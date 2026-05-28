@@ -1,0 +1,40 @@
+# Environments
+.env
+.venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Data artifacts are regenerated locally/CI and are not part of clean history
+data/raw/*
+data/processed/*
+data/published/*
+notebooks/executed/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+.windsurf
+.codex
+
+# Keep empty artifact directories visible
+!data/raw/
+!data/raw/**/
+!data/raw/.gitkeep
+!data/raw/**/.gitkeep
+!data/processed/
+!data/processed/**/
+!data/processed/.gitkeep
+!data/processed/**/.gitkeep
+!data/published/
+!data/published/**/
+!data/published/.gitkeep
+!data/published/**/.gitkeep
+
+#Agents
+.agents/

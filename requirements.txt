@@ -1,0 +1,46 @@
+# HTTP / scraping
+requests==2.32.3
+httpx==0.27.2
+beautifulsoup4==4.12.3
+playwright==1.49.0
+waybackpy==3.0.6
+
+# Data
+pandas==2.2.3
+polars==1.9.0
+pyarrow==18.0.0
+
+# Finance APIs
+yfinance==0.2.50
+finnhub-python==2.4.20
+feedparser==6.0.11
+
+# PDF parsing
+pdfplumber==0.11.4
+pypdf==5.1.0
+
+# NLP / sentiment
+transformers==4.46.3
+torch==2.5.1
+vaderSentiment==3.3.2
+nltk==3.9.1
+
+# ML / validation
+scikit-learn==1.5.2
+statsmodels==0.14.4
+matplotlib==3.9.2
+nbclient==0.10.0
+nbformat==5.10.4
+ipykernel==6.29.5
+openpyxl==3.1.5
+
+# Macro
+wbdata==1.0.0
+
+# Publishing
+kaggle==1.6.17
+datasets==3.1.0
+
+# Utilities
+python-dotenv==1.0.1
+tqdm==4.67.0
