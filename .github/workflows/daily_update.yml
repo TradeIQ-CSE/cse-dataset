@@ -41,5 +41,19 @@ jobs:
       - name: Unit tests
         run: uv run python -m unittest discover -s tests
 
-      - name: Daily OHLCV source validation dry run
-        run: uv run python scripts/daily_update.py --dry-run --allow-missing-metadata
+      - name: Daily OHLCV source validation
+        run: uv run python scripts/daily_update.py
+
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ohlcv-validation-${{ github.run_id }}
+          path: |
+            data/raw/ohlcv/source_payloads/
+            data/raw/ohlcv/accepted/
+            data/raw/ohlcv/manifests/
+            data/processed/daily_ohlcv/
+            data/processed/validation/ohlcv/
+            data/processed/company_metadata.csv
+          if-no-files-found: ignore

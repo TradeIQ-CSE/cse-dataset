@@ -40,9 +40,11 @@ def build_metadata():
     
     securities = fetch_active_companies()
     
-    # Filter to only equity symbols (usually end in .N0000 or .X0000)
-    # The API returns things like ABC.N0000 (voting), ABC.X0000 (non-voting)
-    equities = [s for s in securities if '.N0000' in s['symbol'] or '.X0000' in s['symbol']]
+    # Keep listed security classes that can appear in the daily price snapshot.
+    # Earlier recovery runs showed .U0000 units trading in tradeSummary; excluding
+    # them makes the OHLCV metadata gate fail.
+    tradable_suffixes = ('.N0000', '.X0000', '.U0000')
+    equities = [s for s in securities if any(s['symbol'].endswith(suffix) for suffix in tradable_suffixes)]
     logging.info(f"Filtered to {len(equities)} equity symbols.")
     
     records = []
@@ -57,7 +59,12 @@ def build_metadata():
         base_ticker = symbol.split('.')[0]
         
         # Determine voting status
-        share_type = 'Non-Voting' if '.X' in symbol else 'Voting'
+        if '.X' in symbol:
+            share_type = 'Non-Voting'
+        elif '.U' in symbol:
+            share_type = 'Unit'
+        else:
+            share_type = 'Voting'
         
         # For Yahoo finance compatibility we used to append .CM, but it doesn't work.
         # Still, we keep the column per schema.

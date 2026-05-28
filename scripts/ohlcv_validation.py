@@ -60,7 +60,10 @@ def load_metadata(path: Path | None) -> pd.DataFrame:
     if "symbol" not in metadata.columns:
         raise ValueError(f"metadata file is missing required column 'symbol': {path}")
     if "listing_date" in metadata.columns:
-        metadata["listing_date"] = pd.to_datetime(metadata["listing_date"], errors="coerce").dt.date
+        listing_dates = pd.to_datetime(metadata["listing_date"], format="%d/%b/%Y", errors="coerce")
+        fallback = pd.to_datetime(metadata.loc[listing_dates.isna(), "listing_date"], errors="coerce")
+        listing_dates.loc[listing_dates.isna()] = fallback
+        metadata["listing_date"] = listing_dates.dt.date
     return metadata
 
 

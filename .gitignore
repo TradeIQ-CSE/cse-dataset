@@ -10,9 +10,9 @@ __pycache__/
 *.pyd
 
 # Data artifacts are regenerated locally/CI and are not part of clean history
-data/raw/*
-data/processed/*
-data/published/*
+data/raw/**
+data/processed/**
+data/published/**
 notebooks/executed/
 
 # IDE & OS
