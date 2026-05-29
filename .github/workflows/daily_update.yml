@@ -2,8 +2,8 @@ name: Daily CSE Dataset Recovery Checks
 
 on:
   schedule:
-    # Run at 20:00 UTC (01:30 Sri Lanka time, after CSE close at 14:30 LKT)
-    - cron: '0 20 * * 1-5'
+    # Run at 09:15 UTC (14:45 Sri Lanka time), after CSE close at 14:30 SLST.
+    - cron: '15 9 * * 1-5'
   workflow_dispatch:  # allow manual trigger
 
 permissions:
