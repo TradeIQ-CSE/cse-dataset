@@ -7,7 +7,7 @@ on:
   workflow_dispatch:  # allow manual trigger
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   update:
@@ -42,7 +42,26 @@ jobs:
         run: uv run python -m unittest discover -s tests
 
       - name: Daily OHLCV source validation
+        id: daily_validation
+        continue-on-error: true
         run: uv run python scripts/daily_update.py
+
+      - name: Record validation audit log
+        if: always()
+        run: uv run python scripts/record_ohlcv_run.py
+
+      - name: Commit validation audit log
+        if: always()
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/daily_ohlcv_runs.jsonl docs/daily_ohlcv_runs.md
+          if git diff --staged --quiet; then
+            echo "No validation audit changes to commit"
+            exit 0
+          fi
+          git commit -m "chore(validation): record daily OHLCV run ${{ github.run_id }}"
+          git push origin HEAD:main
 
       - name: Upload validation artifacts
         if: always()
@@ -57,3 +76,7 @@ jobs:
             data/processed/validation/ohlcv/
             data/processed/company_metadata.csv
           if-no-files-found: ignore
+
+      - name: Fail if daily validation failed
+        if: steps.daily_validation.outcome != 'success'
+        run: exit 1

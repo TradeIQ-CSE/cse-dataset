@@ -20,7 +20,7 @@ notebooks/executed/
 .idea/
 .DS_Store
 .windsurf
-.codex
+.codex*
 
 # Keep empty artifact directories visible
 !data/raw/
