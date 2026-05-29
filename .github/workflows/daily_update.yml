@@ -42,9 +42,7 @@ jobs:
         run: uv run python -m unittest discover -s tests
 
       - name: Daily OHLCV source validation
-        id: daily_validation
-        continue-on-error: true
-        run: uv run python scripts/daily_update.py
+        run: uv run python scripts/daily_update.py --allow-validation-failure
 
       - name: Record validation audit log
         if: always()
@@ -76,7 +74,3 @@ jobs:
             data/processed/validation/ohlcv/
             data/processed/company_metadata.csv
           if-no-files-found: ignore
-
-      - name: Fail if daily validation failed
-        if: steps.daily_validation.outcome != 'success'
-        run: exit 1

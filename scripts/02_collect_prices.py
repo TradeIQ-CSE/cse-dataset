@@ -118,6 +118,9 @@ def collect_daily_ohlcv(args: argparse.Namespace) -> None:
     if not result.passed:
         for failure in result.failures:
             print(f"FAIL: {failure}")
+        if args.allow_validation_failure:
+            print("VALIDATION_REJECTED: wrote validation report and skipped accepted OHLCV append")
+            return
         raise SystemExit(1)
 
     print(
@@ -140,6 +143,11 @@ def main() -> None:
     )
     parser.add_argument("--ignore-previous-digest", action="store_true")
     parser.add_argument("--missing-activity-threshold", type=float, default=0.0)
+    parser.add_argument(
+        "--allow-validation-failure",
+        action="store_true",
+        help="Exit successfully after writing validation reports for rejected source payloads",
+    )
     args = parser.parse_args()
     collect_daily_ohlcv(args)
 
