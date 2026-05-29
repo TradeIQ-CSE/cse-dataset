@@ -7,3 +7,4 @@ artifacts until publication gates are re-enabled.
 | Target Date | Status | Source | Accepted Rows | Rejected Rows | Repairs | Digest | Run |
 |---|---|---|---:|---:|---:|---|---|
 | 2026-05-29 | FAIL | `cse_trade_summary_current` | 2 | 285 | 1 | `efd919981d7b` | [26623887189](https://github.com/nimeshk03/cse-dataset-v2/actions/runs/26623887189) |
+| 2026-05-29 | FAIL | `cse_trade_summary_current` | 2 | 287 | 1 | `0b4624ab26bf` | [26624968888](https://github.com/nimeshk03/cse-dataset-v2/actions/runs/26624968888) |
