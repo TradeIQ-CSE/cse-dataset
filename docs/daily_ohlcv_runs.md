@@ -1,8 +1,9 @@
 # Daily OHLCV Run Log
 
-This file is a tracked audit trail of daily validation summaries. Raw payloads
-and generated datasets are not committed; they remain workflow artifacts until
-publication gates are re-enabled.
+This file is a tracked audit trail of daily validation summaries. Raw
+payloads and generated datasets are not committed; they remain workflow
+artifacts until publication gates are re-enabled.
 
 | Target Date | Status | Source | Accepted Rows | Rejected Rows | Repairs | Digest | Run |
 |---|---|---|---:|---:|---:|---|---|
+| 2026-05-29 | FAIL | `cse_trade_summary_current` | 2 | 285 | 1 | `efd919981d7b` | [26623887189](https://github.com/nimeshk03/cse-dataset-v2/actions/runs/26623887189) |
