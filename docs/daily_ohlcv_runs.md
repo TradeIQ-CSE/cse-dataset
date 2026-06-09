@@ -16,3 +16,4 @@ artifacts until publication gates are re-enabled.
 | 2026-06-04 | PASS | `cse_trade_summary_current` | 286 | 0 | 11 | `559752a77513` | [26951338498](https://github.com/nimeshk03/cse-dataset-v2/actions/runs/26951338498) |
 | 2026-06-05 | PASS | `cse_trade_summary_current` | 287 | 0 | 21 | `34ebc3a14994` | [27014479031](https://github.com/nimeshk03/cse-dataset-v2/actions/runs/27014479031) |
 | 2026-06-08 | PASS | `cse_trade_summary_current` | 290 | 0 | 15 | `1e33328bcd83` | [27140297880](https://github.com/nimeshk03/cse-dataset-v2/actions/runs/27140297880) |
+| 2026-06-09 | PASS | `cse_trade_summary_current` | 284 | 0 | 19 | `3de872a15dca` | [27205472841](https://github.com/nimeshk03/cse-dataset-v2/actions/runs/27205472841) |
