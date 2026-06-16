@@ -1,0 +1,87 @@
+{
+  "evidence": {
+    "detected_fields": [
+      "symbol"
+    ],
+    "has_2026_dates": true,
+    "has_cse_coverage": false,
+    "has_per_row_dates": false,
+    "has_report_date": false,
+    "has_spot_check_boundary": false,
+    "has_verifiable_dates": false,
+    "row_count": 3,
+    "sample_rows": [
+      {
+        "chart_error": null
+      },
+      {
+        "meta_currency": null,
+        "meta_datagranularity": "1d",
+        "meta_exchangename": "YHD",
+        "meta_exchangetimezonename": "America/New_York",
+        "meta_firsttradedate": null,
+        "meta_fullexchangename": "YHD",
+        "meta_gmtoffset": -14400,
+        "meta_hasprepostmarketdata": false,
+        "meta_instrumenttype": "MUTUALFUND",
+        "meta_pricehint": 2,
+        "meta_range": "",
+        "meta_regularmarkettime": 1561759658,
+        "meta_symbol": "COMB.CM",
+        "meta_timezone": "EDT"
+      },
+      {
+        "post_end": 1780099200,
+        "post_gmtoffset": -14400,
+        "post_start": 1780084800,
+        "post_timezone": "EDT",
+        "pre_end": 1780061400,
+        "pre_gmtoffset": -14400,
+        "pre_start": 1780041600,
+        "pre_timezone": "EDT",
+        "regular_end": 1780084800,
+        "regular_gmtoffset": -14400,
+        "regular_start": 1780061400,
+        "regular_timezone": "EDT"
+      }
+    ],
+    "selector_evidence": {},
+    "warnings": []
+  },
+  "sample_rows": [
+    {
+      "chart_error": null
+    },
+    {
+      "meta_currency": null,
+      "meta_datagranularity": "1d",
+      "meta_exchangename": "YHD",
+      "meta_exchangetimezonename": "America/New_York",
+      "meta_firsttradedate": null,
+      "meta_fullexchangename": "YHD",
+      "meta_gmtoffset": -14400,
+      "meta_hasprepostmarketdata": false,
+      "meta_instrumenttype": "MUTUALFUND",
+      "meta_pricehint": 2,
+      "meta_range": "",
+      "meta_regularmarkettime": 1561759658,
+      "meta_symbol": "COMB.CM",
+      "meta_timezone": "EDT"
+    },
+    {
+      "post_end": 1780099200,
+      "post_gmtoffset": -14400,
+      "post_start": 1780084800,
+      "post_timezone": "EDT",
+      "pre_end": 1780061400,
+      "pre_gmtoffset": -14400,
+      "pre_start": 1780041600,
+      "pre_timezone": "EDT",
+      "regular_end": 1780084800,
+      "regular_gmtoffset": -14400,
+      "regular_start": 1780061400,
+      "regular_timezone": "EDT"
+    }
+  ],
+  "source_id": "yahoo_comb_chart"
+}

@@ -1,0 +1,108 @@
+[
+  {
+    "content_type": "text/html; charset=utf-8",
+    "current_snapshot": false,
+    "detected_fields": [
+      "close",
+      "date",
+      "high",
+      "low",
+      "open",
+      "symbol"
+    ],
+    "display_name": "TradingView COMB.N0000 browser page",
+    "environment": "local",
+    "error": null,
+    "family": "ohlcv",
+    "fetched_at_utc": "2026-05-31T05:11:03.867720+00:00",
+    "has_2026_dates": false,
+    "has_cse_coverage": true,
+    "has_per_row_dates": false,
+    "has_report_date": false,
+    "has_spot_check_boundary": false,
+    "has_verifiable_dates": false,
+    "key_available": true,
+    "observed_dates": [
+      "25.04.2022"
+    ],
+    "official": false,
+    "parsed_sample_path": "data/recon/20260531T051103Z/parsed/tradingview_comb_browser.json",
+    "probe_type": "browser",
+    "raw_sample_path": "data/recon/20260531T051103Z/raw/tradingview_comb_browser.html",
+    "reachable": true,
+    "recommendation": "quarantine",
+    "recommendation_reason": "OHLCV candidate lacks verifiable row/report dates",
+    "required_fields_present": false,
+    "requires_key_env": null,
+    "scores": {
+      "automation_stability": 0.8,
+      "cross_source_agreement": 0.0,
+      "data_coverage": 1.0,
+      "date_verifiability": 0.0,
+      "implementation_effort": 0.7,
+      "required_fields": 0.6,
+      "terms_rate_limit_risk": 0.7
+    },
+    "screenshot_path": "data/recon/20260531T051103Z/screenshots/tradingview_comb_browser.png",
+    "selector_evidence": {
+      "[data-symbol='CSELK:COMB.N0000'], [data-symbol-short='COMB.N0000']": "COMB.N0000\n207.00\nLKR\n+2.00\n+0.98%",
+      "h1": "Commercial Bank of Ceylon Plc"
+    },
+    "source_id": "tradingview_comb_browser",
+    "status_code": 200,
+    "total_score": 3.8,
+    "url": "https://www.tradingview.com/symbols/CSELK-COMB.N0000/",
+    "warnings": []
+  },
+  {
+    "content_type": "text/html; charset=UTF-8",
+    "current_snapshot": false,
+    "detected_fields": [
+      "symbol",
+      "title"
+    ],
+    "display_name": "Investing.com CSE All-Share historical data",
+    "environment": "local",
+    "error": "required selector missing: table",
+    "family": "indices",
+    "fetched_at_utc": "2026-05-31T05:11:07.663178+00:00",
+    "has_2026_dates": false,
+    "has_cse_coverage": true,
+    "has_per_row_dates": false,
+    "has_report_date": false,
+    "has_spot_check_boundary": false,
+    "has_verifiable_dates": false,
+    "key_available": true,
+    "observed_dates": [],
+    "official": false,
+    "parsed_sample_path": "data/recon/20260531T051103Z/parsed/investing_aspi_historical_browser.json",
+    "probe_type": "browser",
+    "raw_sample_path": "data/recon/20260531T051103Z/raw/investing_aspi_historical_browser.html",
+    "reachable": true,
+    "recommendation": "rejected",
+    "recommendation_reason": "HTTP status 403",
+    "required_fields_present": false,
+    "requires_key_env": null,
+    "scores": {
+      "automation_stability": 0.8,
+      "cross_source_agreement": 0.0,
+      "data_coverage": 1.0,
+      "date_verifiability": 0.0,
+      "implementation_effort": 0.7,
+      "required_fields": 0.6,
+      "terms_rate_limit_risk": 0.7
+    },
+    "screenshot_path": "data/recon/20260531T051103Z/screenshots/investing_aspi_historical_browser.png",
+    "selector_evidence": {
+      "table": "matched 0 nodes",
+      "text=CSE All-Share": "matched 0 nodes"
+    },
+    "source_id": "investing_aspi_historical_browser",
+    "status_code": 403,
+    "total_score": 3.8,
+    "url": "https://www.investing.com/indices/cse-all-share-historical-data",
+    "warnings": [
+      "required selector missing: table"
+    ]
+  }
+]

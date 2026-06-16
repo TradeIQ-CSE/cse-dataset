@@ -1,0 +1,3 @@
+rank,source_id,display_name,family,probe_type,recommendation,total_score,reachable,status_code,has_cse_coverage,has_2026_dates,has_verifiable_dates,has_report_date,has_per_row_dates,required_fields_present,current_snapshot,recommendation_reason,url
+1,tradingview_comb_browser,TradingView COMB.N0000 browser page,ohlcv,browser,quarantine,4.8,True,200,True,True,False,False,False,False,False,OHLCV candidate lacks verifiable row/report dates,https://www.tradingview.com/symbols/CSELK-COMB.N0000/
+2,investing_aspi_historical_browser,Investing.com CSE All-Share historical data,indices,browser,rejected,4.8,True,403,True,True,False,False,False,False,False,HTTP status 403,https://www.investing.com/indices/cse-all-share-historical-data

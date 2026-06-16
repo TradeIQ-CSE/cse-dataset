@@ -1,0 +1,61 @@
+name: Source Recon Dry Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip_browser:
+        description: "Skip Playwright browser probes"
+        required: false
+        default: "false"
+      target_date:
+        description: "Optional target date for date-template probes (YYYY-MM-DD)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  recon:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Install Playwright Chromium
+        if: ${{ inputs.skip_browser != 'true' }}
+        run: uv run playwright install --with-deps chromium
+
+      - name: Run source recon
+        run: |
+          args=()
+          if [ "${{ inputs.skip_browser }}" = "true" ]; then
+            args+=(--skip-browser)
+          fi
+          if [ -n "${{ inputs.target_date }}" ]; then
+            args+=(--target-date "${{ inputs.target_date }}")
+          fi
+          uv run python scripts/source_recon.py "${args[@]}"
+
+      - name: Upload recon artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-recon-${{ github.run_id }}
+          path: data/recon/
+          if-no-files-found: ignore

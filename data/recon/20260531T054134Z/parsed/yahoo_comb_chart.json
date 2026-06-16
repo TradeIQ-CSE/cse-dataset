@@ -1,0 +1,229 @@
+{
+  "evidence": {
+    "detected_fields": [
+      "close",
+      "date",
+      "high",
+      "low",
+      "open",
+      "symbol",
+      "volume"
+    ],
+    "has_2026_dates": true,
+    "has_cse_coverage": true,
+    "has_per_row_dates": true,
+    "has_report_date": false,
+    "has_spot_check_boundary": true,
+    "has_verifiable_dates": true,
+    "observed_dates": [
+      "2025-12-31",
+      "2026-01-01",
+      "2026-01-02",
+      "2026-01-05",
+      "2026-01-06",
+      "2026-01-07",
+      "2026-01-08",
+      "2026-01-09",
+      "2026-01-12",
+      "2026-01-13",
+      "2026-01-14",
+      "2026-01-15",
+      "2026-01-16",
+      "2026-01-19",
+      "2026-01-20",
+      "2026-01-21",
+      "2026-01-22",
+      "2026-01-23",
+      "2026-01-26",
+      "2026-01-27"
+    ],
+    "row_count": 25,
+    "sample_rows": [
+      {
+        "close": 200.75,
+        "date": "2025-12-31",
+        "high": 203.0,
+        "low": 200.0,
+        "open": 200.5,
+        "symbol": "COMB-N0000.CM",
+        "volume": 251229
+      },
+      {
+        "close": null,
+        "date": "2026-01-01",
+        "high": null,
+        "low": null,
+        "open": null,
+        "symbol": "COMB-N0000.CM",
+        "volume": null
+      },
+      {
+        "close": 203.0,
+        "date": "2026-01-02",
+        "high": 203.0,
+        "low": 201.0,
+        "open": 201.0,
+        "symbol": "COMB-N0000.CM",
+        "volume": 150627
+      },
+      {
+        "close": 207.25,
+        "date": "2026-01-05",
+        "high": 210.0,
+        "low": 203.25,
+        "open": 203.25,
+        "symbol": "COMB-N0000.CM",
+        "volume": 1372480
+      },
+      {
+        "close": 212.5,
+        "date": "2026-01-06",
+        "high": 213.0,
+        "low": 210.0,
+        "open": 210.0,
+        "symbol": "COMB-N0000.CM",
+        "volume": 1889951
+      },
+      {
+        "close": 212.5,
+        "date": "2026-01-07",
+        "high": 214.0,
+        "low": 214.0,
+        "open": 212.75,
+        "symbol": "COMB-N0000.CM",
+        "volume": 50
+      },
+      {
+        "close": 212.5,
+        "date": "2026-01-08",
+        "high": 212.5,
+        "low": 212.5,
+        "open": 212.5,
+        "symbol": "COMB-N0000.CM",
+        "volume": 0
+      },
+      {
+        "close": 218.25,
+        "date": "2026-01-09",
+        "high": 219.0,
+        "low": 215.5,
+        "open": 215.75,
+        "symbol": "COMB-N0000.CM",
+        "volume": 383668
+      },
+      {
+        "close": 219.5,
+        "date": "2026-01-12",
+        "high": 220.25,
+        "low": 218.25,
+        "open": 218.25,
+        "symbol": "COMB-N0000.CM",
+        "volume": 1136540
+      },
+      {
+        "close": 219.75,
+        "date": "2026-01-13",
+        "high": 220.0,
+        "low": 219.0,
+        "open": 219.5,
+        "symbol": "COMB-N0000.CM",
+        "volume": 1137244
+      }
+    ],
+    "selector_evidence": {},
+    "warnings": []
+  },
+  "sample_rows": [
+    {
+      "close": 200.75,
+      "date": "2025-12-31",
+      "high": 203.0,
+      "low": 200.0,
+      "open": 200.5,
+      "symbol": "COMB-N0000.CM",
+      "volume": 251229
+    },
+    {
+      "close": null,
+      "date": "2026-01-01",
+      "high": null,
+      "low": null,
+      "open": null,
+      "symbol": "COMB-N0000.CM",
+      "volume": null
+    },
+    {
+      "close": 203.0,
+      "date": "2026-01-02",
+      "high": 203.0,
+      "low": 201.0,
+      "open": 201.0,
+      "symbol": "COMB-N0000.CM",
+      "volume": 150627
+    },
+    {
+      "close": 207.25,
+      "date": "2026-01-05",
+      "high": 210.0,
+      "low": 203.25,
+      "open": 203.25,
+      "symbol": "COMB-N0000.CM",
+      "volume": 1372480
+    },
+    {
+      "close": 212.5,
+      "date": "2026-01-06",
+      "high": 213.0,
+      "low": 210.0,
+      "open": 210.0,
+      "symbol": "COMB-N0000.CM",
+      "volume": 1889951
+    },
+    {
+      "close": 212.5,
+      "date": "2026-01-07",
+      "high": 214.0,
+      "low": 214.0,
+      "open": 212.75,
+      "symbol": "COMB-N0000.CM",
+      "volume": 50
+    },
+    {
+      "close": 212.5,
+      "date": "2026-01-08",
+      "high": 212.5,
+      "low": 212.5,
+      "open": 212.5,
+      "symbol": "COMB-N0000.CM",
+      "volume": 0
+    },
+    {
+      "close": 218.25,
+      "date": "2026-01-09",
+      "high": 219.0,
+      "low": 215.5,
+      "open": 215.75,
+      "symbol": "COMB-N0000.CM",
+      "volume": 383668
+    },
+    {
+      "close": 219.5,
+      "date": "2026-01-12",
+      "high": 220.25,
+      "low": 218.25,
+      "open": 218.25,
+      "symbol": "COMB-N0000.CM",
+      "volume": 1136540
+    },
+    {
+      "close": 219.75,
+      "date": "2026-01-13",
+      "high": 220.0,
+      "low": 219.0,
+      "open": 219.5,
+      "symbol": "COMB-N0000.CM",
+      "volume": 1137244
+    }
+  ],
+  "source_id": "yahoo_comb_chart"
+}

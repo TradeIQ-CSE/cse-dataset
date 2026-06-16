@@ -44,6 +44,9 @@ jobs:
       - name: Daily OHLCV source validation
         run: uv run python scripts/daily_update.py --allow-validation-failure
 
+      - name: 2026-forward source validation summary
+        run: uv run python scripts/2026_forward_update.py --allow-validation-failure
+
       - name: Record validation audit log
         if: always()
         run: uv run python scripts/record_ohlcv_run.py
@@ -70,7 +73,10 @@ jobs:
             data/raw/ohlcv/source_payloads/
             data/raw/ohlcv/accepted/
             data/raw/ohlcv/manifests/
+            data/raw/2026_forward/
             data/processed/daily_ohlcv/
             data/processed/validation/ohlcv/
+            data/processed/validation/2026_forward/
+            data/processed/2026_forward/
             data/processed/company_metadata.csv
           if-no-files-found: ignore
