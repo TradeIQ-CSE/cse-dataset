@@ -7,13 +7,16 @@ import json
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
+REQUEST_TIMEOUT_SECONDS = int(os.getenv("CSE_METADATA_TIMEOUT_SECONDS", "15"))
+REQUEST_SLEEP_SECONDS = float(os.getenv("CSE_METADATA_SLEEP_SECONDS", "0.1"))
+
 def fetch_active_companies():
     """Fetch all active company symbols from CSE API."""
     url = 'https://www.cse.lk/api/allSecurityCode'
     headers = {'User-Agent': 'Mozilla/5.0'}
     
     logging.info(f"Fetching active companies from {url}...")
-    r = requests.get(url, headers=headers)
+    r = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT_SECONDS)
     r.raise_for_status()
     
     data = r.json()
@@ -27,7 +30,7 @@ def fetch_company_info(symbol):
     files = {'symbol': (None, symbol)}
     
     try:
-        r = requests.post(url, files=files, headers=headers, timeout=10)
+        r = requests.post(url, files=files, headers=headers, timeout=REQUEST_TIMEOUT_SECONDS)
         r.raise_for_status()
         data = r.json()
         return data.get('reqSymbolInfo', {})
@@ -87,7 +90,7 @@ def build_metadata():
             'yahoo_ticker': yahoo_ticker
         })
         
-        time.sleep(0.5) # Polite rate limiting
+        time.sleep(REQUEST_SLEEP_SECONDS) # Polite rate limiting
         
     df = pd.DataFrame(records)
     
