@@ -1,0 +1,87 @@
+{
+  "evidence": {
+    "detected_fields": [
+      "close",
+      "date",
+      "high",
+      "low",
+      "rate",
+      "symbol",
+      "title"
+    ],
+    "has_2026_dates": true,
+    "has_cse_coverage": true,
+    "has_per_row_dates": false,
+    "has_report_date": false,
+    "has_spot_check_boundary": false,
+    "has_verifiable_dates": false,
+    "row_count": 24,
+    "sample_rows": [
+      {
+        "title": "Home"
+      },
+      {
+        "title": "E-Paper"
+      },
+      {
+        "title": "Today's Paper"
+      },
+      {
+        "title": "Top Stories"
+      },
+      {
+        "title": "Breaking News"
+      },
+      {
+        "title": "Pictorial News"
+      },
+      {
+        "title": "Opinion"
+      },
+      {
+        "title": "DBS Jeyaraj"
+      },
+      {
+        "title": "Farzana Baduel"
+      },
+      {
+        "title": "Features"
+      }
+    ],
+    "selector_evidence": {},
+    "warnings": []
+  },
+  "sample_rows": [
+    {
+      "title": "Home"
+    },
+    {
+      "title": "E-Paper"
+    },
+    {
+      "title": "Today's Paper"
+    },
+    {
+      "title": "Top Stories"
+    },
+    {
+      "title": "Breaking News"
+    },
+    {
+      "title": "Pictorial News"
+    },
+    {
+      "title": "Opinion"
+    },
+    {
+      "title": "DBS Jeyaraj"
+    },
+    {
+      "title": "Farzana Baduel"
+    },
+    {
+      "title": "Features"
+    }
+  ],
+  "source_id": "daily_mirror_business_html"
+}

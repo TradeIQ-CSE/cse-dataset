@@ -1,0 +1,21 @@
+Industry Group Code,GICS Code,Symbol,Industry Group Name
+SPCSEEIP,1010,EGY,Energy
+SPCSEMIP,1510,MAT,Materials
+SPCSECGP,2010,CG,Capital Goods
+SPCSECPP,2020,CPS,Commercial & Professional Services
+SPCSETP,2030,TRP,Transportation
+SPCSEAMP,2510,A&C,Automobiles & Components
+SPCSECAP,2520,CDA,Consumer Durables & Apparel
+SPCSECSP,2530,CS,Consumer Services
+SPCSERP,2550,RET,Retailing
+SPCSEFRP,3010,FSR,Food & Staples Retailing
+SPCSEFBP,3020,FBT,"Food, Beverage & Tobacco"
+SPCSEHPP,3030,HPP,Household & Personal Products
+SPCSEHSP,3510,HES,Health Care Equipment & Services
+SPCSEBP,4010,BNK,Banks
+SPCSEDFP,4020,DF,Diversified Financials
+SPCSEINP,4030,INS,Insurance
+SPCSESP,4510,S&S,Software & Services
+SPCSETIP,5010,TEL,Telecommunication Services
+SPCSEUIP,5510,UTI,Utilities
+SPCSERMP,6020,RE,Real Estate Management&Development

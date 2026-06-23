@@ -1,0 +1,41 @@
+{
+  "evidence": {
+    "detected_fields": [
+      "close",
+      "date",
+      "high",
+      "low",
+      "open",
+      "symbol"
+    ],
+    "has_2026_dates": true,
+    "has_cse_coverage": true,
+    "has_per_row_dates": false,
+    "has_report_date": false,
+    "has_spot_check_boundary": false,
+    "has_verifiable_dates": false,
+    "row_count": 2,
+    "sample_rows": [
+      {
+        "": ""
+      },
+      {
+        "": ""
+      }
+    ],
+    "selector_evidence": {
+      "[data-symbol='CSELK:COMB.N0000'], [data-symbol-short='COMB.N0000']": "COMB.N0000\n+0.98%",
+      "h1": "Commercial Bank of Ceylon Plc"
+    },
+    "warnings": []
+  },
+  "sample_rows": [
+    {
+      "": ""
+    },
+    {
+      "": ""
+    }
+  ],
+  "source_id": "tradingview_comb_browser"
+}

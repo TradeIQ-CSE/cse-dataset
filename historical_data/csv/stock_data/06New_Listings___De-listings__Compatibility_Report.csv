@@ -1,0 +1,5 @@
+Compatibility Report for 06New Listings & De-listings.xls,,
+Run on 4/11/2016 15:00,,
+The following features in this workbook are not supported by earlier versions of Excel. These features may be lost or degraded when opening this workbook in an earlier version of Excel or if you save this workbook in an earlier file format.,,
+Minor loss of fidelity,# of occurrences,Version
+Some cells or styles in this workbook contain formatting that is not supported by the selected file format. These formats will be converted to the closest format available.,409,Excel 97-2003

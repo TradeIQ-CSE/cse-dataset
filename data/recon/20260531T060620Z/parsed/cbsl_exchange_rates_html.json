@@ -1,0 +1,90 @@
+{
+  "evidence": {
+    "detected_fields": [
+      "close",
+      "date",
+      "open",
+      "rate",
+      "symbol",
+      "title"
+    ],
+    "has_2026_dates": false,
+    "has_cse_coverage": true,
+    "has_per_row_dates": false,
+    "has_report_date": false,
+    "has_spot_check_boundary": false,
+    "has_verifiable_dates": false,
+    "observed_dates": [
+      "03.03.2023",
+      "07.03.2023"
+    ],
+    "row_count": 15,
+    "sample_rows": [
+      {
+        "title": "Skip to main content"
+      },
+      {
+        "title": "Search form"
+      },
+      {
+        "title": "English"
+      },
+      {
+        "title": "\u0dc3\u0dd2\u0d82\u0dc4\u0dbd"
+      },
+      {
+        "title": "\u0ba4\u0bae\u0bbf\u0bb4\u0bcd"
+      },
+      {
+        "title": "Search form"
+      },
+      {
+        "title": "Navigation"
+      },
+      {
+        "title": "ABOUT"
+      },
+      {
+        "title": "About the Bank"
+      },
+      {
+        "title": "Overview"
+      }
+    ],
+    "selector_evidence": {},
+    "warnings": []
+  },
+  "sample_rows": [
+    {
+      "title": "Skip to main content"
+    },
+    {
+      "title": "Search form"
+    },
+    {
+      "title": "English"
+    },
+    {
+      "title": "\u0dc3\u0dd2\u0d82\u0dc4\u0dbd"
+    },
+    {
+      "title": "\u0ba4\u0bae\u0bbf\u0bb4\u0bcd"
+    },
+    {
+      "title": "Search form"
+    },
+    {
+      "title": "Navigation"
+    },
+    {
+      "title": "ABOUT"
+    },
+    {
+      "title": "About the Bank"
+    },
+    {
+      "title": "Overview"
+    }
+  ],
+  "source_id": "cbsl_exchange_rates_html"
+}

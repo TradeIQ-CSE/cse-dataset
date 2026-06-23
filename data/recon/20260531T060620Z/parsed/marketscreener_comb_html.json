@@ -1,0 +1,146 @@
+{
+  "evidence": {
+    "detected_fields": [
+      "close",
+      "date",
+      "high",
+      "low",
+      "open",
+      "symbol",
+      "volume"
+    ],
+    "has_2026_dates": true,
+    "has_cse_coverage": true,
+    "has_per_row_dates": false,
+    "has_report_date": false,
+    "has_spot_check_boundary": false,
+    "has_verifiable_dates": false,
+    "observed_dates": [
+      "2013-08-27",
+      "2013-12-31",
+      "2014-12-31",
+      "2023-05-01",
+      "2023-07-31",
+      "2023-10-31",
+      "2024-03-29",
+      "2024-04-30",
+      "2024-10-31",
+      "2025-04-07",
+      "2025-04-30",
+      "2025-06-30",
+      "2025-07-31",
+      "2025-10-30",
+      "2026-03-31",
+      "2026-04-30",
+      "2026-05-29"
+    ],
+    "row_count": 20,
+    "sample_rows": [
+      {
+        "1st_jan_change": "",
+        "5_day_change": "+10.61%",
+        "end_of_day_quote_indonesia_s_e_other_stock_markets_2026_05_29": "10,950.00 IDR"
+      },
+      {
+        "apr_30": "Mar. 31",
+        "ci": "CI",
+        "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the Full Year Ended December 31, 2025"
+      },
+      {
+        "apr_30": "Mar. 31",
+        "ci": "CI",
+        "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the Full Year Ended December 31, 2025"
+      },
+      {
+        "apr_30": "25-10-30",
+        "ci": "CI",
+        "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the Nine Months Ended September 30, 2025"
+      },
+      {
+        "apr_30": "25-07-31",
+        "ci": "CI",
+        "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the Half Year Ended June 30, 2025"
+      },
+      {
+        "apr_30": "25-06-30",
+        "ci": "CI",
+        "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. announces Annual dividend, payable on July 30, 2025"
+      },
+      {
+        "apr_30": "25-04-30",
+        "ci": "CI",
+        "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the First Quarter Ended March 31, 2025"
+      },
+      {
+        "apr_30": "25-04-07",
+        "ci": "CI",
+        "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the Full Year Ended December 31, 2024"
+      },
+      {
+        "apr_30": "24-10-31",
+        "ci": "CI",
+        "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the Nine Months Ended September 30, 2024"
+      },
+      {
+        "apr_30": "24-04-30",
+        "ci": "CI",
+        "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the First Quarter Ended March 31, 2024"
+      }
+    ],
+    "selector_evidence": {},
+    "warnings": []
+  },
+  "sample_rows": [
+    {
+      "1st_jan_change": "",
+      "5_day_change": "+10.61%",
+      "end_of_day_quote_indonesia_s_e_other_stock_markets_2026_05_29": "10,950.00 IDR"
+    },
+    {
+      "apr_30": "Mar. 31",
+      "ci": "CI",
+      "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the Full Year Ended December 31, 2025"
+    },
+    {
+      "apr_30": "Mar. 31",
+      "ci": "CI",
+      "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the Full Year Ended December 31, 2025"
+    },
+    {
+      "apr_30": "25-10-30",
+      "ci": "CI",
+      "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the Nine Months Ended September 30, 2025"
+    },
+    {
+      "apr_30": "25-07-31",
+      "ci": "CI",
+      "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the Half Year Ended June 30, 2025"
+    },
+    {
+      "apr_30": "25-06-30",
+      "ci": "CI",
+      "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. announces Annual dividend, payable on July 30, 2025"
+    },
+    {
+      "apr_30": "25-04-30",
+      "ci": "CI",
+      "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the First Quarter Ended March 31, 2025"
+    },
+    {
+      "apr_30": "25-04-07",
+      "ci": "CI",
+      "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the Full Year Ended December 31, 2024"
+    },
+    {
+      "apr_30": "24-10-31",
+      "ci": "CI",
+      "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the Nine Months Ended September 30, 2024"
+    },
+    {
+      "apr_30": "24-04-30",
+      "ci": "CI",
+      "pt_indoritel_makmur_internasional_tbk_reports_earnings_results_for_the_first_quarter_ended_march_31_2026": "PT Indoritel Makmur Internasional Tbk. Reports Earnings Results for the First Quarter Ended March 31, 2024"
+    }
+  ],
+  "source_id": "marketscreener_comb_html"
+}

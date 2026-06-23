@@ -1,0 +1,157 @@
+{
+  "evidence": {
+    "detected_fields": [
+      "date",
+      "value"
+    ],
+    "has_2026_dates": true,
+    "has_cse_coverage": true,
+    "has_per_row_dates": true,
+    "has_spot_check_boundary": false,
+    "has_verifiable_dates": true,
+    "row_count": 6,
+    "sample_rows": [
+      {
+        "country_id": "LK",
+        "country_value": "Sri Lanka",
+        "countryiso3code": "LKA",
+        "date": "2025",
+        "decimal": 1,
+        "indicator_id": "FR.INR.RINR",
+        "indicator_value": "Real interest rate (%)",
+        "obs_status": "",
+        "unit": "",
+        "value": null
+      },
+      {
+        "country_id": "LK",
+        "country_value": "Sri Lanka",
+        "countryiso3code": "LKA",
+        "date": "2024",
+        "decimal": 1,
+        "indicator_id": "FR.INR.RINR",
+        "indicator_value": "Real interest rate (%)",
+        "obs_status": "",
+        "unit": "",
+        "value": null
+      },
+      {
+        "country_id": "LK",
+        "country_value": "Sri Lanka",
+        "countryiso3code": "LKA",
+        "date": "2023",
+        "decimal": 1,
+        "indicator_id": "FR.INR.RINR",
+        "indicator_value": "Real interest rate (%)",
+        "obs_status": "",
+        "unit": "",
+        "value": null
+      },
+      {
+        "country_id": "LK",
+        "country_value": "Sri Lanka",
+        "countryiso3code": "LKA",
+        "date": "2022",
+        "decimal": 1,
+        "indicator_id": "FR.INR.RINR",
+        "indicator_value": "Real interest rate (%)",
+        "obs_status": "",
+        "unit": "",
+        "value": null
+      },
+      {
+        "country_id": "LK",
+        "country_value": "Sri Lanka",
+        "countryiso3code": "LKA",
+        "date": "2021",
+        "decimal": 1,
+        "indicator_id": "FR.INR.RINR",
+        "indicator_value": "Real interest rate (%)",
+        "obs_status": "",
+        "unit": "",
+        "value": null
+      },
+      {
+        "lastupdated": "2026-04-08",
+        "page": 1,
+        "pages": 14,
+        "per_page": 5,
+        "sourceid": "2",
+        "total": 66
+      }
+    ],
+    "selector_evidence": {},
+    "warnings": []
+  },
+  "sample_rows": [
+    {
+      "country_id": "LK",
+      "country_value": "Sri Lanka",
+      "countryiso3code": "LKA",
+      "date": "2025",
+      "decimal": 1,
+      "indicator_id": "FR.INR.RINR",
+      "indicator_value": "Real interest rate (%)",
+      "obs_status": "",
+      "unit": "",
+      "value": null
+    },
+    {
+      "country_id": "LK",
+      "country_value": "Sri Lanka",
+      "countryiso3code": "LKA",
+      "date": "2024",
+      "decimal": 1,
+      "indicator_id": "FR.INR.RINR",
+      "indicator_value": "Real interest rate (%)",
+      "obs_status": "",
+      "unit": "",
+      "value": null
+    },
+    {
+      "country_id": "LK",
+      "country_value": "Sri Lanka",
+      "countryiso3code": "LKA",
+      "date": "2023",
+      "decimal": 1,
+      "indicator_id": "FR.INR.RINR",
+      "indicator_value": "Real interest rate (%)",
+      "obs_status": "",
+      "unit": "",
+      "value": null
+    },
+    {
+      "country_id": "LK",
+      "country_value": "Sri Lanka",
+      "countryiso3code": "LKA",
+      "date": "2022",
+      "decimal": 1,
+      "indicator_id": "FR.INR.RINR",
+      "indicator_value": "Real interest rate (%)",
+      "obs_status": "",
+      "unit": "",
+      "value": null
+    },
+    {
+      "country_id": "LK",
+      "country_value": "Sri Lanka",
+      "countryiso3code": "LKA",
+      "date": "2021",
+      "decimal": 1,
+      "indicator_id": "FR.INR.RINR",
+      "indicator_value": "Real interest rate (%)",
+      "obs_status": "",
+      "unit": "",
+      "value": null
+    },
+    {
+      "lastupdated": "2026-04-08",
+      "page": 1,
+      "pages": 14,
+      "per_page": 5,
+      "sourceid": "2",
+      "total": 66
+    }
+  ],
+  "source_id": "world_bank_lka_interest_rate"
+}

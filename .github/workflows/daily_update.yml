@@ -7,7 +7,7 @@ on:
   workflow_dispatch:  # allow manual trigger
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   update:
@@ -18,9 +18,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: main
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -44,22 +42,12 @@ jobs:
       - name: Daily OHLCV source validation
         run: uv run python scripts/daily_update.py --allow-validation-failure
 
+      - name: 2026-forward source validation summary
+        run: uv run python scripts/2026_forward_update.py --allow-validation-failure
+
       - name: Record validation audit log
         if: always()
         run: uv run python scripts/record_ohlcv_run.py
-
-      - name: Commit validation audit log
-        if: always()
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/daily_ohlcv_runs.jsonl docs/daily_ohlcv_runs.md
-          if git diff --staged --quiet; then
-            echo "No validation audit changes to commit"
-            exit 0
-          fi
-          git commit -m "chore(validation): record daily OHLCV run ${{ github.run_id }}"
-          git push origin HEAD:main
 
       - name: Upload validation artifacts
         if: always()
@@ -67,10 +55,15 @@ jobs:
         with:
           name: ohlcv-validation-${{ github.run_id }}
           path: |
+            docs/daily_ohlcv_runs.jsonl
+            docs/daily_ohlcv_runs.md
             data/raw/ohlcv/source_payloads/
             data/raw/ohlcv/accepted/
             data/raw/ohlcv/manifests/
+            data/raw/2026_forward/
             data/processed/daily_ohlcv/
             data/processed/validation/ohlcv/
+            data/processed/validation/2026_forward/
+            data/processed/2026_forward/
             data/processed/company_metadata.csv
           if-no-files-found: ignore

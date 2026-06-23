@@ -78,10 +78,12 @@ def validate_ohlcv_records(
     *,
     target_date: date,
     source_date_failures: list[str] | None = None,
+    extra_rejection_reasons: pd.Series | list[str] | None = None,
     metadata: pd.DataFrame | None = None,
     previous_manifest: dict[str, Any] | None = None,
     allow_missing_metadata: bool = False,
     missing_value_threshold: float = 0.0,
+    required_activity_columns: list[str] | None = None,
     low_variation_min_rows: int = 60,
     low_variation_max_distinct_closes: int = 2,
 ) -> ValidationResult:
@@ -110,6 +112,11 @@ def validate_ohlcv_records(
         df[f"source_{column}"] = df[column]
 
     rejection_reasons: list[list[str]] = [[] for _ in range(len(df))]
+    if extra_rejection_reasons is not None:
+        extra = pd.Series(extra_rejection_reasons, index=df.index).fillna("").astype(str)
+        for idx, reason in enumerate(extra.tolist()):
+            if reason.strip():
+                rejection_reasons[idx].append(reason.strip())
 
     bad_date = df["date"] != target_date
     _mark_rejected(rejection_reasons, bad_date, "record date does not match target date")
@@ -145,7 +152,7 @@ def validate_ohlcv_records(
     df["ohlc_repaired"] = invalid_bounds
     df["ohlc_invalid"] = negative_prices
 
-    missing_value_cols = ["volume", "turnover", "trades"]
+    missing_value_cols = required_activity_columns or ["volume", "turnover", "trades"]
     missing_value_rate = float(df[missing_value_cols].isna().any(axis=1).mean())
     if missing_value_rate > missing_value_threshold:
         failures.append(
