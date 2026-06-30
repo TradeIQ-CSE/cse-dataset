@@ -85,9 +85,53 @@ enabled.
 |---|---|---|---|
 | Alpha Vantage | Yes (`.env`) | None | CSE symbols not indexed. Premium endpoint required even for basic queries. |
 | Finnhub | Yes (`.env`) | None | CSE not in free-tier exchange list. Returns 403 for all CSE tickers. |
+| EODHD (EOD Historical Data) | Demo token only | None | Demo token confirmed working (AAPL.US 2011 data returns correctly). CSE is not present in their exchange catalogue — returns 403 for `COMB.CSE`. Paid subscription unlikely to help without explicit CSE listing. |
+| Nasdaq Data Link | None | Unknown | Cloudflare bot protection blocks all direct API access. |
+| MarketScreener | None | Unknown | Returns 403 Forbidden for CSE stock pages. |
+| Stooq.com | None | Unknown | Cloudflare blocks access; `comb.lk` symbol returns "Access denied". |
+
+## 2011 Gap-Fill Source Exhaustion (TIQ-20)
+
+The 2011 OHLCV gap was caused by the official CSE source file (`2011_Data__hl.csv`)
+covering only 74 of 281 companies (A–E alphabetically). Yahoo Finance recovered 149 of
+the remaining 169 missing tickers using the `TICKER-SHARETYPE.CM` format.
+
+The 20 unrecovered tickers were investigated against every source in this codebase.
+Status as of 2026-06-30:
+
+- **5 X/U-series** (preference shares, unit trusts): structurally unrecoverable — global
+  aggregators do not track these instrument types for CSE.
+- **15 N-series**: mostly 2011 IPOs listed June–November 2011; a few older companies
+  (SEMB listed 1993, SWAD listed 1970) that had full-year 2011 trading but no global
+  aggregator coverage. None of the tested sources carry them.
+
+All tested sources exhausted:
+
+| Source | Outcome |
+|---|---|
+| Yahoo Finance `TICKER-TYPE.CM` | 149/169 (20 errors) |
+| Alpha Vantage | No `.CM` exchange support |
+| Finnhub | No CSE coverage |
+| Stooq.com | Cloudflare blocked |
+| EODHD | CSE not in exchange list; 403 Forbidden |
+| Nasdaq Data Link | Cloudflare blocked |
+| Wayback Machine CDX | Network timeout (ISP block) |
+| Investing.com (browser) | JS date-picker unautomatable |
+| MarketScreener | 403 Forbidden |
+| TradingView (browser) | ToS risk; browser-only |
+| CSE historical API endpoints (guessed) | All 404 |
+
+The 88.2% gap recovery (149/169 additional tickers, 223/281 total 2011 universe)
+is the ceiling achievable from publicly available digital sources. Further recovery
+would require a paid EODHD/Bloomberg subscription or a direct data request to
+the Colombo Stock Exchange.
 
 ## Network Constraints
 
 - `web.archive.org` — **TIMEOUT** (firewall/ISP block)
+- `data.nasdaq.com` — Cloudflare bot protection blocks API access
+- `stooq.com` — Cloudflare blocks access
+- `marketscreener.com` — 403 Forbidden
 - All other tested domains reachable (CSE, LBO, FT, Daily Mirror, Alpha Vantage, Finnhub, Google)
-- Yahoo Finance API itself is reachable (AAPL returns 200) but CSE tickers are simply not listed
+- Yahoo Finance API reachable; CSE tickers work with `TICKER-SHARETYPE.CM` format (e.g. `COMB-N0000.CM`)
+  but 20 specific 2011 tickers (mostly recent IPOs) are absent from their database
