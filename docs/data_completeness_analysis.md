@@ -1,7 +1,7 @@
 # CSE OHLCV Data Completeness Analysis
 
 **Prepared for:** TIQ-19 — Week 1 data completeness findings  
-**Updated:** 2026-06-30 (TIQ-22 — 2017–2024 backfill run)  
+**Updated:** 2026-06-30 (TIQ-22 — 2017–2024 backfill; TIQ-26 — 2025 quarantine repair)  
 **Scope:** Historical daily OHLCV, 1991–2026  
 
 ---
@@ -58,12 +58,12 @@ The second-largest issue is a **partial source file for 2011** — the official 
 | 2022 | 231 | 231 | 100% | **Accepted** (TIQ-22, 0 quarantined) |
 | 2023 | 242 | 235 | 97.1% | **Accepted** (TIQ-22, 7 dates quarantined) |
 | 2024 | 240 | 210 | 87.5% | **Accepted** (TIQ-22, 30 dates quarantined) |
-| 2025 | 238 | 221 | 92.9% | Accepted (daily workflow, 17 quarantined — TIQ-26) |
+| 2025 | 238 | 236 | 99.2% | Accepted (221 backfill + 15 repaired via TIQ-26; 2 remain quarantined) |
 | 2026 | 0 (from source) | 1 | — | 12 run-log-only; daily workflow partial |
 
 **Candidate-unvalidated dates remaining: ~6,195** (1991–2016, blocked on TIQ-21).  
-**Total accepted dates: 2,029** (2017–2026).  
-**Merged parquet: 508,425 rows, 447 symbols.**
+**Total accepted dates: 2,044** (2017–2026).  
+**Merged parquet: 512,658 rows, 447 symbols.**
 
 ---
 
@@ -156,11 +156,17 @@ The daily GitHub Actions workflow is running (commits to `docs/daily_ohlcv_runs.
 
 ---
 
-### Gap 7 — 2025 Quarantined Dates (18)
+### Gap 7 — 2025 Quarantined Dates (2 remaining)
 
-**Severity:** Low — small number of rejected rows per date, not missing trading days.
+**Severity:** Low — 15 of 17 quarantined dates repaired (TIQ-26, 2026-06-30).
 
-18 dates in 2025 have quarantined validation attempts, all with 1–3 rejected rows per date. These are individual stock-symbol rows that failed validation (likely listing-date violations or OHLC bound violations in the source file).
+17 dates in 2025 had quarantined validation attempts, all caused by missing `low` price (and sometimes `open`) in the official CSE source file. Yahoo Finance was used as the repair source for 15 dates, cross-checked against official `high` and `close` values (all matched exactly).
+
+**2 dates remain quarantined** — Yahoo Finance data is internally inconsistent for these rows:
+- `MERC.N0000 2025-10-10`: Yahoo high/low=5500 vs official close=2600 (likely corporate action adjustment artefact)
+- `CINS.N0000 2025-11-12`: Yahoo high/low=3300 vs official close=3358.25 (OHLC bounds violation in Yahoo data)
+
+No alternative repair source has been identified for these two rows.
 
 ---
 
