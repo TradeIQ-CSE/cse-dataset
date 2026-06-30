@@ -40,3 +40,4 @@ notebooks/executed/
 .agents/
 .codex*
 .claude*
+.firecrawl/
