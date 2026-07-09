@@ -12,6 +12,7 @@ import argparse
 import csv
 import hashlib
 import json
+import re
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -86,16 +87,24 @@ def find_header_row(raw: pd.DataFrame) -> int:
 
 
 def canonical_column_map(columns: list[Any]) -> dict[str, str]:
+    # `open` is the one canonical field absent from all official CSE source files before
+    # 2017 (see TIQ-21); every other field is required in every era.
     normalized = {normalize_header(column): str(column).strip() for column in columns}
     mapping: dict[str, str] = {}
     for canonical, aliases in HEADER_ALIASES.items():
+        if canonical == "open":
+            continue
         for alias in aliases:
             if alias in normalized:
                 mapping[canonical] = normalized[alias]
                 break
-    missing = sorted(set(HEADER_ALIASES) - set(mapping))
+    missing = sorted((set(HEADER_ALIASES) - {"open"}) - set(mapping))
     if missing:
         raise ValueError(f"daily share price file is missing required columns: {', '.join(missing)}")
+    for alias in HEADER_ALIASES["open"]:
+        if alias in normalized:
+            mapping["open"] = normalized[alias]
+            break
     return mapping
 
 
@@ -173,7 +182,7 @@ def normalize_daily_share_price_file(path: Path, payload_hash: str | None = None
         out = pd.DataFrame()
         out["date"] = pd.to_datetime(table[mapping["trading_date"]], errors="coerce").dt.date.astype(str)
         out["symbol"] = security_symbols(table[mapping["company_id"]], table[mapping["main_type"]], table[mapping["sub_type"]])
-        out["open"] = numeric_series(table[mapping["open"]])
+        out["open"] = numeric_series(table[mapping["open"]]) if "open" in mapping else pd.NA
         out["high"] = numeric_series(table[mapping["high"]])
         out["low"] = numeric_series(table[mapping["low"]])
         out["close"] = numeric_series(table[mapping["close"]])
@@ -191,6 +200,155 @@ def normalize_daily_share_price_file(path: Path, payload_hash: str | None = None
     if not frames:
         return pd.DataFrame()
     return pd.concat(frames, ignore_index=True)
+
+
+def clean_label_value(value: str | None) -> str | None:
+    if value is None:
+        return None
+    cleaned = str(value).strip().lstrip(":,").strip()
+    return cleaned or None
+
+
+def value_after_label(values: list[str | None], label: str) -> str | None:
+    normalized_label = normalize_header(label)
+    for idx, value in enumerate(values):
+        if value is None:
+            continue
+        text = str(value)
+        normalized = normalize_header(text)
+        if normalized.startswith(normalized_label):
+            after_colon = text.split(":", 1)[1].strip() if ":" in text else ""
+            if after_colon:
+                return clean_label_value(after_colon)
+            if idx + 1 < len(values) and values[idx + 1]:
+                return clean_label_value(str(values[idx + 1]))
+    return None
+
+
+def regex_group(text: str, pattern: str) -> str | None:
+    match = re.search(pattern, text, flags=re.IGNORECASE)
+    return clean_label_value(match.group(1)) if match else None
+
+
+def grouped_symbol_parts(values: list[str | None]) -> tuple[str | None, str | None, str | None]:
+    # "Company Id", "Security Type"/"Type", and "Sub Type" labels drift across 2002-2015 source
+    # years (sometimes one cell, sometimes split by the comma inside "Security, Type : N") so
+    # each label is searched independently rather than assuming a fixed cell layout. Some rows
+    # even split a label mid-word across two cells, and the split point itself varies by year
+    # (e.g. "Sub Ty,pe :  0006" in 2013 vs "Sub T,ype :  0049" in 2003/2004/2006-2009) —
+    # verified against real data in both eras, where an unmatched split silently defaulted a
+    # non-zero sub-type to "0000", colliding distinct securities (e.g. COMB's ordinary and
+    # preference share blocks) onto the same symbol. The regex tolerates a split after any
+    # letter of "type" rather than hardcoding one split point.
+    joined = " ".join(value for value in values if value)
+    company = value_after_label(values, "Company Id") or regex_group(joined, r"company\s*id\s*,?\s*:?\s*([A-Za-z0-9]+)")
+    main = (
+        value_after_label(values, "Security Type")
+        or value_after_label(values, "Type")
+        or regex_group(joined, r"(?:security\s*)?type\s*:?\s*([A-Za-z])")
+    )
+    sub = value_after_label(values, "Sub Type") or regex_group(joined, r"sub\s*t\s*y\s*p\s*e\s*:?\s*([A-Za-z0-9]+)")
+    return company, main, sub
+
+
+def symbol_from_group_parts(company_id: str | None, main_type: str | None, sub_type: str | None) -> str | None:
+    if company_id is None or pd.isna(company_id):
+        return None
+    main = "N" if main_type is None or pd.isna(main_type) else str(main_type).strip().upper()
+    subtype_text = "0000" if sub_type is None or pd.isna(sub_type) else str(sub_type).strip()
+    try:
+        subtype = f"{int(float(subtype_text)):04d}"
+    except ValueError:
+        subtype = subtype_text.zfill(4)[-4:]
+    return f"{str(company_id).strip().upper()}.{main}{subtype}"
+
+
+def normalize_grouped_high_low_file(path: Path, payload_hash: str | None = None) -> pd.DataFrame:
+    """Normalize the 2002-2015 per-company block layout (no flat header row).
+
+    Each company's section starts with a "Company Id :" line, followed by a "Short Name :"
+    line, a column header row ("Day, Date High, High, Date Low, Low, Closing, Trades(No.),
+    Shares(No.), Turnover(Rs.), Last Traded, Days Traded"), then one data row per trading day.
+    "Date High"/"Date Low" always equal "Day" and "Days Traded" is always 1 in this dataset
+    (verified across a full company block), so "Day" is the trading date and the high/low
+    date columns are redundant. Column positions are fixed even though header label spelling
+    (units, spacing) drifts by year, so positions are used instead of header text.
+    """
+    source_hash = payload_hash or sha256_file(path)
+    raw = read_ragged_csv(path)
+    first_col = raw.iloc[:, 0].fillna("").astype(str).str.strip()
+    company_mask = first_col.str.contains("company id", case=False, regex=False, na=False)
+    if not bool(company_mask.any()):
+        return pd.DataFrame()
+
+    company = pd.Series([None] * len(raw), index=raw.index, dtype=object)
+    main_type = pd.Series([None] * len(raw), index=raw.index, dtype=object)
+    sub_type = pd.Series([None] * len(raw), index=raw.index, dtype=object)
+    for idx in raw.index[company_mask]:
+        values = [None if pd.isna(value) else str(value).strip() for value in raw.loc[idx].tolist()]
+        company.loc[idx], main_type.loc[idx], sub_type.loc[idx] = grouped_symbol_parts(values)
+
+    # A handful of company blocks in this dataset are missing their "Company Id :" line
+    # entirely (verified: 2013_Data__Sheet1.csv line ~50418, "Short Name : S M B LEASING" with
+    # no preceding "Company Id" row). ffill() only skips real (non-null) values, so writing
+    # None at that row is a no-op against it — the previous company's identity would still get
+    # silently carried across the orphaned block's data rows. A sentinel string survives
+    # ffill() as a distinct "unknown" identity instead, so the orphaned block's rows end up
+    # excluded rather than merged into an unrelated company.
+    unknown = "__unknown_company__"
+    short_name_mask = first_col.str.contains("short name", case=False, regex=False, na=False)
+    orphaned = short_name_mask & ~company_mask.shift(1, fill_value=False)
+    company.loc[orphaned] = unknown
+    main_type.loc[orphaned] = unknown
+    sub_type.loc[orphaned] = unknown
+
+    company = company.ffill()
+    main_type = main_type.ffill()
+    sub_type = sub_type.ffill()
+
+    date_mask = first_col.str.match(r"^\d{4}[-/]\d{1,2}[-/]\d{1,2}", na=False)
+    dates = pd.to_datetime(first_col, errors="coerce", format="mixed")
+    valid = date_mask & dates.notna() & company.notna() & (company != unknown)
+    if not bool(valid.any()):
+        return pd.DataFrame()
+
+    symbols = [
+        symbol_from_group_parts(c, m, s)
+        for c, m, s in zip(company[valid], main_type[valid], sub_type[valid], strict=False)
+    ]
+    out = pd.DataFrame(
+        {
+            "date": dates[valid].dt.date.astype(str).to_numpy(),
+            "symbol": symbols,
+            "open": pd.NA,
+            "high": numeric_series(raw.iloc[:, 2])[valid].to_numpy(),
+            "low": numeric_series(raw.iloc[:, 4])[valid].to_numpy(),
+            "close": numeric_series(raw.iloc[:, 5])[valid].to_numpy(),
+            "trades": numeric_series(raw.iloc[:, 6])[valid].to_numpy(),
+            "volume": numeric_series(raw.iloc[:, 7])[valid].to_numpy(),
+            "turnover": numeric_series(raw.iloc[:, 8])[valid].to_numpy(),
+        }
+    )
+    out = out[out["symbol"].notna()].copy()
+    out["source"] = SOURCE_NAME
+    out["source_priority"] = SOURCE_PRIORITY
+    out["source_timestamp"] = out["date"]
+    out["raw_payload_hash"] = source_hash
+    out["validation_status"] = "candidate"
+    out["validation_warnings"] = ""
+    return out
+
+
+def normalize_backfill_source_file(path: Path, payload_hash: str | None = None) -> pd.DataFrame:
+    """Dispatch to the flat (2016+) or per-company block (2002-2015) normalizer.
+
+    The two layouts are told apart by whether a header row containing both "company id" and
+    "trading date" can be found at all; the block layout never has both on the same row.
+    """
+    try:
+        return normalize_daily_share_price_file(path, payload_hash=payload_hash)
+    except ValueError:
+        return normalize_grouped_high_low_file(path, payload_hash=payload_hash)
 
 
 def write_source_manifest(path: Path, records: pd.DataFrame, payload_hash: str) -> None:
@@ -243,9 +401,17 @@ def run_backfill(
     dry_run: bool = False,
     allow_missing_metadata: bool = True,
     allow_validation_failure: bool = False,
+    exclude_symbols: set[str] | None = None,
 ) -> BackfillResult:
     payload_hash = sha256_file(source_path)
-    records = normalize_daily_share_price_file(source_path, payload_hash=payload_hash)
+    records = normalize_backfill_source_file(source_path, payload_hash=payload_hash)
+    if exclude_symbols:
+        # For documented source-data conflicts a single symbol can't be resolved from this
+        # file alone (e.g. COMB.N0000 in 2014_Data__Sheet1.csv appears as two complete,
+        # conflicting full-year price series under an identical header — verified, not a
+        # parsing bug). Excluding it here keeps the rest of that date's ~280 other companies
+        # from being quarantined for an unrelated company's bad data.
+        records = records[~records["symbol"].isin(exclude_symbols)].copy()
     records["date"] = pd.to_datetime(records["date"], errors="coerce").dt.date
     if start_date:
         records = records[records["date"] >= start_date]
@@ -254,6 +420,10 @@ def run_backfill(
     records["date"] = records["date"].astype(str)
 
     metadata = pd.DataFrame() if allow_missing_metadata else load_metadata(metadata_path)
+    # No source file in this dataset has an `open` column that is present but sparsely
+    # populated (2017+ files are >99.5% complete per TIQ-22); an entirely-null `open`
+    # column reliably means the source era predates 2017 and never published one at all.
+    require_open = bool(records["open"].notna().any())
     failures: list[str] = []
     accepted_dates = 0
     quarantined_dates = 0
@@ -272,6 +442,7 @@ def run_backfill(
             metadata=metadata,
             allow_missing_metadata=allow_missing_metadata,
             missing_value_threshold=0.0,
+            require_open=require_open,
         )
         validation_dir = VALIDATION_ROOT / target_date.isoformat() / SOURCE_NAME
         if not dry_run:
@@ -299,6 +470,7 @@ def run_backfill(
         "failures": failures[:200],
         "failure_count": len(failures),
         "dry_run": dry_run,
+        "require_open": require_open,
     }
     if not dry_run:
         write_backfill_summary(summary)
@@ -337,6 +509,12 @@ def main() -> None:
         help="Fail symbols missing current metadata. Default allows official historical symbols without current metadata.",
     )
     parser.add_argument("--allow-validation-failure", action="store_true")
+    parser.add_argument(
+        "--exclude-symbols",
+        help="Comma-separated canonical symbols to drop before validation, for documented "
+        "source-data conflicts that can't be resolved from this file alone (e.g. "
+        "COMB.N0000 in 2014_Data__Sheet1.csv).",
+    )
     args = parser.parse_args()
 
     result = run_backfill(
@@ -347,6 +525,7 @@ def main() -> None:
         dry_run=args.dry_run,
         allow_missing_metadata=not args.require_metadata,
         allow_validation_failure=args.allow_validation_failure,
+        exclude_symbols=set(args.exclude_symbols.split(",")) if args.exclude_symbols else None,
     )
     print(
         "PASS: OHLCV backfill evaluated "

@@ -125,5 +125,38 @@ class BackfillOHLCVTests(unittest.TestCase):
         self.assertTrue(any("negative OHLC price" in reason for reason in rejected["rejection_reason"]))
 
 
+class GroupedHighLowBlockTests(unittest.TestCase):
+    def test_sub_type_label_split_after_any_letter_of_type(self) -> None:
+        # 2013 splits the label as "Sub Ty,pe :  0049"; 2003/2004/2006-2009 split it as
+        # "Sub T,ype :  0049" instead — a different split point that an earlier version of
+        # this regex missed, silently defaulting the sub-type to "0000" and colliding
+        # distinct securities (e.g. COMB's ordinary vs preference share blocks) onto one
+        # symbol.
+        source = Path(tempfile.mkstemp(suffix=".csv")[1])
+        self.addCleanup(source.unlink)
+        source.write_text(
+            "\n".join(
+                [
+                    "Company Id :,COMB,Security,Type :  P,Sub Ty,pe :  0004,,,,,",
+                    "Short Name :,COMBANK PREF,,,,,,,,,",
+                    "Day,Date High,High,Date Low,Low,Closing,Trades(No.),Shares(No.),Turnover(Rs.),Last Traded,Days Traded",
+                    "2013-01-02 00:00:00,2013-01-02 00:00:00,100,2013-01-02 00:00:00,98,99,2,1000,99000,2013-01-02 00:00:00,1",
+                    "Company Id :,COMB,Security,Type :  D,Sub T,ype :  0016,,,,,",
+                    "Short Name :,COMBANK,,,,,,,,,",
+                    "Day,Date High,High,Date Low,Low,Closing,Trades(No.),Shares(No.),Turnover(Rs.),Last Traded,Days Traded",
+                    "2013-01-02 00:00:00,2013-01-02 00:00:00,120,2013-01-02 00:00:00,118,119,3,2000,238000,2013-01-02 00:00:00,1",
+                ]
+            )
+            + "\n"
+        )
+
+        records = backfill.normalize_grouped_high_low_file(source)
+
+        self.assertEqual(
+            sorted(records["symbol"]),
+            ["COMB.D0016", "COMB.P0004"],
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
