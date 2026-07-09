@@ -234,10 +234,12 @@ def grouped_symbol_parts(values: list[str | None]) -> tuple[str | None, str | No
     # "Company Id", "Security Type"/"Type", and "Sub Type" labels drift across 2002-2015 source
     # years (sometimes one cell, sometimes split by the comma inside "Security, Type : N") so
     # each label is searched independently rather than assuming a fixed cell layout. Some rows
-    # even split a label mid-word across two cells (e.g. "Sub Ty,pe :  0006") — verified against
-    # real 2013 data, where this silently defaulted distinct warrant sub-types to the same
-    # symbol and caused duplicate-date rejections — so a regex over the joined row text is a
-    # required fallback, not optional robustness.
+    # even split a label mid-word across two cells, and the split point itself varies by year
+    # (e.g. "Sub Ty,pe :  0006" in 2013 vs "Sub T,ype :  0049" in 2003/2004/2006-2009) —
+    # verified against real data in both eras, where an unmatched split silently defaulted a
+    # non-zero sub-type to "0000", colliding distinct securities (e.g. COMB's ordinary and
+    # preference share blocks) onto the same symbol. The regex tolerates a split after any
+    # letter of "type" rather than hardcoding one split point.
     joined = " ".join(value for value in values if value)
     company = value_after_label(values, "Company Id") or regex_group(joined, r"company\s*id\s*,?\s*:?\s*([A-Za-z0-9]+)")
     main = (
@@ -245,7 +247,7 @@ def grouped_symbol_parts(values: list[str | None]) -> tuple[str | None, str | No
         or value_after_label(values, "Type")
         or regex_group(joined, r"(?:security\s*)?type\s*:?\s*([A-Za-z])")
     )
-    sub = value_after_label(values, "Sub Type") or regex_group(joined, r"sub\s*ty\s*pe\s*:?\s*([A-Za-z0-9]+)")
+    sub = value_after_label(values, "Sub Type") or regex_group(joined, r"sub\s*t\s*y\s*p\s*e\s*:?\s*([A-Za-z0-9]+)")
     return company, main, sub
 
 
