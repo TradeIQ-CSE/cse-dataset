@@ -86,6 +86,7 @@ def validate_ohlcv_records(
     required_activity_columns: list[str] | None = None,
     low_variation_min_rows: int = 60,
     low_variation_max_distinct_closes: int = 2,
+    require_open: bool = True,
 ) -> ValidationResult:
     failures: list[str] = list(source_date_failures or [])
     warnings: list[str] = []
@@ -129,25 +130,29 @@ def validate_ohlcv_records(
     if duplicate_mask.any():
         failures.append(f"duplicate (symbol, date) rows: {int(duplicate_mask.sum())}")
 
-    required_price_cols = ["open", "high", "low", "close"]
+    # Pre-2017 CSE source files never published an opening price (see TIQ-21: decision was
+    # to leave `open` null for those eras rather than reject or synthesize it).
+    required_price_cols = ["open", "high", "low", "close"] if require_open else ["high", "low", "close"]
     missing_price_mask = df[required_price_cols].isna().any(axis=1)
     _mark_rejected(rejection_reasons, missing_price_mask, "missing OHLC price")
 
     negative_prices = df[required_price_cols].notna().all(axis=1) & (df[required_price_cols] < 0).any(axis=1)
     _mark_rejected(rejection_reasons, negative_prices, "negative OHLC price")
 
+    high_bound_cols = [column for column in required_price_cols if column != "high"]
+    low_bound_cols = [column for column in required_price_cols if column != "low"]
     invalid_bounds = (
         df[required_price_cols].notna().all(axis=1)
         & ~negative_prices
         & (
-            (df["high"] < df[["open", "low", "close"]].max(axis=1))
-            | (df["low"] > df[["open", "high", "close"]].min(axis=1))
+            (df["high"] < df[high_bound_cols].max(axis=1))
+            | (df["low"] > df[low_bound_cols].min(axis=1))
         )
     )
     repaired_count = int(invalid_bounds.sum())
     if repaired_count:
-        df.loc[invalid_bounds, "high"] = df.loc[invalid_bounds, ["open", "high", "low", "close"]].max(axis=1)
-        df.loc[invalid_bounds, "low"] = df.loc[invalid_bounds, ["open", "high", "low", "close"]].min(axis=1)
+        df.loc[invalid_bounds, "high"] = df.loc[invalid_bounds, required_price_cols].max(axis=1)
+        df.loc[invalid_bounds, "low"] = df.loc[invalid_bounds, required_price_cols].min(axis=1)
     df["source_ohlc_invalid"] = invalid_bounds
     df["ohlc_repaired"] = invalid_bounds
     df["ohlc_invalid"] = negative_prices

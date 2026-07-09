@@ -86,16 +86,24 @@ def find_header_row(raw: pd.DataFrame) -> int:
 
 
 def canonical_column_map(columns: list[Any]) -> dict[str, str]:
+    # `open` is the one canonical field absent from all official CSE source files before
+    # 2017 (see TIQ-21); every other field is required in every era.
     normalized = {normalize_header(column): str(column).strip() for column in columns}
     mapping: dict[str, str] = {}
     for canonical, aliases in HEADER_ALIASES.items():
+        if canonical == "open":
+            continue
         for alias in aliases:
             if alias in normalized:
                 mapping[canonical] = normalized[alias]
                 break
-    missing = sorted(set(HEADER_ALIASES) - set(mapping))
+    missing = sorted((set(HEADER_ALIASES) - {"open"}) - set(mapping))
     if missing:
         raise ValueError(f"daily share price file is missing required columns: {', '.join(missing)}")
+    for alias in HEADER_ALIASES["open"]:
+        if alias in normalized:
+            mapping["open"] = normalized[alias]
+            break
     return mapping
 
 
@@ -173,7 +181,7 @@ def normalize_daily_share_price_file(path: Path, payload_hash: str | None = None
         out = pd.DataFrame()
         out["date"] = pd.to_datetime(table[mapping["trading_date"]], errors="coerce").dt.date.astype(str)
         out["symbol"] = security_symbols(table[mapping["company_id"]], table[mapping["main_type"]], table[mapping["sub_type"]])
-        out["open"] = numeric_series(table[mapping["open"]])
+        out["open"] = numeric_series(table[mapping["open"]]) if "open" in mapping else pd.NA
         out["high"] = numeric_series(table[mapping["high"]])
         out["low"] = numeric_series(table[mapping["low"]])
         out["close"] = numeric_series(table[mapping["close"]])
@@ -254,6 +262,10 @@ def run_backfill(
     records["date"] = records["date"].astype(str)
 
     metadata = pd.DataFrame() if allow_missing_metadata else load_metadata(metadata_path)
+    # No source file in this dataset has an `open` column that is present but sparsely
+    # populated (2017+ files are >99.5% complete per TIQ-22); an entirely-null `open`
+    # column reliably means the source era predates 2017 and never published one at all.
+    require_open = bool(records["open"].notna().any())
     failures: list[str] = []
     accepted_dates = 0
     quarantined_dates = 0
@@ -272,6 +284,7 @@ def run_backfill(
             metadata=metadata,
             allow_missing_metadata=allow_missing_metadata,
             missing_value_threshold=0.0,
+            require_open=require_open,
         )
         validation_dir = VALIDATION_ROOT / target_date.isoformat() / SOURCE_NAME
         if not dry_run:
@@ -299,6 +312,7 @@ def run_backfill(
         "failures": failures[:200],
         "failure_count": len(failures),
         "dry_run": dry_run,
+        "require_open": require_open,
     }
     if not dry_run:
         write_backfill_summary(summary)
