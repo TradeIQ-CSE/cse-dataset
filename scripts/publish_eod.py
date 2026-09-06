@@ -69,10 +69,9 @@ def integer_string(value: Any, *, nullable: bool = False) -> str | None:
     return str(int(number))
 
 
-def canonical_digest(trade_date: str, prices: list[dict[str, Any]]) -> str:
+def canonical_digest(prices: list[dict[str, Any]]) -> str:
     canonical = [
         {
-            "date": trade_date,
             "symbol": row["symbol"],
             "open": row["open"],
             "high": row["high"],
@@ -259,7 +258,7 @@ def build_request(
             security["shares_outstanding"] = shares
         securities.append(security)
 
-    market_digest = canonical_digest(trade_date, prices)
+    market_digest = canonical_digest(prices)
     raw_hash = str(result.get("raw_payload_hash", ""))
     if not re.fullmatch(r"[a-f0-9]{64}", raw_hash):
         raise DeliveryError("result manifest has an invalid raw payload hash")

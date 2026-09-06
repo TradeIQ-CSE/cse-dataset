@@ -6,7 +6,14 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from scripts.publish_eod import DeliveryError, ROOT, build_request, deliver, main
+from scripts.publish_eod import (
+    DeliveryError,
+    ROOT,
+    build_request,
+    canonical_digest,
+    deliver,
+    main,
+)
 
 
 class FakeResponse:
@@ -130,6 +137,26 @@ class PublishEodTests(unittest.TestCase):
         self.assertEqual(first["securities"][0]["shares_outstanding"], "1000000")
         self.assertEqual(len(first["batch_id"]), 64)
         self.assertEqual(len(first["market_digest"]), 64)
+
+    def test_market_digest_depends_only_on_canonical_price_content(self):
+        first = {
+            "symbol": "AAAA.N0000",
+            "open": "10.0000",
+            "high": "12.0000",
+            "low": "9.5000",
+            "close": "11.2500",
+            "volume": "1234",
+        }
+        second = {**first, "symbol": "BBBB.N0000"}
+
+        self.assertEqual(
+            canonical_digest([first, second]),
+            canonical_digest([second, first]),
+        )
+        self.assertNotEqual(
+            canonical_digest([first]),
+            canonical_digest([{**first, "close": "11.2600"}]),
+        )
 
     def test_refuses_rejected_current_invocation(self):
         with tempfile.TemporaryDirectory(dir=ROOT / "data") as directory:
