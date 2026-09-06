@@ -85,6 +85,37 @@ def write_accepted_artifacts(target_date: date, source_name: str, accepted: pd.D
     (MANIFEST_ROOT / "latest_accepted.json").write_text(manifest_text)
 
 
+def write_result_manifest(
+    path: Path,
+    *,
+    target_date: date,
+    fetch_result: Any,
+    result: Any,
+) -> None:
+    """Record exactly what this invocation produced for the delivery step.
+
+    The publisher consumes this file instead of searching accepted directories,
+    which prevents a rejected run from accidentally sending an older artifact.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    accepted_path = (
+        ACCEPTED_ROOT / target_date.isoformat() / fetch_result.source_name / "canonical_ohlcv.csv"
+    )
+    manifest = {
+        "contract_version": "1",
+        "status": "accepted" if result.passed else "rejected",
+        "target_date": target_date.isoformat(),
+        "source_name": fetch_result.source_name,
+        "captured_at": fetch_result.fetch_time_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "source_date_method": "colombo_capture_date",
+        "raw_payload_hash": fetch_result.payload_hash,
+        "accepted_path": str(accepted_path.relative_to(ROOT)) if result.passed else None,
+        "metadata_path": str(DEFAULT_METADATA.relative_to(ROOT)),
+        "validation": result.metrics,
+    }
+    path.write_text(json.dumps(manifest, indent=2) + "\n")
+
+
 def collect_daily_ohlcv(args: argparse.Namespace) -> None:
     target_date = parse_target_date(args.target_date)
     adapter = make_adapter(args.source)
@@ -114,6 +145,13 @@ def collect_daily_ohlcv(args: argparse.Namespace) -> None:
         write_validation_outputs(result, output_dir=validation_dir, source_name=adapter.source_name)
         if result.passed:
             write_accepted_artifacts(target_date, adapter.source_name, result.accepted, result.metrics)
+        if args.result_manifest:
+            write_result_manifest(
+                Path(args.result_manifest),
+                target_date=target_date,
+                fetch_result=fetch_result,
+                result=result,
+            )
 
     if not result.passed:
         for failure in result.failures:
@@ -142,6 +180,10 @@ def main() -> None:
         help="Allow source-only dry runs before company metadata has been rebuilt",
     )
     parser.add_argument("--ignore-previous-digest", action="store_true")
+    parser.add_argument(
+        "--result-manifest",
+        help="Write an invocation-specific JSON result for the delivery step",
+    )
     parser.add_argument("--missing-activity-threshold", type=float, default=0.0)
     parser.add_argument(
         "--allow-validation-failure",
@@ -149,6 +191,9 @@ def main() -> None:
         help="Exit successfully after writing validation reports for rejected source payloads",
     )
     args = parser.parse_args()
+    if args.result_manifest:
+        # A fetch crash must not leave a previous invocation looking current.
+        Path(args.result_manifest).unlink(missing_ok=True)
     collect_daily_ohlcv(args)
 
 
