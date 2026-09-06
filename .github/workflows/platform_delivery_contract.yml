@@ -111,6 +111,7 @@ jobs:
           uv run python scripts/publish_eod.py \
             --result-manifest tests/fixtures/eod_delivery/result.json \
             --calendar-path tests/fixtures/eod_delivery/calendar.csv \
+            --expected-trade-date 2026-09-04 \
             --out-dir data/run/contract
 
       - name: Verify the trading consumer sees the delivered close

@@ -10,11 +10,11 @@ import random
 import re
 import subprocess
 import time
-from datetime import datetime, time as clock_time
+from datetime import date, datetime, time as clock_time
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlsplit
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -24,6 +24,7 @@ import requests
 ROOT = Path(__file__).resolve().parents[1]
 COLOMBO_TZ = ZoneInfo("Asia/Colombo")
 MAX_REQUEST_BYTES = 2 * 1024 * 1024
+SHA256 = re.compile(r"[a-f0-9]{64}")
 
 
 class DeliveryError(RuntimeError):
@@ -128,6 +129,22 @@ def assert_after_close(captured_at: str, trade_date: str, close_time: str) -> No
         raise DeliveryError(f"capture occurred before the configured {close_time} Colombo close")
 
 
+def assert_expected_trade_date(
+    trade_date: str,
+    expected_trade_date: str | None = None,
+) -> None:
+    expected = expected_trade_date or datetime.now(COLOMBO_TZ).date().isoformat()
+    try:
+        parsed_trade_date = date.fromisoformat(trade_date)
+        parsed_expected_date = date.fromisoformat(expected)
+    except (TypeError, ValueError) as exc:
+        raise DeliveryError("target and expected trading dates must be valid ISO dates") from exc
+    if parsed_trade_date != parsed_expected_date:
+        raise DeliveryError(
+            f"manifest trading date {trade_date} does not match expected date {expected}"
+        )
+
+
 def _git_commit() -> str | None:
     configured = os.getenv("GITHUB_SHA")
     if configured:
@@ -145,6 +162,7 @@ def build_request(
     calendar_path: Path,
     *,
     close_time: str = "14:30",
+    expected_trade_date: str | None = None,
 ) -> dict[str, Any]:
     result = load_json(result_manifest_path)
     if result.get("contract_version") != "1" or result.get("status") != "accepted":
@@ -152,6 +170,7 @@ def build_request(
     trade_date = str(result.get("target_date", ""))
     captured_at = str(result.get("captured_at", ""))
     assert_after_close(captured_at, trade_date, close_time)
+    assert_expected_trade_date(trade_date, expected_trade_date)
     calendar = load_calendar_entry(calendar_path, trade_date)
 
     validation = result.get("validation")
@@ -333,13 +352,53 @@ def deliver(
     api_url: str,
     token: str,
     session: requests.Session | None = None,
+    prefer_existing_receipt: bool = False,
 ) -> dict[str, Any]:
-    if not api_url.startswith(("http://localhost", "http://127.0.0.1", "https://")):
+    try:
+        parsed_api_url = urlsplit(api_url)
+        parsed_api_url.port
+    except ValueError as exc:
+        raise DeliveryError("the ingestion API URL is invalid") from exc
+    local_http = (
+        parsed_api_url.scheme == "http"
+        and parsed_api_url.hostname in {"localhost", "127.0.0.1", "::1"}
+    )
+    if (
+        not parsed_api_url.hostname
+        or (parsed_api_url.scheme != "https" and not local_http)
+        or parsed_api_url.username is not None
+        or parsed_api_url.password is not None
+        or parsed_api_url.query
+        or parsed_api_url.fragment
+    ):
         raise DeliveryError("the ingestion API must use HTTPS outside localhost")
     if not token:
         raise DeliveryError("the ingestion token is empty")
+    batch_id = request_body.get("batch_id")
+    trade_date = request_body.get("trade_date")
+    market_digest = request_body.get("market_digest")
+    if not isinstance(batch_id, str) or not SHA256.fullmatch(batch_id):
+        raise DeliveryError("the ingestion request has an invalid batch_id")
+    if not isinstance(trade_date, str):
+        raise DeliveryError("the ingestion request has no trade_date")
+    if not isinstance(market_digest, str) or not SHA256.fullmatch(market_digest):
+        raise DeliveryError("the ingestion request has an invalid market_digest")
     client = session or requests.Session()
     endpoint = urljoin(api_url.rstrip("/") + "/", "internal/v1/ingestions/eod")
+
+    if prefer_existing_receipt:
+        existing = _request_with_retries(
+            client,
+            "GET",
+            f"{endpoint}/{batch_id}",
+            token=token,
+        )
+        if existing.status_code == 200:
+            return _validated_receipt(existing, request_body)
+        if existing.status_code != 404:
+            raise DeliveryError(
+                f"batch-receipt lookup failed with HTTP {existing.status_code}"
+            )
 
     latest = _request_with_retries(client, "GET", endpoint + "/latest", token=token)
     if latest.status_code != 200:
@@ -361,10 +420,40 @@ def deliver(
         except ValueError:
             details = response.text[:500]
         raise DeliveryError(f"ingestion failed with HTTP {response.status_code}: {details}")
-    payload = response.json()
-    if not isinstance(payload.get("data"), dict):
+    return _validated_receipt(response, request_body)
+
+
+def _validated_receipt(
+    response: requests.Response,
+    request_body: dict[str, Any],
+) -> dict[str, Any]:
+    try:
+        payload = response.json()
+    except ValueError as exc:
+        raise DeliveryError("ingestion API returned an invalid receipt") from exc
+    receipt = payload.get("data") if isinstance(payload, dict) else None
+    if not isinstance(receipt, dict):
         raise DeliveryError("ingestion API returned no durable receipt")
-    return payload["data"]
+    if receipt.get("batch_id") != request_body.get("batch_id"):
+        raise DeliveryError("ingestion receipt batch_id does not match the request")
+    if receipt.get("trade_date") != request_body.get("trade_date"):
+        raise DeliveryError("ingestion receipt trade_date does not match the request")
+    if receipt.get("market_digest") != request_body.get("market_digest"):
+        raise DeliveryError("ingestion receipt market_digest does not match the request")
+    records_accepted = receipt.get("records_accepted")
+    if (
+        not isinstance(records_accepted, int)
+        or isinstance(records_accepted, bool)
+        or records_accepted < 0
+    ):
+        raise DeliveryError("ingestion receipt has an invalid records_accepted value")
+    validation = request_body.get("validation")
+    expected_records = validation.get("accepted") if isinstance(validation, dict) else None
+    if isinstance(expected_records, int) and records_accepted != expected_records:
+        raise DeliveryError("ingestion receipt accepted count does not match the request")
+    if receipt.get("status") != "succeeded":
+        raise DeliveryError("ingestion receipt does not report a successful delivery")
+    return receipt
 
 
 def main() -> None:
@@ -377,6 +466,10 @@ def main() -> None:
     parser.add_argument("--token", default=os.getenv("TRADEIQ_INGESTION_TOKEN"))
     parser.add_argument("--out-dir", type=Path, required=True)
     parser.add_argument("--close-time", default="14:30")
+    parser.add_argument(
+        "--expected-trade-date",
+        help="Expected YYYY-MM-DD date; defaults to today's Asia/Colombo date",
+    )
     args = parser.parse_args()
     if not args.api_url or not args.token:
         raise DeliveryError("api URL and token are required")
@@ -386,12 +479,20 @@ def main() -> None:
         if not args.calendar_path:
             raise DeliveryError("--calendar-path is required when building a request")
         request_body = build_request(
-            args.result_manifest, args.calendar_path, close_time=args.close_time
+            args.result_manifest,
+            args.calendar_path,
+            close_time=args.close_time,
+            expected_trade_date=args.expected_trade_date,
         )
     args.out_dir.mkdir(parents=True, exist_ok=True)
     request_path = args.out_dir / "eod_ingestion_request.json"
     request_path.write_text(json.dumps(request_body, indent=2) + "\n")
-    receipt = deliver(request_body, api_url=args.api_url, token=args.token)
+    receipt = deliver(
+        request_body,
+        api_url=args.api_url,
+        token=args.token,
+        prefer_existing_receipt=args.replay_request is not None,
+    )
     (args.out_dir / "eod_ingestion_receipt.json").write_text(
         json.dumps(receipt, indent=2) + "\n"
     )

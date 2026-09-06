@@ -16,6 +16,8 @@ The publisher also requires:
 
 - capture after the configured 14:30 Asia/Colombo market close;
 - capture date equal to the requested trading date;
+- trading date equal to the current Asia/Colombo date unless an operator
+  supplies `--expected-trade-date` explicitly;
 - one source-attributed, verified trading-day entry in an operator calendar;
 - matching artifact dates, row counts and security metadata;
 - no repeated market digest from the platform's latest accepted receipt.
@@ -52,7 +54,8 @@ uv run python scripts/publish_eod.py \
 
 The output directory contains the exact request and durable platform receipt.
 If a client loses the response, replay the retained request without contacting
-CSE again:
+CSE again. Replay first looks up the batch receipt and sends the retained
+request only when the platform does not already have it:
 
 ```sh
 uv run python scripts/publish_eod.py \

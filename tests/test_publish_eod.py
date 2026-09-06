@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from scripts.publish_eod import DeliveryError, ROOT, build_request, deliver
+from scripts.publish_eod import DeliveryError, ROOT, build_request, deliver, main
 
 
 class FakeResponse:
@@ -28,6 +28,25 @@ class FakeSession:
     def request(self, method, url, **kwargs):
         self.calls.append((method, url, kwargs))
         return self.responses.pop(0)
+
+
+def valid_request():
+    return {
+        "batch_id": "b" * 64,
+        "trade_date": "2026-09-04",
+        "market_digest": "a" * 64,
+        "validation": {"accepted": 1},
+    }
+
+
+def valid_receipt():
+    return {
+        "batch_id": "b" * 64,
+        "trade_date": "2026-09-04",
+        "status": "succeeded",
+        "market_digest": "a" * 64,
+        "records_accepted": 1,
+    }
 
 
 class PublishEodTests(unittest.TestCase):
@@ -98,8 +117,12 @@ class PublishEodTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=ROOT / "data") as directory:
             result, calendar = self.make_files(Path(directory))
             with patch("scripts.publish_eod._git_commit", return_value="c" * 40):
-                first = build_request(result, calendar)
-                second = build_request(result, calendar)
+                first = build_request(
+                    result, calendar, expected_trade_date="2026-09-04"
+                )
+                second = build_request(
+                    result, calendar, expected_trade_date="2026-09-04"
+                )
 
         self.assertEqual(first, second)
         self.assertEqual(first["validation"], {"processed": 1, "accepted": 1, "rejected": 0, "repaired": 0})
@@ -121,16 +144,52 @@ class PublishEodTests(unittest.TestCase):
             payload["captured_at"] = "2026-09-04T08:00:00Z"
             result.write_text(json.dumps(payload))
             with self.assertRaisesRegex(DeliveryError, "before the configured"):
-                build_request(result, calendar)
+                build_request(
+                    result, calendar, expected_trade_date="2026-09-04"
+                )
+
+    def test_refuses_manifest_for_an_unexpected_date(self):
+        with tempfile.TemporaryDirectory(dir=ROOT / "data") as directory:
+            result, calendar = self.make_files(Path(directory))
+            with self.assertRaisesRegex(DeliveryError, "does not match expected date"):
+                build_request(
+                    result, calendar, expected_trade_date="2026-09-05"
+                )
+
+    @patch("scripts.publish_eod.deliver")
+    def test_stale_manifest_never_calls_delivery(self, mock_deliver):
+        with tempfile.TemporaryDirectory(dir=ROOT / "data") as directory:
+            root = Path(directory)
+            result, calendar = self.make_files(root)
+            args = [
+                "publish_eod.py",
+                "--result-manifest",
+                str(result),
+                "--calendar-path",
+                str(calendar),
+                "--expected-trade-date",
+                "2026-09-05",
+                "--api-url",
+                "http://localhost:3001",
+                "--token",
+                "secret",
+                "--out-dir",
+                str(root / "delivery"),
+            ]
+            with patch("sys.argv", args), self.assertRaisesRegex(
+                DeliveryError, "does not match expected date"
+            ):
+                main()
+        mock_deliver.assert_not_called()
 
     @patch("scripts.publish_eod.time.sleep", return_value=None)
     def test_retries_transient_post_and_returns_receipt(self, _sleep):
-        request_body = {"trade_date": "2026-09-04", "market_digest": "a" * 64}
+        request_body = valid_request()
         session = FakeSession(
             [
                 FakeResponse(200, {"data": None}),
                 FakeResponse(503, {"error": {"code": "INTERNAL"}}),
-                FakeResponse(201, {"data": {"batch_id": "b" * 64}}),
+                FakeResponse(201, {"data": valid_receipt()}),
             ]
         )
         receipt = deliver(
@@ -143,7 +202,7 @@ class PublishEodTests(unittest.TestCase):
         self.assertEqual([call[0] for call in session.calls], ["GET", "POST", "POST"])
 
     def test_rejects_repeated_snapshot_before_posting(self):
-        request_body = {"trade_date": "2026-09-04", "market_digest": "a" * 64}
+        request_body = valid_request()
         session = FakeSession(
             [
                 FakeResponse(
@@ -160,6 +219,50 @@ class PublishEodTests(unittest.TestCase):
                 session=session,
             )
         self.assertEqual(len(session.calls), 1)
+
+    def test_replay_returns_existing_receipt_without_posting(self):
+        session = FakeSession([FakeResponse(200, {"data": valid_receipt()})])
+
+        receipt = deliver(
+            valid_request(),
+            api_url="http://localhost:3001",
+            token="secret",
+            session=session,
+            prefer_existing_receipt=True,
+        )
+
+        self.assertEqual(receipt, valid_receipt())
+        self.assertEqual([call[0] for call in session.calls], ["GET"])
+        self.assertTrue(session.calls[0][1].endswith("/" + "b" * 64))
+
+    def test_rejects_invalid_or_mismatched_receipt(self):
+        session = FakeSession(
+            [
+                FakeResponse(200, {"data": None}),
+                FakeResponse(201, {"data": {}}),
+            ]
+        )
+
+        with self.assertRaisesRegex(DeliveryError, "batch_id does not match"):
+            deliver(
+                valid_request(),
+                api_url="http://localhost:3001",
+                token="secret",
+                session=session,
+            )
+
+    def test_rejects_non_loopback_cleartext_url(self):
+        session = FakeSession([])
+
+        with self.assertRaisesRegex(DeliveryError, "must use HTTPS"):
+            deliver(
+                valid_request(),
+                api_url="http://localhost.evil",
+                token="secret",
+                session=session,
+            )
+
+        self.assertEqual(session.calls, [])
 
 
 if __name__ == "__main__":
