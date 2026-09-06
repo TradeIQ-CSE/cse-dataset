@@ -1,0 +1,18 @@
+{
+  "contract_version": "1",
+  "status": "accepted",
+  "target_date": "2026-09-04",
+  "source_name": "contract_fixture",
+  "captured_at": "2026-09-04T09:18:00Z",
+  "source_date_method": "fixture_date",
+  "raw_payload_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "accepted_path": "tests/fixtures/eod_delivery/accepted.csv",
+  "metadata_path": "tests/fixtures/eod_delivery/metadata.csv",
+  "validation": {
+    "row_count": 1,
+    "accepted_rows": 1,
+    "rejected_rows": 0,
+    "ohlc_repaired_rows": 0,
+    "failures": []
+  }
+}

@@ -36,6 +36,10 @@ def main() -> None:
         action="store_true",
         help="Record rejected source payloads without failing the process",
     )
+    parser.add_argument(
+        "--result-manifest",
+        help="Write an invocation-specific JSON result for the delivery step",
+    )
     args = parser.parse_args()
 
     # Metadata is regenerated before OHLCV so symbol/listing-date gates can run.
@@ -51,6 +55,8 @@ def main() -> None:
         collect_args.append("--allow-missing-metadata")
     if args.allow_validation_failure:
         collect_args.append("--allow-validation-failure")
+    if args.result_manifest:
+        collect_args.extend(["--result-manifest", args.result_manifest])
     run_step(collect_args)
 
     if not args.dry_run:

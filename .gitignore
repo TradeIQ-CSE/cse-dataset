@@ -13,6 +13,7 @@ __pycache__/
 data/raw/**
 data/processed/**
 data/published/**
+data/run/**
 notebooks/executed/
 
 # IDE & OS

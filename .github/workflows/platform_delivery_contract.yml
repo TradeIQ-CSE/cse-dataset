@@ -1,0 +1,140 @@
+name: Platform delivery contract
+
+on:
+  pull_request:
+    paths:
+      - "scripts/publish_eod.py"
+      - "scripts/02_collect_prices.py"
+      - "scripts/daily_update.py"
+      - "tests/fixtures/eod_delivery/**"
+      - ".github/workflows/platform_delivery_contract.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      db:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: changeme
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      MARKET_DATA_DATABASE_URL: postgresql://market_data:changeme@localhost:5432/market_data
+      DATA_INGESTION_MARKET_DATA_DATABASE_URL: postgresql://market_data:changeme@localhost:5432/market_data
+      MARKET_INGESTION_TOKEN: contract-test-secret
+
+    steps:
+      - name: Checkout dataset change
+        uses: actions/checkout@v4
+        with:
+          path: dataset
+          persist-credentials: false
+
+      - name: Checkout platform contract
+        uses: actions/checkout@v4
+        with:
+          repository: TradeIQ-CSE/tradeiq_cse
+          ref: dev
+          path: platform
+          persist-credentials: false
+
+      - name: Resolve platform contract revision
+        run: |
+          if [ ! -f platform/services/market-trading/src/eod-ingestion/eod-ingestion.module.ts ]; then
+            git -C platform fetch --depth=1 origin nimesh/tiq-95-market-data-bulk-write-ingestion-api-as-the-pipelines-only-write-path
+            git -C platform checkout --detach FETCH_HEAD
+          fi
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+          cache-dependency-path: platform/pnpm-lock.yaml
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Create market-data database and role
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y postgresql-client
+          psql "postgresql://postgres:changeme@localhost:5432/postgres" -v ON_ERROR_STOP=1 -f platform/docker/db/init.sql
+
+      - name: Install and migrate platform
+        working-directory: platform
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --dir services/market-trading migration:run
+
+      - name: Seed market data
+        working-directory: platform/pipeline/data-ingestion
+        run: |
+          uv sync --all-groups
+          uv run python -m data_ingestion.seed
+
+      - name: Start market API
+        working-directory: platform
+        run: |
+          pnpm --filter @tradeiq/market-trading build
+          pnpm --filter @tradeiq/market-trading start > "$RUNNER_TEMP/market-trading.log" 2>&1 &
+          for attempt in $(seq 1 30); do
+            curl --fail --silent http://localhost:3001/health && exit 0
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/market-trading.log"
+          exit 1
+
+      - name: Send the Python contract fixture
+        working-directory: dataset
+        env:
+          TRADEIQ_INGESTION_API_URL: http://localhost:3001
+          TRADEIQ_INGESTION_TOKEN: contract-test-secret
+        run: |
+          uv sync --frozen
+          uv run python scripts/publish_eod.py \
+            --result-manifest tests/fixtures/eod_delivery/result.json \
+            --calendar-path tests/fixtures/eod_delivery/calendar.csv \
+            --expected-trade-date 2026-09-04 \
+            --out-dir data/run/contract
+
+      - name: Verify the trading consumer sees the delivered close
+        run: |
+          python - <<'PY'
+          import json
+          import urllib.request
+
+          with urllib.request.urlopen(
+              "http://localhost:3001/internal/paper-trading/quotes/TEST.N0000"
+          ) as response:
+              quote = json.load(response)["data"]
+          assert quote["market_as_of"] == "2026-09-04", quote
+          assert quote["price_as_of"] == "2026-09-04", quote
+          assert quote["close"] == 11.25, quote
+          PY
+
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: platform-delivery-contract-${{ github.run_id }}
+          path: |
+            dataset/data/run/contract/
+            ${{ runner.temp }}/market-trading.log
+          if-no-files-found: ignore

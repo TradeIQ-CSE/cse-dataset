@@ -67,6 +67,11 @@ payload, writes accepted canonical rows under `data/raw/ohlcv/accepted/`, and
 builds `data/processed/all_stocks_merged.parquet` only from accepted raw
 transactions. It does not load or append stale processed Parquet data.
 
+Validated current-day batches can be delivered to the TradeIQ market-data API
+using `scripts/publish_eod.py`. Delivery is disabled by default; see
+[docs/eod_platform_delivery.md](docs/eod_platform_delivery.md) for its calendar,
+authentication, replay, and GitHub Actions requirements.
+
 ## Historical OHLCV Backfill
 
 Backfill official CSE daily share price files through `2025-12-31` with
