@@ -47,7 +47,16 @@ jobs:
           path: platform
           persist-credentials: false
 
+      - name: Resolve platform contract revision
+        run: |
+          if [ ! -f platform/services/market-trading/src/eod-ingestion/eod-ingestion.module.ts ]; then
+            git -C platform fetch --depth=1 origin nimesh/tiq-95-market-data-bulk-write-ingestion-api-as-the-pipelines-only-write-path
+            git -C platform checkout --detach FETCH_HEAD
+          fi
+
       - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
 
       - uses: actions/setup-node@v4
         with:
