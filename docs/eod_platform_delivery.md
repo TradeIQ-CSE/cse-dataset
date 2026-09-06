@@ -20,7 +20,9 @@ The publisher also requires:
   supplies `--expected-trade-date` explicitly;
 - one source-attributed, verified trading-day entry in an operator calendar;
 - matching artifact dates, row counts and security metadata;
-- no repeated market digest from the platform's latest accepted receipt.
+- no repeated market digest from the platform's latest accepted receipt. The
+  digest covers canonical symbol and OHLCV content but excludes the trading
+  date, so an unchanged snapshot cannot be relabelled as a later session.
 
 The CSE `tradeSummary` response has no trustworthy source date. Its current-day
 adapter therefore records `colombo_capture_date` as the source-date method. It
