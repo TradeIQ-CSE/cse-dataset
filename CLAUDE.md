@@ -61,6 +61,21 @@ uv run python scripts/2026_forward_update.py \
   --start-date 2026-01-01 --end-date 2026-05-29 --allow-validation-failure
 ```
 
+**Historical index backfill (ASPI, S&P SL20, TRI series):**
+```bash
+uv run python scripts/convert_historical_indices.py --dry-run
+```
+
+**Daily index collection (defaults to the current Colombo date):**
+```bash
+uv run python scripts/daily_indices_update.py --target-date 2026-09-08
+```
+
+**2026 ASPI gap fill from the trailing chart window:**
+```bash
+uv run python scripts/backfill_2026_indices.py --dry-run
+```
+
 **Source reconnaissance (before building a new adapter):**
 ```bash
 uv run python scripts/source_recon.py --target-date 2026-05-29
@@ -75,9 +90,9 @@ uv run python scripts/repair_ohlcv_missing.py export-targets \
 
 ## Architecture
 
-### Three Distinct Data Paths
+### Distinct Data Paths
 
-The codebase separates ingestion into three non-overlapping paths. Do not mix them:
+The codebase separates ingestion into non-overlapping paths. Do not mix them:
 
 | Path | Script | Source | Date coverage |
 |---|---|---|---|
@@ -85,10 +100,22 @@ The codebase separates ingestion into three non-overlapping paths. Do not mix th
 | Historical backfill | `scripts/backfill_ohlcv.py` | Official CSE workbooks/CSVs | Through 2025-12-31 |
 | 2026-forward | `scripts/2026_forward_update.py` | CSE daily PDF reports, Yahoo Finance (candidate) | 2026-01-01 onward |
 
+Indices are collected on their own two paths, for the same reason: the official
+workbook spans decades, the API serves only the settled day.
+
+| Path | Script | Source | Date coverage |
+|---|---|---|---|
+| Index archive | `scripts/convert_historical_indices.py` | Official CSE index/TRI workbooks | Through 2025-12-31 |
+| Index daily | `scripts/daily_indices_update.py` | CSE `dailyMarketSummery` API | 2026-01-01 onward |
+| Index 2026 gap fill | `scripts/backfill_2026_indices.py` | CSE `chartData` trailing window | ASPI only, partial |
+
 ### Core Modules
 
 - **`scripts/ohlcv_sources.py`** — Source adapter base class (`OHLCVSourceAdapter`), `FetchResult` dataclass, and `CSETradeSummaryCurrentAdapter`. All adapters must separate fetching, normalization, and source-date validation.
 - **`scripts/ohlcv_validation.py`** — `validate_ohlcv_records()`, `ValidationResult`, and `write_validation_outputs()`. This is the central gate: records are split into `accepted` / `rejected` DataFrames. Contains all validation logic: source/date matching, duplicate detection, OHLC bounds repair, missing-activity thresholds, metadata symbol checks, listing-date checks, and stale-digest detection.
+- **`scripts/indices_sources.py`** — `CSEDailyMarketSummaryIndicesAdapter` for the `indices` family. `dailyMarketSummery` ignores a `date` form field and always answers with the settled day, but it stamps the payload with its own `tradeDate`, so the observed date is read from the response and a mismatch quarantines instead of stamping.
+- **`scripts/convert_historical_indices.py`** — official index workbook loader. The daily index workbook restarts its header mid-file for the GICS sector switch, so it is walked in segments; unlabelled columns are skipped, never guessed at.
+- **`scripts/backfill_2026_indices.py`** — one-shot 2026 ASPI gap fill. `chartData` mixes settled closes with points stamped before the open; only the settled ones reproduce the official archive, so points are kept only when stamped at or after the 14:30 close, and the run aborts unless every point overlapping the archive matches it exactly. ASPI only — other `chartId` values return an empty list.
 - **`scripts/forward_ingestion.py`** — 2026-forward family ingestion engine: PDF parsing, Yahoo Finance adapter, and `run_daily_report_ohlcv_ingestion()` / `run_generic_family_ingestion()`. Defines `DATASET_FAMILIES` and the default CSE PDF URL template.
 - **`scripts/backfill_ohlcv.py`** — Converts official historical workbooks (grouped multi-symbol XLS/CSV format) into canonical OHLCV candidates, validates per-date batch, and writes accepted transactions.
 
@@ -126,6 +153,20 @@ validation_status, validation_warnings
 
 `source_timestamp` must equal `target_date`; this is what enforces the current-snapshot-only constraint. Optional columns added by validation: `source_open/high/low/close`, `source_ohlc_invalid`, `ohlc_repaired`, `ohlc_invalid`.
 
+### Canonical Index Schema
+
+Defined in `data/schemas/indices.schema.json`, matching the `indices`
+`FamilyContract` in `forward_ingestion.py`:
+
+```
+date, index_name, close, source, source_timestamp, raw_payload_hash
+```
+
+Index codes: `ASPI`, `SL20`, `SL20TRI`, `ASTRI`, `MPI`, `MTRI`. Indices are
+close-only in every official source. A series the exchange does not publish on
+a date produces no row — never a zero close, which is how the frozen
+post-discontinuation Milanka values are kept out.
+
 ### Validation Gates
 
 `validate_ohlcv_records()` runs these checks in order:
@@ -158,7 +199,9 @@ Ten data families each with independent validation contracts in `forward_ingesti
 
 ### CI Workflow
 
-`.github/workflows/daily_update.yml` runs weekdays at 09:15 UTC (after CSE market close at 14:30 SLST). It smoke-checks, runs unit tests, runs daily OHLCV validation with `--allow-validation-failure`, records the audit log to `docs/daily_ohlcv_runs.jsonl` and `docs/daily_ohlcv_runs.md`, and commits those audit files to `main`. Generated data artifacts are **not** committed to git.
+`.github/workflows/daily_update.yml` runs weekdays at 12:30 UTC (18:00 SLST). CSE closes at 14:30 SLST, but `dailyMarketSummery` does not settle the current trading day immediately — observed still serving the previous day at 15:55 SLST and rolled over by 17:10 — so the earlier 14:45 slot quarantined every index run. `tradeSummary` still reports the same trading day at 18:00.
+
+It smoke-checks, runs unit tests, runs daily OHLCV validation, the 2026-forward summary, and the daily index collection, all with `--allow-validation-failure`, then probes `cdn.cse.lk` reachability. Since `29314eb` the audit log is **not** committed back to `main` (`permissions: contents: read`); `docs/daily_ohlcv_runs.jsonl` is frozen at 2026-06-16 by design and current run records live in the uploaded artifacts. Generated data artifacts are **not** committed to git.
 
 ### Recovery Order
 

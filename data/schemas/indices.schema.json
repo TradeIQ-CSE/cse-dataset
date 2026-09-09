@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Canonical CSE Index Row",
+  "type": "object",
+  "required": [
+    "date",
+    "index_name",
+    "close",
+    "source",
+    "source_timestamp",
+    "raw_payload_hash"
+  ],
+  "properties": {
+    "date": {"type": "string", "format": "date"},
+    "index_name": {"type": "string", "minLength": 1},
+    "close": {"type": "number", "exclusiveMinimum": 0},
+    "source": {"type": "string", "minLength": 1},
+    "source_timestamp": {"type": "string", "format": "date"},
+    "raw_payload_hash": {"type": "string", "minLength": 64, "maxLength": 64}
+  },
+  "additionalProperties": true
+}
