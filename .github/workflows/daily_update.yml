@@ -2,8 +2,12 @@ name: Daily CSE Dataset Recovery Checks
 
 on:
   schedule:
-    # Run at 09:15 UTC (14:45 Sri Lanka time), after CSE close at 14:30 SLST.
-    - cron: '15 9 * * 1-5'
+    # Run at 12:30 UTC (18:00 Sri Lanka time). CSE closes at 14:30 SLST, but
+    # dailyMarketSummery does not settle the current trading day immediately:
+    # on 2026-09-09 it still served the previous day at 15:55 SLST and had
+    # rolled over by 17:10. Collecting at 14:45 quarantines the index run.
+    # tradeSummary still reports the same trading day at this hour.
+    - cron: '30 12 * * 1-5'
   workflow_dispatch:  # allow manual trigger
 
 permissions:
@@ -47,6 +51,22 @@ jobs:
 
       - name: Daily index collection (ASPI, S&P SL20)
         run: uv run python scripts/daily_indices_update.py --allow-validation-failure
+
+      # cdn.cse.lk returns 403 from local and hosted egress alike, which blocks
+      # the SMD PDF path and the official workbook downloads. This reports
+      # whether GitHub's network is treated differently, without failing the run.
+      - name: Probe cdn.cse.lk reachability
+        if: always()
+        run: |
+          date_str=$(TZ=Asia/Colombo date +%d-%m-%Y)
+          url="https://cdn.cse.lk/cse-daily/StockMarketDaily%28SMD%29${date_str}.pdf"
+          code=$(curl -s -o /dev/null -w '%{http_code}' -m 30 "$url" || echo "000")
+          echo "cdn.cse.lk SMD ${date_str}: HTTP ${code}"
+          if [ "$code" = "200" ]; then
+            echo "REACHABLE from GitHub Actions - the PDF and workbook paths are usable here."
+          else
+            echo "Not reachable (HTTP ${code}); the 403 is not specific to the local network."
+          fi
 
       - name: Record validation audit log
         if: always()
