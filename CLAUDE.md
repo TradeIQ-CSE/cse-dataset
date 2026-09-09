@@ -71,6 +71,11 @@ uv run python scripts/convert_historical_indices.py --dry-run
 uv run python scripts/daily_indices_update.py --target-date 2026-09-08
 ```
 
+**2026 ASPI gap fill from the trailing chart window:**
+```bash
+uv run python scripts/backfill_2026_indices.py --dry-run
+```
+
 **Source reconnaissance (before building a new adapter):**
 ```bash
 uv run python scripts/source_recon.py --target-date 2026-05-29
@@ -102,6 +107,7 @@ workbook spans decades, the API serves only the settled day.
 |---|---|---|---|
 | Index archive | `scripts/convert_historical_indices.py` | Official CSE index/TRI workbooks | Through 2025-12-31 |
 | Index daily | `scripts/daily_indices_update.py` | CSE `dailyMarketSummery` API | 2026-01-01 onward |
+| Index 2026 gap fill | `scripts/backfill_2026_indices.py` | CSE `chartData` trailing window | ASPI only, partial |
 
 ### Core Modules
 
@@ -109,6 +115,7 @@ workbook spans decades, the API serves only the settled day.
 - **`scripts/ohlcv_validation.py`** — `validate_ohlcv_records()`, `ValidationResult`, and `write_validation_outputs()`. This is the central gate: records are split into `accepted` / `rejected` DataFrames. Contains all validation logic: source/date matching, duplicate detection, OHLC bounds repair, missing-activity thresholds, metadata symbol checks, listing-date checks, and stale-digest detection.
 - **`scripts/indices_sources.py`** — `CSEDailyMarketSummaryIndicesAdapter` for the `indices` family. `dailyMarketSummery` ignores a `date` form field and always answers with the settled day, but it stamps the payload with its own `tradeDate`, so the observed date is read from the response and a mismatch quarantines instead of stamping.
 - **`scripts/convert_historical_indices.py`** — official index workbook loader. The daily index workbook restarts its header mid-file for the GICS sector switch, so it is walked in segments; unlabelled columns are skipped, never guessed at.
+- **`scripts/backfill_2026_indices.py`** — one-shot 2026 ASPI gap fill. `chartData` mixes settled closes with points stamped before the open; only the settled ones reproduce the official archive, so points are kept only when stamped at or after the 14:30 close, and the run aborts unless every point overlapping the archive matches it exactly. ASPI only — other `chartId` values return an empty list.
 - **`scripts/forward_ingestion.py`** — 2026-forward family ingestion engine: PDF parsing, Yahoo Finance adapter, and `run_daily_report_ohlcv_ingestion()` / `run_generic_family_ingestion()`. Defines `DATASET_FAMILIES` and the default CSE PDF URL template.
 - **`scripts/backfill_ohlcv.py`** — Converts official historical workbooks (grouped multi-symbol XLS/CSV format) into canonical OHLCV candidates, validates per-date batch, and writes accepted transactions.
 
