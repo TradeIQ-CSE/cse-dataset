@@ -38,6 +38,12 @@ class PointParsingTests(unittest.TestCase):
         parsed = backfill.parse_points([point(date(2026, 3, 2), BEFORE_OPEN, 21000.0)])
         self.assertFalse(parsed[0].is_settled)
 
+    def test_unreadable_value_is_refused_not_dropped(self) -> None:
+        # Silently skipping would shrink the window without saying so.
+        good = point(date(2026, 3, 2), AFTER_CLOSE, 21000.0)
+        with self.assertRaises(MissingSourceError):
+            backfill.parse_points([good, {"d": good["d"], "v": "N/A"}])
+
     def test_empty_payload_is_refused(self) -> None:
         with self.assertRaises(MissingSourceError):
             backfill.parse_points([])

@@ -132,8 +132,17 @@ def parse_points(payload: Any) -> list[ChartPoint]:
         value = entry.get("v")
         if stamp_ms is None or value is None:
             continue
-        stamp = datetime.fromtimestamp(float(stamp_ms) / 1000, tz=timezone.utc).astimezone(COLOMBO_TZ)
-        points.append(ChartPoint(stamp=stamp, value=float(value)))
+        try:
+            stamp = datetime.fromtimestamp(float(stamp_ms) / 1000, tz=timezone.utc).astimezone(COLOMBO_TZ)
+            close = float(value)
+        except (TypeError, ValueError, OSError, OverflowError) as exc:
+            # Refuse rather than drop the point: a value the endpoint cannot
+            # express as a number means the response shape changed, and
+            # skipping it would quietly shrink the window instead.
+            raise MissingSourceError(
+                f"chartData point is not readable as a timestamp and value: {entry!r} ({exc})"
+            ) from exc
+        points.append(ChartPoint(stamp=stamp, value=close))
     if not points:
         raise MissingSourceError("chartData payload carried no readable points")
     return points
@@ -311,6 +320,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Backfill 2026 ASPI closes from the CSE chart endpoint")
     parser.add_argument("--dry-run", action="store_true", help="Validate without writing artifacts")
     parser.add_argument(
+        "--allow-validation-failure",
+        action="store_true",
+        help="Exit 0 even when rows are rejected",
+    )
+    parser.add_argument(
         "--min-overlap",
         type=int,
         default=DEFAULT_MIN_OVERLAP,
@@ -343,6 +357,9 @@ def main() -> int:
         paths = write_outputs(result, held_back, raw, payload_hash)
         for label, path in paths.items():
             print(f"wrote {label}: {path.relative_to(ROOT)}")
+
+    if metrics["failures"] and not args.allow_validation_failure:
+        return 1
     return 0
 
 

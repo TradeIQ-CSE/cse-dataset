@@ -359,10 +359,12 @@ def validate_historical_index_records(
     # disagrees on the close is a real conflict worth rejecting, because there
     # is no way to tell which value is right.
     identity = [column for column in contract.identity_columns if column in df.columns]
-    exact_duplicate = df.duplicated(subset=identity + ["close"], keep="first")
-    conflicting = df.duplicated(subset=identity, keep=False) & ~df.duplicated(
-        subset=identity + ["close"], keep=False
-    )
+    exact_duplicate = df.duplicated(subset=[*identity, "close"], keep="first")
+    # Every row in a group holding more than one distinct close is a conflict.
+    # Testing "is a duplicate on identity but not on close" is not enough: with
+    # closes A, A and B the two A rows mask each other, so one A survives on a
+    # date the archive disagrees about.
+    conflicting = df.groupby(identity, dropna=False)["close"].transform("nunique") > 1
     for position, is_conflict in enumerate(conflicting.tolist()):
         if is_conflict:
             reasons[position].append("conflicting duplicate row")
@@ -555,8 +557,10 @@ def main() -> int:
         print(f"  failure: {item}")
 
     if not args.dry_run:
+        # Keyed by content so re-running against an updated workbook writes a
+        # new directory instead of overwriting the previous candidates.
         run_digest = hashlib.sha256(
-            "|".join(sorted(str(path) for path in source_paths)).encode("utf-8")
+            "|".join(sha256_file(path) for path in sorted(source_paths)).encode("utf-8")
         ).hexdigest()
         paths = write_outputs(result, candidates, run_digest=run_digest)
         for label, path in paths.items():

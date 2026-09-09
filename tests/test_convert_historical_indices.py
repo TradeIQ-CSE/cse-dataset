@@ -173,6 +173,21 @@ class ValidationTests(unittest.TestCase):
         self.assertEqual(len(result.accepted), 0)
         self.assertEqual(len(result.rejected), 2)
 
+    def test_a_repeated_value_does_not_rescue_a_disputed_date(self) -> None:
+        # Closes A, A and B for one date and index. Checking "duplicate on
+        # identity but not on close" lets the two A rows mask each other, so
+        # one A is accepted on a date the source disagrees about.
+        result = indices.validate_historical_index_records(
+            candidates(
+                [
+                    {"date": date(2010, 3, 12), "index_name": "ASTRI", "close": 4472.57},
+                    {"date": date(2010, 3, 12), "index_name": "ASTRI", "close": 4472.57},
+                    {"date": date(2010, 3, 12), "index_name": "ASTRI", "close": 4487.20},
+                ]
+            )
+        )
+        self.assertEqual(len(result.accepted), 0)
+
     def test_source_timestamp_must_match_the_row_date(self) -> None:
         frame = candidates([{"date": date(2015, 6, 1), "index_name": "ASPI", "close": 7000.0}])
         frame.loc[0, "source_timestamp"] = date(2015, 6, 2)
