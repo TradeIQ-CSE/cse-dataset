@@ -199,7 +199,9 @@ Ten data families each with independent validation contracts in `forward_ingesti
 
 ### CI Workflow
 
-`.github/workflows/daily_update.yml` runs weekdays at 09:15 UTC (after CSE market close at 14:30 SLST). It smoke-checks, runs unit tests, runs daily OHLCV validation with `--allow-validation-failure`, records the audit log to `docs/daily_ohlcv_runs.jsonl` and `docs/daily_ohlcv_runs.md`, and commits those audit files to `main`. Generated data artifacts are **not** committed to git.
+`.github/workflows/daily_update.yml` runs weekdays at 12:30 UTC (18:00 SLST). CSE closes at 14:30 SLST, but `dailyMarketSummery` does not settle the current trading day immediately — observed still serving the previous day at 15:55 SLST and rolled over by 17:10 — so the earlier 14:45 slot quarantined every index run. `tradeSummary` still reports the same trading day at 18:00.
+
+It smoke-checks, runs unit tests, runs daily OHLCV validation, the 2026-forward summary, and the daily index collection, all with `--allow-validation-failure`, then probes `cdn.cse.lk` reachability. Since `29314eb` the audit log is **not** committed back to `main` (`permissions: contents: read`); `docs/daily_ohlcv_runs.jsonl` is frozen at 2026-06-16 by design and current run records live in the uploaded artifacts. Generated data artifacts are **not** committed to git.
 
 ### Recovery Order
 
