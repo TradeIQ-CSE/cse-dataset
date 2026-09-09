@@ -45,6 +45,9 @@ jobs:
       - name: 2026-forward source validation summary
         run: uv run python scripts/2026_forward_update.py --allow-validation-failure
 
+      - name: Daily index collection (ASPI, S&P SL20)
+        run: uv run python scripts/daily_indices_update.py --allow-validation-failure
+
       - name: Record validation audit log
         if: always()
         run: uv run python scripts/record_ohlcv_run.py
