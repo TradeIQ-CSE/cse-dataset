@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CSE dataset artifact manifest, contract v1",
+  "description": "See docs/contracts/dataset-artifact-v1.md. Rules that relate one field to another (coverage order, dataset_version against coverage.end, base_version against coverage) are enforced by scripts/validate_artifact.py.",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "dataset_version",
+    "kind",
+    "created_at",
+    "source_commit",
+    "coverage",
+    "files",
+    "index_series",
+    "quarantine"
+  ],
+  "properties": {
+    "contract_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "dataset_version": {"$ref": "#/$defs/dataset_version"},
+    "kind": {"enum": ["full", "incremental", "correction"]},
+    "created_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+    },
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "coverage": {
+      "type": "object",
+      "required": ["start", "end"],
+      "properties": {
+        "start": {"$ref": "#/$defs/date"},
+        "end": {"$ref": "#/$defs/date"}
+      }
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["path", "sha256", "rows"],
+        "properties": {
+          "path": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$"},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "rows": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "index_series": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["index_code", "first_date", "last_date"],
+        "properties": {
+          "index_code": {"$ref": "#/$defs/index_code"},
+          "first_date": {"$ref": "#/$defs/date"},
+          "last_date": {"$ref": "#/$defs/date"}
+        }
+      }
+    },
+    "quarantine": {
+      "type": "object",
+      "required": ["dates", "rows"],
+      "properties": {
+        "dates": {"type": "integer", "minimum": 0},
+        "rows": {"type": "integer", "minimum": 0}
+      }
+    },
+    "known_gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file", "start", "end", "reason"],
+        "properties": {
+          "file": {"type": "string"},
+          "index_code": {"$ref": "#/$defs/index_code"},
+          "start": {"$ref": "#/$defs/date"},
+          "end": {"$ref": "#/$defs/date"},
+          "reason": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "base_version": {"$ref": "#/$defs/dataset_version"},
+    "corrected_dates": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/date"}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"required": ["kind"], "properties": {"kind": {"const": "full"}}},
+      "then": {"not": {"anyOf": [{"required": ["base_version"]}, {"required": ["corrected_dates"]}]}}
+    },
+    {
+      "if": {"required": ["kind"], "properties": {"kind": {"const": "incremental"}}},
+      "then": {"required": ["base_version"], "not": {"required": ["corrected_dates"]}}
+    },
+    {
+      "if": {"required": ["kind"], "properties": {"kind": {"const": "correction"}}},
+      "then": {"required": ["base_version", "corrected_dates"]}
+    }
+  ],
+  "$defs": {
+    "date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "dataset_version": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}\\.[1-9][0-9]*$"},
+    "index_code": {"enum": ["ASPI", "SL20", "SL20TRI", "ASTRI", "MPI", "MTRI"]}
+  }
+}

@@ -76,6 +76,11 @@ uv run python scripts/daily_indices_update.py --target-date 2026-09-08
 uv run python scripts/backfill_2026_indices.py --dry-run
 ```
 
+**Validate a release artifact (zip or directory) against contract v1:**
+```bash
+uv run python scripts/validate_artifact.py tests/fixtures/artifact/valid
+```
+
 **Source reconnaissance (before building a new adapter):**
 ```bash
 uv run python scripts/source_recon.py --target-date 2026-05-29
@@ -166,6 +171,23 @@ Index codes: `ASPI`, `SL20`, `SL20TRI`, `ASTRI`, `MPI`, `MTRI`. Indices are
 close-only in every official source. A series the exchange does not publish on
 a date produces no row — never a zero close, which is how the frozen
 post-discontinuation Milanka values are kept out.
+
+### Release Artifact Contract
+
+`docs/contracts/dataset-artifact-v1.md` is the interface to `tradeiq_cse`: a flat
+zip of `manifest.json`, `company_metadata.csv`, `trading_calendar.csv`,
+`daily_ohlcv.csv`, `indices.csv`, `index_values.csv` and optional `sectors.csv`,
+with each file checksummed in the manifest. `scripts/validate_artifact.py`
+implements it and stops at the first failure with a stable code. If the two
+disagree, the document wins. The manifest schema is
+`data/schemas/artifact_manifest.schema.json`.
+
+The contract is stricter than the canonical outputs. Integers have no `.0`,
+decimals have at most 4 dp, the only null is an empty field (never `Unknown`),
+and dates are ISO. A publisher has to normalise values to these formats; it
+must not relax the contract. A quarantined trading date stays in
+`trading_calendar.csv` as a session with no prices, because an importer that
+drops it treats the session as a holiday.
 
 ### Validation Gates
 
