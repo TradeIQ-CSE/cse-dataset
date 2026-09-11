@@ -59,6 +59,11 @@ class TradeSummaryAdapterTests(unittest.TestCase):
         fetched = self.fetch([trade_row("AAA.N0000", FRIDAY), trade_row("BBB.N0000", FRIDAY)], date(2026, 8, 29))
         self.assertEqual(fetched.observed_source_date, FRIDAY)
 
+    def test_snapshot_mixing_days_has_no_session(self) -> None:
+        thursday = date(2026, 8, 27)
+        rows = [trade_row("AAA.N0000", FRIDAY), trade_row("BBB.N0000", FRIDAY), trade_row("CCC.N0000", thursday)]
+        self.assertIsNone(self.fetch(rows, FRIDAY).observed_source_date)
+
     def test_zero_activity_is_a_value(self) -> None:
         # CINS.X0000 on 2026-08-25: a crossing trade only, so no regular volume.
         row = trade_row("CINS.X0000", FRIDAY, sharevolume=0, tradevolume=0, turnover=0.0)

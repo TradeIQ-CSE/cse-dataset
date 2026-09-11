@@ -10,7 +10,6 @@ from __future__ import annotations
 import hashlib
 import json
 from abc import ABC, abstractmethod
-from collections import Counter
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -90,18 +89,19 @@ def first_present(row: dict[str, Any], *keys: str) -> Any:
 
 
 def snapshot_session_date(rows: list[dict[str, Any]]) -> date | None:
-    """The Colombo date most rows last traded on.
+    """The Colombo date every row last traded on, or None if they disagree.
 
     On a holiday tradeSummary still serves the previous session, and a run
     that starts after midnight gets the day before, so the clock cannot date
-    the snapshot. Every row of a real session last traded that day.
+    the snapshot. Every row of a real session last traded that day; a snapshot
+    that mixes days has no session and fails source-date validation.
     """
-    days = [
+    days = {
         datetime.fromtimestamp(stamp / 1000, COLOMBO_TZ).date()
         for row in rows
         if (stamp := parse_number(row.get("lastTradedTime"))) is not None
-    ]
-    return Counter(days).most_common(1)[0][0] if days else None
+    }
+    return days.pop() if len(days) == 1 else None
 
 
 class CSETradeSummaryCurrentAdapter(OHLCVSourceAdapter):
