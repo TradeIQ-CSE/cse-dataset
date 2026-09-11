@@ -252,7 +252,7 @@ Ten data families each with independent validation contracts in `forward_ingesti
 
 `.github/workflows/daily_update.yml` runs weekdays at 12:30 UTC (18:00 SLST). CSE closes at 14:30 SLST, but `dailyMarketSummery` does not settle the current trading day immediately — observed still serving the previous day at 15:55 SLST and rolled over by 17:10 — so the earlier 14:45 slot quarantined every index run. `tradeSummary` still reports the same trading day at 18:00.
 
-It smoke-checks, runs unit tests, runs daily OHLCV validation, the 2026-forward summary, and the daily index collection, all with `--allow-validation-failure`, then probes `cdn.cse.lk` reachability. Since `29314eb` the audit log is **not** committed back to `main` (`permissions: contents: read`); `docs/daily_ohlcv_runs.jsonl` is frozen at 2026-06-16 by design and current run records live in the uploaded artifacts. Generated data artifacts are **not** committed to git.
+It smoke-checks, runs unit tests, runs daily OHLCV validation, the 2026-forward summary, and the daily index collection, all with `--allow-validation-failure`, then probes `cdn.cse.lk` reachability. Since `29314eb` the audit log is **not** committed back to `main` (`permissions: contents: read`); `docs/daily_ohlcv_runs.jsonl` is frozen at 2026-06-16 by design. Each run's capture (raw payloads, validation outputs, accepted files, run record) is uploaded as a 90-day artifact, then a separate `save` job, the only one with `contents: write`, commits it to the `captures` branch as `<session>/<run id>/`; that branch's README describes the layout. Generated data artifacts are **not** committed to `main`.
 
 ### Recovery Order
 
