@@ -1,0 +1,3 @@
+date,symbol,open,high,low,close,volume,turnover,trades,source,source_priority,source_timestamp,raw_payload_hash,validation_status,validation_warnings,source_open,source_high,source_low,source_close,source_ohlc_invalid,ohlc_repaired,ohlc_invalid,rejection_reason
+2026-06-15,HNBF.R0000,3.5,3.9,3.4,3.5,2551230.0,8978132.9,389.0,cse_trade_summary_current,10,2026-06-15,e5aad8fd7cd53f5aa25bcba002f3208535b0a2fd1a514829a03081be64d8824a,candidate,,3.5,3.9,3.4,3.5,False,False,False,symbol missing metadata
+2026-06-15,HNBF.R0001,3.1,3.2,2.4,2.5,2457954.0,6327042.3,257.0,cse_trade_summary_current,10,2026-06-15,e5aad8fd7cd53f5aa25bcba002f3208535b0a2fd1a514829a03081be64d8824a,candidate,,3.1,3.2,2.4,2.5,False,False,False,symbol missing metadata

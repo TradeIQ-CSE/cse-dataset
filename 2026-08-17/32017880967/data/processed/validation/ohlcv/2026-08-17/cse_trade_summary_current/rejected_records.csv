@@ -1,0 +1,2 @@
+date,symbol,open,high,low,close,volume,turnover,trades,source,source_priority,source_timestamp,raw_payload_hash,validation_status,validation_warnings,source_open,source_high,source_low,source_close,source_ohlc_invalid,ohlc_repaired,ohlc_invalid,rejection_reason
+2026-08-17,AAF.R0000,13.5,13.5,12.0,12.5,659528.0,8422543.0,310.0,cse_trade_summary_current,10,2026-08-17,157647060eb947ec3957c576c4290fa20236ce46440b214b22c353b94a67c04f,candidate,,13.5,13.5,12.0,12.5,False,False,False,symbol missing metadata

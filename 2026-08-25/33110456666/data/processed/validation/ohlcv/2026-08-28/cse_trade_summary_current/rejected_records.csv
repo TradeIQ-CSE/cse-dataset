@@ -1,0 +1,2 @@
+date,symbol,open,high,low,close,volume,turnover,trades,source,source_priority,source_timestamp,raw_payload_hash,validation_status,validation_warnings,source_open,source_high,source_low,source_close,source_ohlc_invalid,ohlc_repaired,ohlc_invalid,rejection_reason
+2026-08-28,CINS.X0000,1600.0,1600.0,1600.0,1600.0,,0.0,,cse_trade_summary_current,10,2026-08-28,3bc5fd773d7241d46d55bb8a08ef2a8978fe0e571e9176040fcf46ad221fabae,candidate,,1600.0,1600.0,1600.0,1600.0,False,False,False,missing market activity fields

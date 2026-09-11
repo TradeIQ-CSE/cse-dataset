@@ -1,0 +1,17 @@
+{
+  "generated_at_utc": "2026-07-06T13:03:39Z",
+  "target_date": "2026-07-06",
+  "row_count": 284,
+  "accepted_rows": 284,
+  "rejected_rows": 0,
+  "symbols": 284,
+  "accepted_symbols": 284,
+  "market_digest": "e3f8bfee24778f4774d7349528e3ad3fce99cd2369b00cd9463b7f3190d72b8a",
+  "duplicate_symbol_date_rows": 0,
+  "source_ohlc_invalid_rows": 20,
+  "ohlc_repaired_rows": 20,
+  "ohlc_invalid_rows": 0,
+  "missing_activity_rate": 0.0,
+  "warnings": [],
+  "failures": []
+}

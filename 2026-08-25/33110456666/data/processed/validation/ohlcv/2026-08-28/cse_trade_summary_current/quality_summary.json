@@ -1,0 +1,20 @@
+{
+  "generated_at_utc": "2026-08-27T19:56:32Z",
+  "target_date": "2026-08-28",
+  "row_count": 271,
+  "accepted_rows": 270,
+  "rejected_rows": 1,
+  "symbols": 271,
+  "accepted_symbols": 270,
+  "market_digest": "634f0c7b13fd8ef969b91387c9356a8dbb60f3f3e945a42bec2c1dc9e1b3b4ed",
+  "duplicate_symbol_date_rows": 0,
+  "source_ohlc_invalid_rows": 19,
+  "ohlc_repaired_rows": 19,
+  "ohlc_invalid_rows": 0,
+  "missing_activity_rate": 0.0036900369003690036,
+  "warnings": [],
+  "failures": [
+    "missing volume/turnover/trades rate 0.37% exceeds 0.00%",
+    "rejected OHLCV rows: 1"
+  ]
+}

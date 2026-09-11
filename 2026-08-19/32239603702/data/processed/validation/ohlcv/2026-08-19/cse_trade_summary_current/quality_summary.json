@@ -1,0 +1,20 @@
+{
+  "generated_at_utc": "2026-08-19T09:55:19Z",
+  "target_date": "2026-08-19",
+  "row_count": 279,
+  "accepted_rows": 278,
+  "rejected_rows": 1,
+  "symbols": 279,
+  "accepted_symbols": 278,
+  "market_digest": "d481ce4ee5ce91147219aa41939ab0a603aa4b22c69ef5773274a9cac2f2d182",
+  "duplicate_symbol_date_rows": 0,
+  "source_ohlc_invalid_rows": 24,
+  "ohlc_repaired_rows": 24,
+  "ohlc_invalid_rows": 0,
+  "missing_activity_rate": 0.0,
+  "warnings": [],
+  "failures": [
+    "symbols missing metadata: 1 rows",
+    "rejected OHLCV rows: 1"
+  ]
+}

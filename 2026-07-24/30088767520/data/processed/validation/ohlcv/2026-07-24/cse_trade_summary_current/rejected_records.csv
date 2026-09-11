@@ -1,0 +1,2 @@
+date,symbol,open,high,low,close,volume,turnover,trades,source,source_priority,source_timestamp,raw_payload_hash,validation_status,validation_warnings,source_open,source_high,source_low,source_close,source_ohlc_invalid,ohlc_repaired,ohlc_invalid,rejection_reason
+2026-07-24,MBSL.R0001,0.3,0.4,0.3,0.3,2042007.0,759876.3,212.0,cse_trade_summary_current,10,2026-07-24,7e71b20ebd2f2c15ccc53690e610a514cf940a1a8a41061856f4a64392266fda,candidate,,0.3,0.4,0.3,0.3,False,False,False,symbol missing metadata

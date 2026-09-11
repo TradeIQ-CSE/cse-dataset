@@ -1,0 +1,9 @@
+{
+  "target_date": "2026-06-24",
+  "source_name": "cse_trade_summary_current",
+  "accepted_rows": 286,
+  "accepted_symbols": 286,
+  "market_digest": "3fa23732a52ff9f7bf44202c982a1ddf6eccd5ab38adb6205ac7c58820fb404a",
+  "processed_path": "data/processed/daily_ohlcv/2026-06-24_cse_trade_summary_current.parquet",
+  "accepted_path": "data/raw/ohlcv/accepted/2026-06-24/cse_trade_summary_current/canonical_ohlcv.csv"
+}

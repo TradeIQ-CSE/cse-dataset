@@ -1,0 +1,11 @@
+{
+  "generated_at_utc": "2026-09-10T16:42:13Z",
+  "family": "indices",
+  "target_date": "2026-09-10",
+  "source_name": "cse_daily_market_summary_indices",
+  "status": "accepted",
+  "candidate_rows": 4,
+  "accepted_rows": 4,
+  "failures": [],
+  "warnings": []
+}

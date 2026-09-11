@@ -1,0 +1,13 @@
+{
+  "generated_at_utc": "2026-08-21T09:58:24Z",
+  "family": "ohlcv",
+  "target_date": "2026-08-21",
+  "source_name": "cse_daily_report_pdf",
+  "status": "quarantined",
+  "candidate_rows": 0,
+  "accepted_rows": 0,
+  "failures": [
+    "daily report not found or not public at https://cdn.cse.lk/cse-daily/StockMarketDaily%28SMD%2921-08-2026.pdf"
+  ],
+  "warnings": []
+}
