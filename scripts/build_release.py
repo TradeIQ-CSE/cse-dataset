@@ -181,31 +181,34 @@ def session_dates(inputs: ReleaseInputs, start: date, end: date) -> list[str]:
 
 
 def session_outcome(inputs: ReleaseInputs, day: str) -> tuple[list[Path], int]:
-    """Accepted OHLCV files for one session, and its rejected row count when none passed.
+    """Accepted OHLCV files for one session, and its rejected row count when it failed.
 
-    Each validated source leaves a summary. A source that passed must have left an
-    accepted file and one that failed must not, so an accepted file left over from
-    an earlier run of a date that now fails is caught here instead of being shipped.
+    A session comes from exactly one source. Two sources for one date, say an
+    official file and a daily capture, would either repeat every price row or let a
+    passing source outvote a failing one, so the build refuses rather than choose.
+
+    The source must have left an accepted file if it passed and none if it failed,
+    so an accepted file left over from an earlier run of a date that now fails is
+    caught here instead of being shipped.
     """
     summaries = sorted((inputs.validation_root / day).glob("*/quality_summary.json"))
     if not summaries:
         raise ReleaseError(f"{day} was never validated; run backfill_ohlcv.py on its source file")
-    accepted: list[Path] = []
-    rejected = 0
-    for summary_path in summaries:
-        source = summary_path.parent.name
-        summary = json.loads(summary_path.read_text(encoding="utf-8"))
-        passed = not summary.get("failures")
-        output = inputs.accepted_root / day / source / "canonical_ohlcv.csv"
-        if passed and not output.exists():
-            raise ReleaseError(f"{day}/{source} passed validation but has no accepted output")
-        if not passed and output.exists():
-            raise ReleaseError(f"{day}/{source} failed validation but has a stale accepted output; re-run its backfill")
-        if passed:
-            accepted.append(output)
-        else:
-            rejected += int(summary.get("rejected_rows", 0))
-    return accepted, (0 if accepted else rejected)
+    if len(summaries) > 1:
+        sources = ", ".join(path.parent.name for path in summaries)
+        raise ReleaseError(f"{day} was validated from more than one source ({sources}); a session needs exactly one")
+    summary_path = summaries[0]
+    source = summary_path.parent.name
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    passed = not summary.get("failures")
+    output = inputs.accepted_root / day / source / "canonical_ohlcv.csv"
+    if passed and not output.exists():
+        raise ReleaseError(f"{day}/{source} passed validation but has no accepted output")
+    if not passed and output.exists():
+        raise ReleaseError(f"{day}/{source} failed validation but has a stale accepted output; re-run its backfill")
+    if passed:
+        return [output], 0
+    return [], int(summary.get("rejected_rows", 0))
 
 
 def price_row(raw: dict[str, str], where: str) -> list[str]:

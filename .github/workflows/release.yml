@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -82,7 +84,9 @@ jobs:
         run: |
           version=$(jq -r .dataset_version data/published/manifest.json)
           # Fails when the tag exists: a published version is never replaced.
+          # --target tags the commit that was built, not whatever main is now.
           gh release create "dataset-$version" \
+            --target "$GITHUB_SHA" \
             "data/published/cse-dataset-$version.zip" \
             data/published/manifest.json \
             --title "Dataset $version" \

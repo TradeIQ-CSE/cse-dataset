@@ -276,6 +276,16 @@ class RefusalTests(ReleaseTestCase):
 
         self.assertRefused("stale accepted output")
 
+    def test_session_validated_from_two_sources(self) -> None:
+        # A failing daily capture must not be outvoted by the official file that passed.
+        capture = self.fixture.inputs.validation_root / "2025-12-31" / "cse_trade_summary_current"
+        capture.mkdir()
+        (capture / "quality_summary.json").write_text(
+            json.dumps({"target_date": "2025-12-31", "rejected_rows": 3, "failures": ["rejected OHLCV rows: 3"]})
+        )
+
+        self.assertRefused("2025-12-31 was validated from more than one source")
+
     def test_traded_symbol_without_metadata(self) -> None:
         self.edit(self.fixture.inputs.metadata_path, "COMB.N0000,COMMERCIAL", "COMX.N0000,COMMERCIAL")
 
