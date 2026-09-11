@@ -123,7 +123,7 @@ workbook spans decades, the API serves only the settled day.
 
 ### Core Modules
 
-- **`scripts/ohlcv_sources.py`** — Source adapter base class (`OHLCVSourceAdapter`), `FetchResult` dataclass, and `CSETradeSummaryCurrentAdapter`. All adapters must separate fetching, normalization, and source-date validation.
+- **`scripts/ohlcv_sources.py`** — Source adapter base class (`OHLCVSourceAdapter`), `FetchResult` dataclass, and `CSETradeSummaryCurrentAdapter`. All adapters must separate fetching, normalization, and source-date validation. `tradeSummary` serves the latest session whatever date is asked for, so its snapshot is dated by the rows' `lastTradedTime`; a run of `02_collect_prices.py` without `--target-date` files it under that session.
 - **`scripts/ohlcv_validation.py`** — `validate_ohlcv_records()`, `ValidationResult`, and `write_validation_outputs()`. This is the central gate: records are split into `accepted` / `rejected` DataFrames. Contains all validation logic: source/date matching, duplicate detection, OHLC bounds repair, missing-activity thresholds, metadata symbol checks, listing-date checks, and stale-digest detection.
 - **`scripts/indices_sources.py`** — `CSEDailyMarketSummaryIndicesAdapter` for the `indices` family. `dailyMarketSummery` ignores a `date` form field and always answers with the settled day, but it stamps the payload with its own `tradeDate`, so the observed date is read from the response and a mismatch quarantines instead of stamping.
 - **`scripts/convert_historical_indices.py`** — official index workbook loader. The daily index workbook restarts its header mid-file for the GICS sector switch, so it is walked in segments; unlabelled columns are skipped, never guessed at.

@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 from abc import ABC, abstractmethod
+from collections import Counter
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -79,13 +80,37 @@ def parse_number(value: Any) -> float | None:
         return None
 
 
+def first_present(row: dict[str, Any], *keys: str) -> Any:
+    """The first of ``keys`` the row has a value for. A 0 is a value, not a gap."""
+    for key in keys:
+        value = row.get(key)
+        if value is not None and value != "":
+            return value
+    return None
+
+
+def snapshot_session_date(rows: list[dict[str, Any]]) -> date | None:
+    """The Colombo date most rows last traded on.
+
+    On a holiday tradeSummary still serves the previous session, and a run
+    that starts after midnight gets the day before, so the clock cannot date
+    the snapshot. Every row of a real session last traded that day.
+    """
+    days = [
+        datetime.fromtimestamp(stamp / 1000, COLOMBO_TZ).date()
+        for row in rows
+        if (stamp := parse_number(row.get("lastTradedTime"))) is not None
+    ]
+    return Counter(days).most_common(1)[0][0] if days else None
+
+
 class CSETradeSummaryCurrentAdapter(OHLCVSourceAdapter):
     """Official CSE current-snapshot adapter.
 
-    Recon showed that this endpoint must not be treated as historical. It is
-    accepted only when the requested date is the current Colombo calendar date;
-    older target dates fail source-date validation instead of being stamped onto
-    the payload.
+    Recon showed that this endpoint must not be treated as historical: it serves
+    the latest session whatever date is asked for. The session is read from the
+    rows' lastTradedTime, and any other target date fails source-date validation
+    instead of being stamped onto the payload.
     """
 
     source_name = "cse_trade_summary_current"
@@ -108,9 +133,7 @@ class CSETradeSummaryCurrentAdapter(OHLCVSourceAdapter):
         payload = response.json()
         rows = payload.get("reqTradeSummery") or []
 
-        # The endpoint has no trustworthy per-row date. For this current-only
-        # adapter, the only observable source date is the Colombo date at fetch.
-        observed_source_date = fetch_time_utc.astimezone(COLOMBO_TZ).date()
+        observed_source_date = snapshot_session_date(rows)
 
         return FetchResult(
             source_name=self.source_name,
@@ -139,9 +162,9 @@ class CSETradeSummaryCurrentAdapter(OHLCVSourceAdapter):
                     "high": parse_number(row.get("high")),
                     "low": parse_number(row.get("low")),
                     "close": parse_number(row.get("closingPrice") or row.get("close")),
-                    "volume": parse_number(row.get("sharevolume") or row.get("volume")),
+                    "volume": parse_number(first_present(row, "sharevolume", "volume")),
                     "turnover": parse_number(row.get("turnover")),
-                    "trades": parse_number(row.get("tradevolume") or row.get("trades")),
+                    "trades": parse_number(first_present(row, "tradevolume", "trades")),
                     "source": self.source_name,
                     "source_priority": 10,
                     "source_timestamp": fetch_result.observed_source_date.isoformat()
