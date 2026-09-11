@@ -13,11 +13,6 @@ on:
 permissions:
   contents: read
 
-# One run at a time, so two runs never push to the captures branch at once.
-concurrency:
-  group: daily-update
-  cancel-in-progress: false
-
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -162,4 +157,12 @@ jobs:
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
           git add -- "$SESSION/$GITHUB_RUN_ID"
           git commit -m "Capture $SESSION, run $GITHUB_RUN_ID"
-          git push origin HEAD:captures
+          # Runs can overlap, and a concurrency group would cancel a queued
+          # run. Each run writes only its own folder, so a push that loses the
+          # race rebases cleanly onto the other run's commit.
+          for attempt in 1 2 3 4 5; do
+            git push origin HEAD:captures && exit 0
+            sleep $((attempt * 5))
+            git pull --rebase origin captures
+          done
+          exit 1
