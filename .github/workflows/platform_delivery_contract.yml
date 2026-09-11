@@ -93,6 +93,11 @@ jobs:
         working-directory: platform
         run: |
           pnpm --filter @tradeiq/market-trading build
+          # market-trading won't boot without a key to verify access tokens.
+          # The contract calls no user endpoint, so the platform's local
+          # development key from .env.example is enough.
+          export AUTH_JWT_PUBLIC_KEYS="$(grep '^AUTH_JWT_PUBLIC_KEYS=' .env.example | cut -d= -f2-)"
+          test -n "$AUTH_JWT_PUBLIC_KEYS"
           pnpm --filter @tradeiq/market-trading start > "$RUNNER_TEMP/market-trading.log" 2>&1 &
           for attempt in $(seq 1 30); do
             curl --fail --silent http://localhost:3001/health && exit 0
@@ -114,19 +119,20 @@ jobs:
             --expected-trade-date 2026-09-04 \
             --out-dir data/run/contract
 
-      - name: Verify the trading consumer sees the delivered close
+      # Paper trading reads prices in-process since it moved into
+      # market-trading, so the public OHLCV read is the check.
+      - name: Verify the platform serves the delivered close
         run: |
           python - <<'PY'
           import json
           import urllib.request
 
           with urllib.request.urlopen(
-              "http://localhost:3001/internal/paper-trading/quotes/TEST.N0000"
+              "http://localhost:3001/securities/TEST.N0000/ohlcv?from=2026-09-04&to=2026-09-04"
           ) as response:
-              quote = json.load(response)["data"]
-          assert quote["market_as_of"] == "2026-09-04", quote
-          assert quote["price_as_of"] == "2026-09-04", quote
-          assert quote["close"] == 11.25, quote
+              bars = json.load(response)["data"]["bars"]
+          assert [bar["date"] for bar in bars] == ["2026-09-04"], bars
+          assert bars[0]["close"] == 11.25, bars
           PY
 
       - name: Upload diagnostics
