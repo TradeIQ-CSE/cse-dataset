@@ -17,6 +17,8 @@ jobs:
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    outputs:
+      session: ${{ steps.capture.outputs.session }}
 
     steps:
       - name: Checkout repository
@@ -91,22 +93,76 @@ jobs:
         if: always()
         run: uv run python scripts/record_ohlcv_run.py
 
+      # One directory, so the artifact always has data/ and docs/ at its root.
+      - name: Gather the capture
+        id: capture
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/capture"
+          for path in \
+            docs/daily_ohlcv_runs.jsonl \
+            docs/daily_ohlcv_runs.md \
+            data/raw/ohlcv/source_payloads \
+            data/raw/ohlcv/accepted \
+            data/raw/ohlcv/manifests \
+            data/raw/2026_forward \
+            data/processed/daily_ohlcv \
+            data/processed/validation/ohlcv \
+            data/processed/validation/2026_forward \
+            data/processed/2026_forward \
+            data/processed/company_metadata.csv \
+            data/run; do
+            if [ -e "$path" ]; then cp -R --parents "$path" "$RUNNER_TEMP/capture/"; fi
+          done
+          # The session the snapshot holds; the run's own date if the fetch failed.
+          session=$(jq -r '.target_date // empty' data/run/daily_result.json 2>/dev/null || true)
+          echo "session=${session:-$(TZ=Asia/Colombo date +%F)}" >> "$GITHUB_OUTPUT"
+
       - name: Upload validation artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ohlcv-validation-${{ github.run_id }}
-          path: |
-            docs/daily_ohlcv_runs.jsonl
-            docs/daily_ohlcv_runs.md
-            data/raw/ohlcv/source_payloads/
-            data/raw/ohlcv/accepted/
-            data/raw/ohlcv/manifests/
-            data/raw/2026_forward/
-            data/processed/daily_ohlcv/
-            data/processed/validation/ohlcv/
-            data/processed/validation/2026_forward/
-            data/processed/2026_forward/
-            data/processed/company_metadata.csv
-            data/run/
+          path: ${{ runner.temp }}/capture/
           if-no-files-found: ignore
+
+  # Artifacts expire after 90 days, so every run is also kept on the captures
+  # branch. This job holds the write token; the job that fetches and parses
+  # source data stays read-only.
+  save:
+    needs: update
+    if: always() && needs.update.outputs.session != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out the captures branch
+        uses: actions/checkout@v4
+        with:
+          ref: captures
+
+      - name: Download the capture
+        uses: actions/download-artifact@v4
+        with:
+          name: ohlcv-validation-${{ github.run_id }}
+          path: ${{ needs.update.outputs.session }}/${{ github.run_id }}
+
+      - name: Commit it to the captures branch
+        env:
+          SESSION: ${{ needs.update.outputs.session }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add -- "$SESSION/$GITHUB_RUN_ID"
+          git commit -m "Capture $SESSION, run $GITHUB_RUN_ID"
+          # Runs can overlap, and a concurrency group would cancel a queued
+          # run. Each run writes only its own folder, so a push that loses the
+          # race rebases cleanly onto the other run's commit.
+          for attempt in 1 2 3 4 5; do
+            git push origin HEAD:captures && exit 0
+            sleep $((attempt * 5))
+            git pull --rebase origin captures
+          done
+          exit 1
