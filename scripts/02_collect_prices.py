@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from dataclasses import replace
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any
@@ -107,7 +108,7 @@ def write_result_manifest(
         "target_date": target_date.isoformat(),
         "source_name": fetch_result.source_name,
         "captured_at": fetch_result.fetch_time_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "source_date_method": "colombo_capture_date",
+        "source_date_method": "last_traded_time",
         "raw_payload_hash": fetch_result.payload_hash,
         "accepted_path": str(accepted_path.relative_to(ROOT)) if result.passed else None,
         "metadata_path": str(DEFAULT_METADATA.relative_to(ROOT)),
@@ -127,6 +128,16 @@ def collect_daily_ohlcv(args: argparse.Namespace) -> None:
     previous_manifest = {} if args.ignore_previous_digest else load_previous_manifest()
 
     fetch_result = adapter.fetch_for_date(target_date, RAW_ROOT)
+    if not args.target_date and fetch_result.observed_source_date:
+        # With no date given, the snapshot names its own session. A scheduled
+        # run that starts after midnight, or one on a holiday, then files the
+        # session it captured instead of stamping it with the run's date.
+        target_date = fetch_result.observed_source_date
+        fetch_result = replace(
+            fetch_result,
+            requested_date=target_date,
+            raw_payload_path=adapter.raw_payload_path(RAW_ROOT, target_date),
+        )
     records = adapter.normalize(fetch_result.payload, fetch_result)
     source_date_failures = adapter.validate_source_date(records, target_date)
     result = validate_ohlcv_records(

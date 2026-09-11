@@ -10,6 +10,28 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 REQUEST_TIMEOUT_SECONDS = int(os.getenv("CSE_METADATA_TIMEOUT_SECONDS", "15"))
 REQUEST_SLEEP_SECONDS = float(os.getenv("CSE_METADATA_SLEEP_SECONDS", "0.1"))
 
+# Security classes that can appear in the daily price snapshot, keyed by the
+# letter after the dot. Units (.U) and rights lines (.R) trade in tradeSummary;
+# leaving rights out rejected 17 days of 2026 prices over one or two rows each.
+# Debentures (.D) are left out.
+SHARE_TYPES = {
+    'N': 'Voting',
+    'X': 'Non-Voting',
+    'U': 'Unit',
+    'R': 'Rights',
+    'P': 'Preference',
+    'W': 'Warrant',
+}
+
+
+def share_class(symbol):
+    """The class letter of a symbol such as HNBF.R0000, or '' when it has none."""
+    return symbol.partition('.')[2][:1]
+
+
+def tradable_securities(securities):
+    return [s for s in securities if share_class(s['symbol']) in SHARE_TYPES]
+
 def fetch_active_companies():
     """Fetch all active company symbols from CSE API."""
     url = 'https://www.cse.lk/api/allSecurityCode'
@@ -43,11 +65,7 @@ def build_metadata():
     
     securities = fetch_active_companies()
     
-    # Keep listed security classes that can appear in the daily price snapshot.
-    # Earlier recovery runs showed .U0000 units trading in tradeSummary; excluding
-    # them makes the OHLCV metadata gate fail.
-    tradable_suffixes = ('.N0000', '.X0000', '.U0000')
-    equities = [s for s in securities if any(s['symbol'].endswith(suffix) for suffix in tradable_suffixes)]
+    equities = tradable_securities(securities)
     logging.info(f"Filtered to {len(equities)} equity symbols.")
     
     records = []
@@ -61,13 +79,7 @@ def build_metadata():
         # Base ticker without suffix (e.g., COMB from COMB.N0000)
         base_ticker = symbol.split('.')[0]
         
-        # Determine voting status
-        if '.X' in symbol:
-            share_type = 'Non-Voting'
-        elif '.U' in symbol:
-            share_type = 'Unit'
-        else:
-            share_type = 'Voting'
+        share_type = SHARE_TYPES[share_class(symbol)]
         
         # For Yahoo finance compatibility we used to append .CM, but it doesn't work.
         # Still, we keep the column per schema.
