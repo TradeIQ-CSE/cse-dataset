@@ -257,8 +257,11 @@ sessions.
   back to 1985 for ASPI, but every calendar date needs an OHLCV status, and
   sessions before 2017 have none. A later minor version may give each file its
   own coverage and ship the longer history then.
-- **Series shipped:** ASPI, SL20, SL20TRI and ASTRI cover the whole window.
-  MTRI stops at 2025-03-28 in the official workbook, and that is recorded in
-  `known_gaps`. MPI isn't shipped because it has no values after 2012.
+- **Series shipped:** ASPI, SL20, SL20TRI and ASTRI, each with a value on
+  every session. MPI isn't shipped because it has no values after 2012. MTRI
+  isn't shipped either: the official workbook has no MTRI values from 2013 to
+  2024, and only 56 in early 2025.
+- **`board` is empty.** The metadata collector only ever wrote a hardcoded
+  default, so there is no real value to ship.
 - **`sectors.csv` isn't shipped** and every `sector_code` is empty. No per-company
   GICS mapping has been sourced yet.

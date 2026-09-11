@@ -81,6 +81,13 @@ uv run python scripts/backfill_2026_indices.py --dry-run
 uv run python scripts/validate_artifact.py tests/fixtures/artifact/valid
 ```
 
+**Build a release artifact (after backfilling every file in `config/release_sources.txt`):**
+```bash
+uv run python scripts/fill_missing_metadata.py
+uv run python scripts/convert_historical_indices.py --allow-validation-failure
+uv run python scripts/build_release.py   # writes data/published/
+```
+
 **Source reconnaissance (before building a new adapter):**
 ```bash
 uv run python scripts/source_recon.py --target-date 2026-05-29
@@ -188,6 +195,28 @@ and dates are ISO. A publisher has to normalise values to these formats; it
 must not relax the contract. A quarantined trading date stays in
 `trading_calendar.csv` as a session with no prices, because an importer that
 drops it treats the session as a holiday.
+
+### Release Build
+
+`scripts/build_release.py` makes the artifact. The trading calendar is every
+date listed by the official price files in `config/release_sources.txt`. A
+session is accepted or quarantined according to its per-date
+`quality_summary.json`, and the build refuses when an accepted file disagrees
+with its summary: a stale file from an earlier run must not ship. Every shipped
+index series must have a value on every session. The build writes nothing
+unless both the staging directory and the zip pass `validate_artifact`.
+
+`scripts/fill_missing_metadata.py` adds metadata rows for traded symbols that
+the active list no longer has, such as delisted companies and expired rights,
+using `companyInfoSummery`. When the API doesn't know a symbol at all
+(`CSEC.N0000` returns 404), it falls back to the SHORT NAME column of the
+official price files. It never writes `listing_date`, because for rights and
+preference lines `issueDate` is the company's date.
+
+`.github/workflows/release.yml` runs the whole chain on manual dispatch. With
+`publish=false` it only builds and validates. With `publish=true` it creates a
+`dataset-<version>` release, which fails if the tag already exists, and then
+validates the downloaded asset.
 
 ### Validation Gates
 
