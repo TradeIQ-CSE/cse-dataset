@@ -1,0 +1,19 @@
+# Official CSE daily share price files that make up a release, one per line,
+# relative to the repository root. The release workflow backfills each one, and
+# build_release.py takes the trading calendar from their candidate rows.
+# 2024_Data__2024_Q4.csv holds the whole of 2024 despite its name.
+historical_data/csv/stock_data/32Daily Shares Price List -2011-2020/2017_Data__2017.csv
+historical_data/csv/stock_data/32Daily Shares Price List -2011-2020/2018_Data__2018.csv
+historical_data/csv/stock_data/32Daily Shares Price List -2011-2020/2019_Data__2019.csv
+historical_data/csv/stock_data/32Daily Shares Price List -2011-2020/2020_Data__Hign_low_01-Jan-2020_to_31-de.csv
+historical_data/csv/stock_data/33Daily Shares Price List -2021-2025/2021_Data__Daily_Share_Price_Q1.csv
+historical_data/csv/stock_data/33Daily Shares Price List -2021-2025/2021_Data__Daily_Share_Price_Q2.csv
+historical_data/csv/stock_data/33Daily Shares Price List -2021-2025/2021_Data__Daily_Share_Prices_Q3.csv
+historical_data/csv/stock_data/33Daily Shares Price List -2021-2025/2021_Data__Daily_Share_Prices_Q4.csv
+historical_data/csv/stock_data/33Daily Shares Price List -2021-2025/2022_Data__Daily_Share_Prices_Q1.csv
+historical_data/csv/stock_data/33Daily Shares Price List -2021-2025/2022_Data__Daily_Share_Prices_Q2.csv
+historical_data/csv/stock_data/33Daily Shares Price List -2021-2025/2022_Data__Daily_Share_Prices_Q3.csv
+historical_data/csv/stock_data/33Daily Shares Price List -2021-2025/2022_Data__Daily_Share_Prices_Q4.csv
+historical_data/csv/stock_data/33Daily Shares Price List -2021-2025/2023_Data.csv
+historical_data/csv/stock_data/33Daily Shares Price List -2021-2025/2024_Data__2024_Q4.csv
+historical_data/csv/stock_data/33Daily Shares Price List -2021-2025/2025_Data__HighLow.csv
