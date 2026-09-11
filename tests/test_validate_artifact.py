@@ -15,6 +15,7 @@ import json
 import shutil
 import tempfile
 import unittest
+import warnings
 import zipfile
 from pathlib import Path
 from typing import Callable
@@ -138,6 +139,19 @@ class ArtifactAndManifestTests(ArtifactValidatorTestCase):
         archive = self.zip_artifact(lambda name: f"cse-dataset/{name}")
 
         self.assertFails("unlisted_file", "not at the archive root", path=archive)
+
+    def test_zip_with_a_repeated_member_is_refused(self) -> None:
+        # Tampered copy first, genuine file last: zipfile reads the last entry,
+        # so without the check the tampered copy is never examined.
+        archive = self.artifact.with_suffix(".zip")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")  # zipfile warns on the duplicate name, which is the point
+            with zipfile.ZipFile(archive, "w") as zf:
+                zf.writestr("daily_ohlcv.csv", "tampered\n")
+                for path in sorted(self.artifact.iterdir()):
+                    zf.write(path, arcname=path.name)
+
+        self.assertFails("unlisted_file", "daily_ohlcv.csv appears more than once", path=archive)
 
     def test_missing_manifest(self) -> None:
         (self.artifact / "manifest.json").unlink()

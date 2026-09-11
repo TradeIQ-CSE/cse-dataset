@@ -186,6 +186,10 @@ def read_artifact(path: Path) -> dict[str, bytes]:
                         "unlisted_file",
                         f"{info.filename} is not at the archive root; the artifact layout is flat",
                     )
+                # zipfile reads the last entry of a repeated name, but a streaming
+                # reader gets the first, so only one copy would ever be checked.
+                if info.filename in files:
+                    raise ArtifactError("unlisted_file", f"{info.filename} appears more than once in the archive")
                 files[info.filename] = archive.read(info)
         return files
     raise ArtifactError("artifact_unreadable", f"{path} is not a directory or a zip archive")

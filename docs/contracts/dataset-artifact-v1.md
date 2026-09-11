@@ -235,7 +235,7 @@ failure, and the reason names the file, line and column involved.
 | `unsupported_contract` | `contract_version` has a major number other than 1 |
 | `manifest_schema` | The manifest breaks the JSON Schema or a cross-field rule in §6–§7 |
 | `missing_file` | A required file isn't listed, or a listed file isn't in the artifact |
-| `unlisted_file` | A file isn't listed in the manifest, or the layout isn't flat |
+| `unlisted_file` | A file isn't listed in the manifest, a name appears twice in the zip, or the layout isn't flat |
 | `checksum_mismatch` | A file's SHA-256 differs from the manifest |
 | `row_count_mismatch` | A file's row count differs from the manifest |
 | `bad_encoding` | A byte order mark, bytes that aren't UTF-8, or `\r` line endings |
