@@ -205,6 +205,12 @@ class BuildTests(ReleaseTestCase):
         self.assertEqual(rows[1]["open"], "")
         self.assertNotIn("validation_status", rows[0])
 
+    def test_release_notes_count_prices_without_an_open(self) -> None:
+        summary = self.fixture.build()
+
+        self.assertEqual(summary.no_open, {"2025": 1})
+        self.assertIn("- Price rows without an open: 1 (2025: 1)", (self.fixture.output / "release_notes.md").read_text())
+
     def test_quarantined_session_stays_in_the_calendar(self) -> None:
         summary = self.fixture.build()
 
