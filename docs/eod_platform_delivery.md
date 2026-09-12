@@ -45,6 +45,10 @@ date,is_trading_day,source,verified_at
 The production calendar must be reviewed and source-attributed. A weekday-only
 generated calendar is not acceptable because it misses exchange holidays.
 
+`config/trading_calendar.csv` is that calendar: every 2026 weekday, with the
+holidays from CSE circular 07-10-2025 marked closed. Add each year's weekdays
+once CSE publishes its holiday circular.
+
 ## Local delivery
 
 ```sh
@@ -55,7 +59,7 @@ TRADEIQ_INGESTION_API_URL=http://localhost:3001 \
 TRADEIQ_INGESTION_TOKEN=local-secret \
 uv run python scripts/publish_eod.py \
   --result-manifest data/run/daily_result.json \
-  --calendar-path /path/to/cse-trading-calendar.csv \
+  --calendar-path config/trading_calendar.csv \
   --out-dir data/run/delivery
 ```
 
@@ -81,9 +85,7 @@ After the platform is deployed, configure:
 
 - repository variable `TRADEIQ_INGESTION_ENABLED=true`;
 - secret `TRADEIQ_INGESTION_API_URL` with the HTTPS market API origin;
-- secret `TRADEIQ_INGESTION_TOKEN` matching `MARKET_INGESTION_TOKEN`;
-- secret `TRADEIQ_TRADING_CALENDAR_B64` containing the base64-encoded reviewed
-  calendar CSV.
+- secret `TRADEIQ_INGESTION_TOKEN` matching `MARKET_INGESTION_TOKEN`.
 
 Run one manual workflow delivery and verify its saved receipt and platform
 quote before leaving scheduled delivery enabled.
