@@ -199,7 +199,26 @@ def normalize_daily_share_price_file(path: Path, payload_hash: str | None = None
         frames.append(out)
     if not frames:
         return pd.DataFrame()
-    return pd.concat(frames, ignore_index=True)
+    return drop_copied_open(pd.concat(frames, ignore_index=True))
+
+
+# A year's file has about 50,000 rows, and in the years with a real open it
+# differs from the close on 61-83% of them. Every row matching over this many
+# rows is a copied column, not chance; below it, leave the file alone.
+OPEN_COPY_MIN_ROWS = 1000
+
+
+def drop_copied_open(records: pd.DataFrame) -> pd.DataFrame:
+    """Blank `open` when the file repeats the close as the open on every row.
+
+    CSE's official 2017, 2018 and 2025 files do this. A copy of the close is not an
+    opening price, so the file is treated like the pre-2017 ones that have no open.
+    """
+    both = records[records["open"].notna() & records["close"].notna()]
+    if len(both) >= OPEN_COPY_MIN_ROWS and bool((both["open"] == both["close"]).all()):
+        records = records.copy()
+        records["open"] = pd.NA
+    return records
 
 
 def clean_label_value(value: str | None) -> str | None:
@@ -422,7 +441,8 @@ def run_backfill(
     metadata = pd.DataFrame() if allow_missing_metadata else load_metadata(metadata_path)
     # No source file in this dataset has an `open` column that is present but sparsely
     # populated (2017+ files are >99.5% complete per TIQ-22); an entirely-null `open`
-    # column reliably means the source era predates 2017 and never published one at all.
+    # column means the file never published one (before 2017) or only repeated the
+    # close in it (2017, 2018 and 2025, see drop_copied_open).
     require_open = bool(records["open"].notna().any())
     failures: list[str] = []
     accepted_dates = 0

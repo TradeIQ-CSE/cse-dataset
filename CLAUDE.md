@@ -239,7 +239,7 @@ validates the downloaded asset.
 - 2001: close + some volume
 - 2002-2015: high/low/close/volume/turnover/trades (no open)
 - 2016: high/low/close (no open)
-- 2017-2025: closest to full OHLCV, but some rows have blanks
+- 2017-2025: closest to full OHLCV, but some rows have blanks. The 2017, 2018 and 2025 files repeat the close in OPEN PRICE on every row, so `backfill_ohlcv.py` drops the open for them (`drop_copied_open`)
 
 Backfill builds symbols like `AAF.N0000` from `COMPANY ID` + `MAIN TYPE` + `SUB TYPE`.
 

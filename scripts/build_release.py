@@ -22,7 +22,7 @@ import shutil
 import subprocess
 import tempfile
 import zipfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
 from decimal import ROUND_HALF_EVEN, Decimal, InvalidOperation
 from pathlib import Path
@@ -88,6 +88,8 @@ class ReleaseSummary:
     sessions: int
     quarantined: list[str]
     quarantined_rows: int
+    #: Price rows with no open, by year.
+    no_open: dict[str, int] = field(default_factory=dict)
 
 
 def _is_null(value: object) -> bool:
@@ -245,14 +247,16 @@ def metadata_row(raw: dict[str, str]) -> list[str]:
 
 def build_staging(
     staging: Path, inputs: ReleaseInputs, start: date, end: date
-) -> tuple[list[str], list[str], int, dict[str, int]]:
-    """Write every data file into ``staging``. Returns sessions, quarantined dates, rejected rows, row counts."""
+) -> tuple[list[str], list[str], int, dict[str, int], dict[str, int]]:
+    """Write every data file into ``staging``. Returns sessions, quarantined dates, rejected rows,
+    row counts, and price rows with no open by year."""
     sessions = session_dates(inputs, start, end)
     calendar: list[list[str]] = []
     quarantined: list[str] = []
     quarantined_rows = 0
     symbols: set[str] = set()
     price_rows = 0
+    no_open: dict[str, int] = {}
 
     # Streamed one session at a time: the full window is over half a million rows.
     with (staging / "daily_ohlcv.csv").open("w", newline="", encoding="utf-8") as handle:
@@ -269,6 +273,9 @@ def build_staging(
             writer.writerows(rows)
             symbols.update(row[1] for row in rows)
             price_rows += len(rows)
+            missing = sum(1 for row in rows if row[2] == "")
+            if missing:
+                no_open[day[:4]] = no_open.get(day[:4], 0) + missing
             if accepted:
                 calendar.append([day, "accepted", str(len(rows))])
             else:
@@ -318,7 +325,7 @@ def build_staging(
         "indices.csv": len(INDEX_NAMES),
         "trading_calendar.csv": len(sessions),
     }
-    return sessions, quarantined, quarantined_rows, rows
+    return sessions, quarantined, quarantined_rows, rows, no_open
 
 
 def write_manifest(
@@ -388,6 +395,15 @@ def release_notes(manifest: dict, summary: ReleaseSummary) -> str:
         f"- Trading sessions: {summary.sessions:,} ({accepted:,} accepted, {len(summary.quarantined):,} quarantined)",
         f"- Index series: {', '.join(sorted(INDEX_NAMES))}, each with a value on every session",
         f"- Source rows rejected on quarantined sessions: {summary.quarantined_rows:,}",
+        "- Price rows without an open: "
+        + (
+            f"{sum(summary.no_open.values()):,} ("
+            + ", ".join(f"{year}: {count:,}" for year, count in sorted(summary.no_open.items()))
+            + ")"
+            if summary.no_open
+            else "none"
+        )
+        + ". The official file leaves them blank, or repeats the close in place of the open.",
         "",
         "## Quarantined sessions",
         "",
@@ -426,7 +442,7 @@ def build_release(
     with tempfile.TemporaryDirectory() as tmp:
         staging = Path(tmp) / "staging"
         staging.mkdir()
-        sessions, quarantined, quarantined_rows, rows = build_staging(staging, inputs, start, end)
+        sessions, quarantined, quarantined_rows, rows, no_open = build_staging(staging, inputs, start, end)
         manifest = write_manifest(
             staging,
             sessions=sessions,
@@ -451,6 +467,7 @@ def build_release(
             sessions=len(sessions),
             quarantined=quarantined,
             quarantined_rows=quarantined_rows,
+            no_open=no_open,
         )
         output_dir.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(archive, summary.archive)

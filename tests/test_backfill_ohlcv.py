@@ -124,6 +124,47 @@ class BackfillOHLCVTests(unittest.TestCase):
         )
         self.assertTrue(any("negative OHLC price" in reason for reason in rejected["rejection_reason"]))
 
+    def write_rows(self, count: int, *, differing_opens: int = 0) -> Path:
+        """``count`` rows on one date whose open equals the close, except the last ``differing_opens``."""
+        source = self.root / "prices.csv"
+        rows = []
+        for i in range(count):
+            opening = "10.6" if i >= count - differing_opens else "10.5"
+            rows.append(f"C{i:04d},N,0,COMPANY {i},2025-01-02,11,10,10.5,{opening},1,100,1050")
+        write_source(source, rows)
+        return source
+
+    def test_an_open_that_repeats_the_close_on_every_row_is_dropped(self) -> None:
+        records = backfill.normalize_daily_share_price_file(self.write_rows(backfill.OPEN_COPY_MIN_ROWS))
+
+        self.assertTrue(records["open"].isna().all())
+        self.assertTrue(records["close"].notna().all())
+
+    def test_one_differing_open_keeps_the_column(self) -> None:
+        records = backfill.normalize_daily_share_price_file(
+            self.write_rows(backfill.OPEN_COPY_MIN_ROWS, differing_opens=1)
+        )
+
+        self.assertTrue(records["open"].notna().all())
+
+    def test_a_small_file_keeps_an_open_equal_to_the_close(self) -> None:
+        records = backfill.normalize_daily_share_price_file(self.write_rows(backfill.OPEN_COPY_MIN_ROWS - 1))
+
+        self.assertTrue(records["open"].notna().all())
+
+    def test_a_file_with_a_copied_open_is_accepted_without_one(self) -> None:
+        result = backfill.run_backfill(
+            source_path=self.write_rows(backfill.OPEN_COPY_MIN_ROWS),
+            dry_run=False,
+            allow_missing_metadata=True,
+        )
+
+        self.assertEqual(result.accepted_rows, backfill.OPEN_COPY_MIN_ROWS)
+        accepted = pd.read_csv(
+            backfill.ACCEPTED_ROOT / "2025-01-02/cse_historical_daily_share_prices/canonical_ohlcv.csv"
+        )
+        self.assertTrue(accepted["open"].isna().all())
+
 
 class GroupedHighLowBlockTests(unittest.TestCase):
     def test_sub_type_label_split_after_any_letter_of_type(self) -> None:

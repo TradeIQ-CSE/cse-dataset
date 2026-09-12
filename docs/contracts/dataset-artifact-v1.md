@@ -71,7 +71,7 @@ gates.
 |---|---|---|---|
 | `date` | date | no | Key, part 1 |
 | `symbol` | symbol | no | Key, part 2 |
-| `open` | decimal | yes | The official files have no open price for some rows |
+| `open` | decimal | yes | Empty when the official file has no usable open: blank on some rows, and absent from whole years (§10) |
 | `high` | decimal | no | |
 | `low` | decimal | no | |
 | `close` | decimal | no | |
@@ -265,3 +265,7 @@ sessions.
   default, so there is no real value to ship.
 - **`sectors.csv` isn't shipped** and every `sector_code` is empty. No per-company
   GICS mapping has been sourced yet.
+- **No open price for 2017, 2018 and 2025**, from `2025-12-31.2` on. CSE's
+  official files for those years repeat the close in OPEN PRICE on every row,
+  which is not an opening price, so `open` is empty. `2025-12-31.1` shipped the
+  copied value.
