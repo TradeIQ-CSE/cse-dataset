@@ -263,8 +263,10 @@ sessions.
   2024, and only 56 in early 2025.
 - **`board` is empty.** The metadata collector only ever wrote a hardcoded
   default, so there is no real value to ship.
-- **`sectors.csv` isn't shipped** and every `sector_code` is empty. No per-company
-  GICS mapping has been sourced yet.
+- **Sectors are CSE's 20 GICS industry groups**, from `2025-12-31.3` on, taken
+  from CSE's `companyProfile` and `allSectors` endpoints. `sector_code` is empty
+  for a company CSE gives no industry group for. Earlier releases ship no
+  `sectors.csv` and no sector codes.
 - **No open price for 2017, 2018, the first quarter of 2021, and 2025**, from
   `2025-12-31.2` on. CSE's official files for those periods repeat the close in
   OPEN PRICE on every row, which is not an opening price, so `open` is empty.

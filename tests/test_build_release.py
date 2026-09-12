@@ -59,6 +59,8 @@ class ReleaseFixture:
             validation_root=root / "validation",
             metadata_path=root / "company_metadata.csv",
             indices_path=root / "indices_historical.csv",
+            sectors_path=root / "sectors.csv",
+            company_sectors_path=root / "company_sectors.csv",
         )
         source = root / "official_2025.csv"
         source.write_text("fixture official price file\n")
@@ -76,6 +78,8 @@ class ReleaseFixture:
         self.quarantine("2025-12-30", rejected_rows=2)
         self.accept("2025-12-31", [price("2025-12-31", "AAF.N0000"), price("2025-12-31", "COMB.N0000")])
         self.inputs.metadata_path.write_text(METADATA)
+        self.inputs.sectors_path.write_text("gics_code,sector_name\n4010,Banks\n")
+        self.inputs.company_sectors_path.write_text("symbol,gics_code\nCOMB.N0000,4010\n")
 
         index_rows = []
         for day in SESSIONS:
@@ -241,6 +245,13 @@ class BuildTests(ReleaseTestCase):
         self.assertEqual(rows["AAF.N0000"]["sector_code"], "")
         self.assertEqual(rows["AAF.N0000"]["board"], "")
         self.assertEqual(rows["COMB.N0000"]["shares_outstanding"], "")
+
+    def test_sectors_come_from_the_committed_mapping(self) -> None:
+        archive = self.fixture.build().archive
+
+        codes = {r["symbol"]: r["sector_code"] for r in member(archive, "company_metadata.csv")}
+        self.assertEqual(codes, {"AAF.N0000": "", "COMB.N0000": "4010"})
+        self.assertEqual(member(archive, "sectors.csv"), [{"gics_code": "4010", "sector_name": "Banks"}])
 
     def test_revision_sets_the_version(self) -> None:
         summary = self.fixture.build(revision=2)
