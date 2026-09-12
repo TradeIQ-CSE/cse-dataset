@@ -211,8 +211,9 @@ OPEN_COPY_MIN_ROWS = 1000
 def drop_copied_open(records: pd.DataFrame) -> pd.DataFrame:
     """Blank `open` when the file repeats the close as the open on every row.
 
-    CSE's official 2017, 2018 and 2025 files do this. A copy of the close is not an
-    opening price, so the file is treated like the pre-2017 ones that have no open.
+    CSE's official 2017, 2018 and 2025 files do this, and so does the first quarter of
+    2021. A copy of the close is not an opening price, so the file is treated like the
+    pre-2017 ones that have no open.
     """
     both = records[records["open"].notna() & records["close"].notna()]
     if len(both) >= OPEN_COPY_MIN_ROWS and bool((both["open"] == both["close"]).all()):
@@ -442,7 +443,7 @@ def run_backfill(
     # No source file in this dataset has an `open` column that is present but sparsely
     # populated (2017+ files are >99.5% complete per TIQ-22); an entirely-null `open`
     # column means the file never published one (before 2017) or only repeated the
-    # close in it (2017, 2018 and 2025, see drop_copied_open).
+    # close in it (see drop_copied_open).
     require_open = bool(records["open"].notna().any())
     failures: list[str] = []
     accepted_dates = 0
