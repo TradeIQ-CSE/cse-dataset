@@ -77,6 +77,9 @@ class ReleaseInputs:
     validation_root: Path = ROOT / "data/processed/validation/ohlcv"
     metadata_path: Path = ROOT / "data/processed/company_metadata.csv"
     indices_path: Path = ROOT / "data/processed/indices_backfill/accepted/indices_historical.csv"
+    # Committed by collect_sectors.py.
+    sectors_path: Path = ROOT / "config/sectors.csv"
+    company_sectors_path: Path = ROOT / "config/company_sectors.csv"
 
 
 @dataclass(frozen=True)
@@ -229,7 +232,7 @@ def price_row(raw: dict[str, str], where: str) -> list[str]:
     ]
 
 
-def metadata_row(raw: dict[str, str]) -> list[str]:
+def metadata_row(raw: dict[str, str], sector_code: str) -> list[str]:
     where = f"company_metadata.csv {raw.get('symbol')}"
     shares = to_integer(raw.get("shares_outstanding"), f"{where} shares_outstanding")
     return [
@@ -238,7 +241,7 @@ def metadata_row(raw: dict[str, str]) -> list[str]:
         to_boolean(raw.get("delisted"), f"{where} delisted"),
         to_iso_date(raw.get("listing_date"), f"{where} listing_date"),
         to_iso_date(raw.get("delisting_date"), f"{where} delisting_date"),
-        "",  # sector_code: no per-company GICS mapping has been sourced
+        sector_code,
         to_text(raw.get("isin")),
         "" if shares == "0" else shares,
         "",  # board: 01_collect_metadata.py only ever wrote a hardcoded "Main"
@@ -291,7 +294,15 @@ def build_staging(
             f"{len(missing)} traded symbols have no metadata row (first: {', '.join(missing[:5])}); "
             "run fill_missing_metadata.py"
         )
-    write_csv(staging / "company_metadata.csv", METADATA_COLUMNS, [metadata_row(metadata[s]) for s in sorted(symbols)])
+    # A symbol CSE gave no sector for ships with an empty sector_code.
+    sectors = {row["symbol"]: row["gics_code"] for row in read_csv(inputs.company_sectors_path)}
+    write_csv(
+        staging / "company_metadata.csv",
+        METADATA_COLUMNS,
+        [metadata_row(metadata[s], sectors.get(s, "")) for s in sorted(symbols)],
+    )
+    sector_rows = [[row["gics_code"], row["sector_name"]] for row in read_csv(inputs.sectors_path)]
+    write_csv(staging / "sectors.csv", ("gics_code", "sector_name"), sector_rows)
 
     session_set = set(sessions)
     values: dict[str, list[list[str]]] = {code: [] for code in INDEX_NAMES}
@@ -320,6 +331,7 @@ def build_staging(
 
     rows = {
         "company_metadata.csv": len(symbols),
+        "sectors.csv": len(sector_rows),
         "daily_ohlcv.csv": price_rows,
         "index_values.csv": len(index_rows),
         "indices.csv": len(INDEX_NAMES),

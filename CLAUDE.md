@@ -213,6 +213,12 @@ using `companyInfoSummery`. When the API doesn't know a symbol at all
 official price files. It never writes `listing_date`, because for rights and
 preference lines `issueDate` is the company's date.
 
+Sectors come from the committed `config/company_sectors.csv` and
+`config/sectors.csv`. `scripts/collect_sectors.py` writes them from CSE's
+`companyProfile` (each company's GICS industry group) and `allSectors` (the
+groups and their codes); rerun it by hand when companies are added. The release
+build never calls CSE for sectors.
+
 `.github/workflows/release.yml` runs the whole chain on manual dispatch. With
 `publish=false` it only builds and validates. With `publish=true` it creates a
 `dataset-<version>` release, which fails if the tag already exists, and then
