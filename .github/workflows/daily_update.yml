@@ -56,15 +56,12 @@ jobs:
         env:
           TRADEIQ_INGESTION_API_URL: ${{ secrets.TRADEIQ_INGESTION_API_URL }}
           TRADEIQ_INGESTION_TOKEN: ${{ secrets.TRADEIQ_INGESTION_TOKEN }}
-          TRADEIQ_TRADING_CALENDAR_B64: ${{ secrets.TRADEIQ_TRADING_CALENDAR_B64 }}
         run: |
           test -n "$TRADEIQ_INGESTION_API_URL"
           test -n "$TRADEIQ_INGESTION_TOKEN"
-          test -n "$TRADEIQ_TRADING_CALENDAR_B64"
-          printf '%s' "$TRADEIQ_TRADING_CALENDAR_B64" | base64 --decode > "$RUNNER_TEMP/cse-trading-calendar.csv"
           uv run python scripts/publish_eod.py \
             --result-manifest data/run/daily_result.json \
-            --calendar-path "$RUNNER_TEMP/cse-trading-calendar.csv" \
+            --calendar-path config/trading_calendar.csv \
             --out-dir data/run/delivery
 
       - name: 2026-forward source validation summary

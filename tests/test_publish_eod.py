@@ -12,6 +12,7 @@ from scripts.publish_eod import (
     build_request,
     canonical_digest,
     deliver,
+    load_calendar_entry,
     main,
 )
 
@@ -290,6 +291,18 @@ class PublishEodTests(unittest.TestCase):
             )
 
         self.assertEqual(session.calls, [])
+
+
+class CommittedCalendarTests(unittest.TestCase):
+    # The calendar daily_update.yml delivers with, read the way delivery reads it.
+    def test_2026_calendar_closes_cse_holidays(self):
+        calendar = ROOT / "config/trading_calendar.csv"
+        self.assertEqual(
+            load_calendar_entry(calendar, "2026-09-11")["source"],
+            "CSE circular 07-10-2025",
+        )
+        with self.assertRaisesRegex(DeliveryError, "non-trading"):
+            load_calendar_entry(calendar, "2026-08-26")
 
 
 if __name__ == "__main__":
