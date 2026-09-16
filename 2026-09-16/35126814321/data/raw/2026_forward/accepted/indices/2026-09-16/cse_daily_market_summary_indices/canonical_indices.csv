@@ -1,0 +1,5 @@
+date,index_name,close,source,source_timestamp,raw_payload_hash
+2026-09-16,ASPI,21133.41,cse_daily_market_summary_indices,2026-09-16,cd30afbbd63b234e03204d05dd1bb2d7c8314967252664aa883714d6a23c157d
+2026-09-16,SL20,5947.29,cse_daily_market_summary_indices,2026-09-16,cd30afbbd63b234e03204d05dd1bb2d7c8314967252664aa883714d6a23c157d
+2026-09-16,SL20TRI,12630.73,cse_daily_market_summary_indices,2026-09-16,cd30afbbd63b234e03204d05dd1bb2d7c8314967252664aa883714d6a23c157d
+2026-09-16,ASTRI,33286.05,cse_daily_market_summary_indices,2026-09-16,cd30afbbd63b234e03204d05dd1bb2d7c8314967252664aa883714d6a23c157d
