@@ -1,0 +1,13 @@
+{
+  "requested_date": "2026-09-17",
+  "source_date": "2026-09-17",
+  "report_date": "2026-09-17",
+  "fetch_time_utc": "2026-09-17T17:18:07Z",
+  "family": "indices",
+  "source_name": "cse_daily_market_summary_indices",
+  "source_url": "https://www.cse.lk/api/dailyMarketSummery",
+  "payload_hash": "8a2a7511aee403b31cdd2b2aa244de6dcfc6abfc51d98e7ccd0c76dff9428452",
+  "row_count": 4,
+  "validation_status": "accepted",
+  "raw_payload_path": "data/raw/2026_forward/source_payloads/indices/2026-09-17/cse_daily_market_summary_indices/8a2a7511aee403b31cdd2b2aa244de6dcfc6abfc51d98e7ccd0c76dff9428452.json"
+}
