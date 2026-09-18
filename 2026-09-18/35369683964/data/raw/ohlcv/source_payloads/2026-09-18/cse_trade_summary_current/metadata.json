@@ -1,0 +1,11 @@
+{
+  "requested_date": "2026-09-18",
+  "observed_source_date": "2026-09-18",
+  "fetch_time_utc": "2026-09-18T16:44:11Z",
+  "source_name": "cse_trade_summary_current",
+  "source_url": "https://www.cse.lk/api/tradeSummary",
+  "payload_hash": "039ed163afd5804ee878e7d404d19c96e16117388fd6e9ac08f37294645ee472",
+  "row_count": 276,
+  "validation_status": "accepted",
+  "raw_payload_path": "data/raw/ohlcv/source_payloads/2026-09-18/cse_trade_summary_current/payload.json"
+}
