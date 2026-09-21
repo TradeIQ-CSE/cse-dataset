@@ -1,0 +1,123 @@
+# Deliver saved sessions to TradeIQ on demand.
+#
+# The same catch-up that runs after the daily collection, on its own trigger.
+# The daily job only fires after the close, so without this the only way to
+# heal a gap is to wait for the next scheduled run — no use when the platform
+# has just been given its token, or when a delivery failed this morning and the
+# fix is ready now.
+#
+# What it sends comes entirely from the captures branch, re-validated with the
+# current rules, so running it twice is safe: a date the platform already holds
+# answers 409, which counts as delivered.
+#
+# The metadata step is the one exception, and it does reach CSE: the active
+# list no longer carries expired rights lines, and a traded symbol with no
+# metadata row rejects its whole session. That couples this job to CSE being
+# up, which a replay of stored data should not need — the payloads carry each
+# symbol's name, so the metadata can be rebuilt from the captures alone.
+# Tracked as a follow-up; until then, a CSE outage delays a backfill.
+name: Backfill delivery
+
+on:
+  workflow_dispatch:
+    inputs:
+      since:
+        description: "Earliest session to deliver (YYYY-MM-DD, optional)"
+        required: false
+      until:
+        description: "Latest session to deliver (YYYY-MM-DD, optional)"
+        required: false
+      dry_run:
+        description: "Build every request without sending any"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  # Two backfills at once would race on the same dates. The second would only
+  # get 409s, but the report would then claim sessions were already held when
+  # this run is what delivered them.
+  group: tradeiq-delivery
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check out the captures branch
+        uses: actions/checkout@v4
+        with:
+          ref: captures
+          path: captures-store
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      # Expired rights lines are not in the active list, and a symbol with no
+      # metadata row rejects its whole session.
+      - name: Collect metadata and add the symbols only the captures know
+        run: |
+          uv run python scripts/01_collect_metadata.py
+          uv run python scripts/fill_missing_metadata.py --captures-path captures-store
+
+      - name: Deliver
+        env:
+          TRADEIQ_INGESTION_API_URL: ${{ secrets.TRADEIQ_INGESTION_API_URL }}
+          TRADEIQ_INGESTION_TOKEN: ${{ secrets.TRADEIQ_INGESTION_TOKEN }}
+          SINCE: ${{ inputs.since }}
+          UNTIL: ${{ inputs.until }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          # A dry run builds requests and sends nothing, so it must not demand
+          # delivery credentials; backfill_deliveries.py draws the same line.
+          if [ "$DRY_RUN" != "true" ]; then
+            test -n "$TRADEIQ_INGESTION_API_URL"
+            test -n "$TRADEIQ_INGESTION_TOKEN"
+          fi
+          # if, not `test && args+=(...)`: the runner uses bash -e, where a
+          # false test is the last command of the list and aborts the step.
+          args=()
+          if [ -n "$SINCE" ]; then args+=(--since "$SINCE"); fi
+          if [ -n "$UNTIL" ]; then args+=(--until "$UNTIL"); fi
+          if [ "$DRY_RUN" = "true" ]; then args+=(--dry-run); fi
+          uv run python scripts/backfill_deliveries.py \
+            --captures-path captures-store \
+            --calendar-path config/trading_calendar.csv \
+            --out-dir data/run/backfill \
+            "${args[@]}"
+
+      - name: Summarise
+        if: always()
+        run: |
+          if [ -f data/run/backfill/backfill_report.json ]; then
+            jq -r '.summary' data/run/backfill/backfill_report.json
+            jq -r '.sessions[] | select(.prices == "failed" or .indices == "failed")
+                   | "FAILED \(.session): \(.prices_detail) \(.indices_detail)"' \
+              data/run/backfill/backfill_report.json
+          fi
+
+      - name: Upload the delivery report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backfill-${{ github.run_id }}
+          path: data/run/backfill/backfill_report.json
+          if-no-files-found: warn
+          retention-days: 30
