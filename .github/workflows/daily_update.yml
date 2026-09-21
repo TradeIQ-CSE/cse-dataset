@@ -70,6 +70,37 @@ jobs:
       - name: Daily index collection (ASPI, S&P SL20)
         run: uv run python scripts/daily_indices_update.py --allow-validation-failure
 
+      # Separate from the price delivery above because the price route refuses a
+      # date that already has prices: bundled together, index values captured
+      # late could never land. A quarantined index run leaves nothing to send,
+      # which publish_indices reports rather than inventing a value, so this
+      # step is allowed to find nothing on a day the capture failed.
+      - name: Deliver accepted index values to TradeIQ
+        if: ${{ vars.TRADEIQ_INGESTION_ENABLED == 'true' }}
+        env:
+          TRADEIQ_INGESTION_API_URL: ${{ secrets.TRADEIQ_INGESTION_API_URL }}
+          TRADEIQ_INGESTION_TOKEN: ${{ secrets.TRADEIQ_INGESTION_TOKEN }}
+        run: |
+          test -n "$TRADEIQ_INGESTION_API_URL"
+          test -n "$TRADEIQ_INGESTION_TOKEN"
+          session=$(jq -r '.target_date // empty' data/run/daily_result.json 2>/dev/null || true)
+          session=${session:-$(TZ=Asia/Colombo date +%F)}
+          set +e
+          uv run python scripts/publish_indices.py \
+            --target-date "$session" \
+            --calendar-path config/trading_calendar.csv \
+            --out-dir data/run/delivery
+          status=$?
+          set -e
+          # Only "nothing accepted to send" is a warning. A bad token, an
+          # outage, a validation error or a 409 must fail the step rather than
+          # pass as a quiet day.
+          if [ "$status" -eq 3 ]; then
+            echo "::warning::no accepted index values to deliver for $session"
+          elif [ "$status" -ne 0 ]; then
+            exit "$status"
+          fi
+
       # cdn.cse.lk returns 403 from local and hosted egress alike, which blocks
       # the SMD PDF path and the official workbook downloads. This reports
       # whether GitHub's network is treated differently, without failing the run.
@@ -163,3 +194,72 @@ jobs:
             git pull --rebase origin captures
           done
           exit 1
+
+  # Yesterday's failure must not need a human. The daily steps above deliver
+  # only the session they just captured, so one rejected run, one outage on the
+  # platform, or a day quarantined by a bug that has since been fixed would
+  # leave a hole forever. This walks the whole captures store every run and
+  # sends what the platform does not have; a date it already holds answers 409,
+  # which is the expected "already delivered" and not a failure.
+  #
+  # It runs after save so today's capture is on the branch, and re-validates
+  # each saved payload with the current rules rather than trusting what the run
+  # accepted at the time — which is what makes the sessions rejected before
+  # TIQ-134 and TIQ-136 deliverable at all.
+  catch-up:
+    needs: save
+    if: always() && vars.TRADEIQ_INGESTION_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check out the captures branch
+        uses: actions/checkout@v4
+        with:
+          ref: captures
+          path: captures-store
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      # The active list has only securities listed today, so an expired rights
+      # line that traded in July has no metadata row and rejects its whole
+      # session. MBSL.R0001 did exactly that to six sessions.
+      - name: Collect metadata and add the symbols only the captures know
+        run: |
+          uv run python scripts/01_collect_metadata.py
+          uv run python scripts/fill_missing_metadata.py --captures-path captures-store
+
+      - name: Deliver every session the platform does not have
+        env:
+          TRADEIQ_INGESTION_API_URL: ${{ secrets.TRADEIQ_INGESTION_API_URL }}
+          TRADEIQ_INGESTION_TOKEN: ${{ secrets.TRADEIQ_INGESTION_TOKEN }}
+        run: |
+          test -n "$TRADEIQ_INGESTION_API_URL"
+          test -n "$TRADEIQ_INGESTION_TOKEN"
+          uv run python scripts/backfill_deliveries.py \
+            --captures-path captures-store \
+            --calendar-path config/trading_calendar.csv \
+            --out-dir data/run/backfill
+
+      - name: Upload the delivery report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backfill-${{ github.run_id }}
+          path: data/run/backfill/backfill_report.json
+          if-no-files-found: warn
+          retention-days: 30

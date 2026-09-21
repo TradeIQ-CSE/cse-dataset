@@ -31,6 +31,16 @@ class DeliveryError(RuntimeError):
     """A non-retryable EOD delivery failure."""
 
 
+class DeliveryConflict(DeliveryError):
+    """The platform refused the batch as conflicting with what it already holds.
+
+    Its own subclass because the backfill has to tell "this session is already
+    loaded", which is the expected answer when catching up, from a delivery
+    that genuinely failed. It stays a DeliveryError so the daily path, which
+    has no business re-sending an occupied date, keeps failing on it.
+    """
+
+
 def load_json(path: Path) -> dict[str, Any]:
     value = json.loads(path.read_text())
     if not isinstance(value, dict):
@@ -110,7 +120,23 @@ def load_calendar_entry(path: Path, trade_date: str) -> dict[str, Any]:
     }
 
 
-def assert_after_close(captured_at: str, trade_date: str, close_time: str) -> None:
+def assert_after_close(
+    captured_at: str,
+    trade_date: str,
+    close_time: str,
+    *,
+    allow_later_capture: bool = False,
+) -> None:
+    """Refuse a snapshot taken before the session it claims had closed.
+
+    The daily path requires the capture to carry the same Colombo date as the
+    session, which is the tightest possible check on a current-day snapshot.
+    A replay out of the captures store cannot use it: a run that started after
+    midnight holds the previous session, and dating it by the run would be the
+    very mistake TIQ-134 fixed. With allow_later_capture the check becomes the
+    thing actually being asserted — the capture happened at or after that
+    session's close — which a later date satisfies by definition.
+    """
     try:
         parsed = datetime.fromisoformat(captured_at.replace("Z", "+00:00"))
         if parsed.tzinfo is None:
@@ -118,8 +144,17 @@ def assert_after_close(captured_at: str, trade_date: str, close_time: str) -> No
         captured = parsed.astimezone(COLOMBO_TZ)
         hours, minutes = (int(part) for part in close_time.split(":"))
         close = clock_time(hours, minutes)
+        session = date.fromisoformat(trade_date)
     except (ValueError, TypeError) as exc:
         raise DeliveryError("invalid captured_at or close-time value") from exc
+    if allow_later_capture:
+        closed_at = datetime.combine(session, close, tzinfo=COLOMBO_TZ)
+        if captured < closed_at:
+            raise DeliveryError(
+                f"capture at {captured.isoformat()} precedes the {close_time} "
+                f"Colombo close of {trade_date}"
+            )
+        return
     if captured.date().isoformat() != trade_date:
         raise DeliveryError(
             f"capture date {captured.date().isoformat()} does not match target {trade_date}"
@@ -162,13 +197,23 @@ def build_request(
     *,
     close_time: str = "14:30",
     expected_trade_date: str | None = None,
+    root: Path = ROOT,
+    allow_later_capture: bool = False,
 ) -> dict[str, Any]:
+    """Build one delivery from a collection run's result manifest.
+
+    `root` is the checkout the manifest's relative paths resolve against. It is
+    this repository for a live run, and one capture's directory when the
+    backfill replays a session out of the captures store.
+    """
     result = load_json(result_manifest_path)
     if result.get("contract_version") != "1" or result.get("status") != "accepted":
         raise DeliveryError("the current collection invocation was not fully accepted")
     trade_date = str(result.get("target_date", ""))
     captured_at = str(result.get("captured_at", ""))
-    assert_after_close(captured_at, trade_date, close_time)
+    assert_after_close(
+        captured_at, trade_date, close_time, allow_later_capture=allow_later_capture
+    )
     assert_expected_trade_date(trade_date, expected_trade_date)
     calendar = load_calendar_entry(calendar_path, trade_date)
 
@@ -191,9 +236,13 @@ def build_request(
     metadata_path_value = result.get("metadata_path")
     if not isinstance(accepted_path_value, str) or not isinstance(metadata_path_value, str):
         raise DeliveryError("result manifest does not identify accepted data and metadata")
-    accepted_path = (ROOT / accepted_path_value).resolve()
-    metadata_path = (ROOT / metadata_path_value).resolve()
-    if ROOT not in accepted_path.parents or ROOT not in metadata_path.parents:
+    resolved_root = root.resolve()
+    accepted_path = (resolved_root / accepted_path_value).resolve()
+    metadata_path = (resolved_root / metadata_path_value).resolve()
+    if (
+        resolved_root not in accepted_path.parents
+        or resolved_root not in metadata_path.parents
+    ):
         raise DeliveryError("result manifest paths must stay inside the dataset checkout")
 
     accepted = pd.read_csv(accepted_path)
@@ -345,14 +394,13 @@ def _request_with_retries(
     raise AssertionError("retry loop exhausted")
 
 
-def deliver(
-    request_body: dict[str, Any],
-    *,
-    api_url: str,
-    token: str,
-    session: requests.Session | None = None,
-    prefer_existing_receipt: bool = False,
-) -> dict[str, Any]:
+def assert_deliverable_target(api_url: str, token: str) -> None:
+    """Refuse to send a bearer token anywhere but the ingestion API over TLS.
+
+    Shared with publish_indices so the two senders cannot drift on where a
+    credential may go. Plain HTTP is allowed for loopback alone, which is what
+    the compose smoke test and a local dry run use.
+    """
     try:
         parsed_api_url = urlsplit(api_url)
         parsed_api_url.port
@@ -373,6 +421,17 @@ def deliver(
         raise DeliveryError("the ingestion API must use HTTPS outside localhost")
     if not token:
         raise DeliveryError("the ingestion token is empty")
+
+
+def deliver(
+    request_body: dict[str, Any],
+    *,
+    api_url: str,
+    token: str,
+    session: requests.Session | None = None,
+    prefer_existing_receipt: bool = False,
+) -> dict[str, Any]:
+    assert_deliverable_target(api_url, token)
     batch_id = request_body.get("batch_id")
     trade_date = request_body.get("trade_date")
     market_digest = request_body.get("market_digest")
@@ -418,7 +477,10 @@ def deliver(
             details = response.json()
         except ValueError:
             details = response.text[:500]
-        raise DeliveryError(f"ingestion failed with HTTP {response.status_code}: {details}")
+        message = f"ingestion failed with HTTP {response.status_code}: {details}"
+        if response.status_code == 409:
+            raise DeliveryConflict(message)
+        raise DeliveryError(message)
     return _validated_receipt(response, request_body)
 
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import json
 import tempfile
 import unittest
 from datetime import date
@@ -43,6 +44,41 @@ class FillMissingMetadataTests(unittest.TestCase):
         symbols = fm.accepted_symbols(self.root / "accepted", date(2017, 1, 1), date(2025, 12, 31))
 
         self.assertEqual(symbols, {"AAF.N0000", "AINV.N0000"})
+
+    def write_capture_payload(self, session: str, run_id: str, symbols: list[str]) -> None:
+        path = (
+            self.root
+            / "captures"
+            / session
+            / run_id
+            / "data/raw/ohlcv/source_payloads"
+            / session
+            / "cse_trade_summary_current"
+            / "payload.json"
+        )
+        path.parent.mkdir(parents=True)
+        path.write_text(
+            json.dumps({"reqTradeSummery": [{"symbol": symbol} for symbol in symbols]})
+        )
+
+    def test_captured_symbols_come_from_raw_payloads(self) -> None:
+        # The rights line that rejected six July sessions is in the payload and
+        # in no accepted file, which is the whole reason for reading payloads.
+        self.write_capture_payload("2026-07-21", "1", ["AAF.N0000", "MBSL.R0001"])
+
+        symbols = fm.captured_symbols(self.root / "captures")
+
+        self.assertEqual(symbols, {"AAF.N0000", "MBSL.R0001"})
+
+    def test_captured_symbols_respect_the_window(self) -> None:
+        self.write_capture_payload("2026-07-21", "1", ["MBSL.R0001"])
+        self.write_capture_payload("2026-09-18", "2", ["AINV.N0000"])
+
+        symbols = fm.captured_symbols(
+            self.root / "captures", date(2026, 9, 1), date(2026, 9, 30)
+        )
+
+        self.assertEqual(symbols, {"AINV.N0000"})
 
     def test_delisted_symbol_is_filled_from_the_api(self) -> None:
         reply = {"name": "ADAM INVESTMENTS PLC", "isin": "LK0999N00001", "quantityIssued": 1000, "issueDate": "01/JAN/2010"}
