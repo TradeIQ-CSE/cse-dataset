@@ -118,5 +118,60 @@ class ReplayCaptureTests(unittest.TestCase):
                 )
 
 
+
+class MalformedCaptureTests(unittest.TestCase):
+    """One bad capture must cost only its own session, never the whole run."""
+
+    def make(self, root: Path) -> Path:
+        captures = root / "captures"
+        captures.mkdir()
+        return write_capture(captures, SESSION, "1")
+
+    def test_unreadable_payload_json_is_a_replay_error(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            run_dir = self.make(root)
+            next(run_dir.rglob("source_payloads/*/*/payload.json")).write_text("{not json")
+            with self.assertRaises(ReplayError):
+                find_payload(run_dir)
+
+    def test_payload_that_is_not_an_object_is_a_replay_error(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            run_dir = self.make(root)
+            next(run_dir.rglob("source_payloads/*/*/payload.json")).write_text("[]")
+            with self.assertRaises(ReplayError):
+                find_payload(run_dir)
+
+    def test_unreadable_fetch_metadata_is_a_replay_error(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            run_dir = self.make(root)
+            next(run_dir.rglob("source_payloads/*/*/metadata.json")).write_text("{not json")
+            with self.assertRaises(ReplayError):
+                replay_capture(
+                    run_dir,
+                    staging_root=root / "staging",
+                    metadata_path=metadata_file(root),
+                )
+
+    def test_naive_fetch_time_is_refused(self):
+        # fromisoformat accepts this, and astimezone would then read it as the
+        # runner's local time, silently moving the capture instant.
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            run_dir = self.make(root)
+            next(run_dir.rglob("source_payloads/*/*/metadata.json")).write_text(
+                json.dumps({"fetch_time_utc": "2026-09-18T16:44:11"})
+            )
+            with self.assertRaises(ReplayError) as raised:
+                replay_capture(
+                    run_dir,
+                    staging_root=root / "staging",
+                    metadata_path=metadata_file(root),
+                )
+        self.assertIn("timezone", str(raised.exception))
+
+
 if __name__ == "__main__":
     unittest.main()

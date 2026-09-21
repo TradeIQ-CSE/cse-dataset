@@ -453,5 +453,72 @@ class RunTests(unittest.TestCase):
         self.assertFalse(outcome.failed)
 
 
+
+class IndependentIndexDeliveryTests(unittest.TestCase):
+    def test_index_values_are_still_offered_when_prices_cannot_be_prepared(self):
+        # The two routes are separate precisely so one cannot hold the other
+        # back; a price payload that fails validation must not bury a day's
+        # perfectly good closes.
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            captures = root / "captures"
+            captures.mkdir()
+            run_dir = write_capture(captures, SESSION, "1")
+            next(run_dir.rglob("source_payloads/*/*/payload.json")).write_text(
+                json.dumps({"reqTradeSummery": []})
+            )
+            out_dir = root / "out"
+            report = run(
+                captures_path=captures,
+                calendar_path=write_calendar(root),
+                out_dir=out_dir,
+                api_url="",
+                token="",
+                dry_run=True,
+                session_obj=RoutedSession(),
+            )
+            outcome = report.sessions[0]
+            self.assertEqual(outcome.prices, "unavailable")
+            self.assertEqual(outcome.indices, "prepared")
+            self.assertTrue(
+                (out_dir / SESSION.isoformat() / "index_ingestion_request.json").is_file()
+            )
+
+    def test_one_unreadable_capture_does_not_stop_the_others(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            captures = root / "captures"
+            captures.mkdir()
+            broken = write_capture(captures, date(2026, 9, 17), "1", with_indices=False)
+            next(broken.rglob("source_payloads/*/*/metadata.json")).write_text("{not json")
+            write_capture(captures, SESSION, "2")
+            calendar = root / "calendar.csv"
+            pd.DataFrame(
+                [
+                    {
+                        "date": day,
+                        "is_trading_day": "true",
+                        "source": "CSE circular 07-10-2025",
+                        "verified_at": "2025-10-22T00:00:00Z",
+                    }
+                    for day in ("2026-09-17", "2026-09-18")
+                ]
+            ).to_csv(calendar, index=False)
+
+            report = run(
+                captures_path=captures,
+                calendar_path=calendar,
+                out_dir=root / "out",
+                api_url="",
+                token="",
+                dry_run=True,
+                session_obj=RoutedSession(),
+            )
+        by_session = {o.session: o for o in report.sessions}
+        self.assertEqual(by_session["2026-09-17"].prices, "unavailable")
+        # The good session after it still gets delivered.
+        self.assertEqual(by_session["2026-09-18"].prices, "prepared")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -74,7 +74,16 @@ def captured_symbols(captures_path: Path, start: date | None = None, end: date |
             payload = json.loads(path.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
             continue
-        for row in payload.get("reqTradeSummery") or []:
+        # A half-written capture is skipped rather than allowed to stop the
+        # recovery: the symbols in the other captures are still worth having.
+        if not isinstance(payload, dict):
+            continue
+        rows = payload.get("reqTradeSummery") or []
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
             symbol = row.get("symbol") or row.get("securityCode")
             if symbol:
                 symbols.add(str(symbol).strip())

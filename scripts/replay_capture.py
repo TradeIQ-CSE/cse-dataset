@@ -46,7 +46,26 @@ PAYLOAD_GLOB = "data/raw/ohlcv/source_payloads/*/*/payload.json"
 
 
 class ReplayError(RuntimeError):
-    """The capture cannot be replayed at all."""
+    """The capture cannot be replayed at all.
+
+    Every way a single capture can be unreadable ends up here, so the backfill
+    can record that one session as rejected and carry on. A capture is data
+    written by an earlier run, and a truncated or half-written file in one of
+    them must not cost the other sixty-five their delivery.
+    """
+
+
+def _load_json_object(path: Path, description: str) -> dict:
+    """Read a capture file that must contain a JSON object."""
+    try:
+        value = json.loads(path.read_text())
+    except json.JSONDecodeError as exc:
+        raise ReplayError(f"{description} at {path} is not readable JSON") from exc
+    except OSError as exc:
+        raise ReplayError(f"{description} at {path} cannot be read") from exc
+    if not isinstance(value, dict):
+        raise ReplayError(f"{description} at {path} is not a JSON object")
+    return value
 
 
 @dataclass
@@ -78,11 +97,11 @@ def find_payload(run_dir: Path) -> tuple[Path, date, str]:
         )
     payload_path = payloads[0]
     source_name = payload_path.parent.name
-    try:
-        payload = json.loads(payload_path.read_text())
-    except json.JSONDecodeError as exc:
-        raise ReplayError(f"{payload_path} is not readable JSON") from exc
-    session = snapshot_session_date(payload.get("reqTradeSummery") or [])
+    payload = _load_json_object(payload_path, "payload")
+    rows = payload.get("reqTradeSummery") or []
+    if not isinstance(rows, list):
+        raise ReplayError(f"{payload_path} has no list of trade summary rows")
+    session = snapshot_session_date(rows)
     if session is None:
         raise ReplayError(
             f"{payload_path} has no single session date in its lastTradedTime values"
@@ -100,14 +119,20 @@ def _captured_at(payload_path: Path) -> str:
     metadata_path = payload_path.parent / "metadata.json"
     if not metadata_path.is_file():
         raise ReplayError(f"{payload_path.parent} has no fetch metadata")
-    metadata = json.loads(metadata_path.read_text())
+    metadata = _load_json_object(metadata_path, "fetch metadata")
     captured_at = metadata.get("fetch_time_utc")
     if not isinstance(captured_at, str) or not captured_at:
         raise ReplayError(f"{metadata_path} records no fetch_time_utc")
     try:
-        datetime.fromisoformat(captured_at.replace("Z", "+00:00"))
+        parsed = datetime.fromisoformat(captured_at.replace("Z", "+00:00"))
     except ValueError as exc:
         raise ReplayError(f"{metadata_path} has an unparseable fetch_time_utc") from exc
+    # fromisoformat accepts a naive "2026-09-18T16:44:11". Left alone, the
+    # astimezone below would read it as this machine's local time, shifting the
+    # recorded capture instant by the runner's offset, and publish_eod would
+    # then refuse the manifest the replay had already staged.
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        raise ReplayError(f"{metadata_path} has a fetch_time_utc with no timezone")
     return captured_at
 
 

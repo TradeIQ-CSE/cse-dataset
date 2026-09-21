@@ -85,13 +85,20 @@ jobs:
           test -n "$TRADEIQ_INGESTION_TOKEN"
           session=$(jq -r '.target_date // empty' data/run/daily_result.json 2>/dev/null || true)
           session=${session:-$(TZ=Asia/Colombo date +%F)}
-          if uv run python scripts/publish_indices.py \
-               --target-date "$session" \
-               --calendar-path config/trading_calendar.csv \
-               --out-dir data/run/delivery; then
-            echo "index values delivered for $session"
-          else
+          set +e
+          uv run python scripts/publish_indices.py \
+            --target-date "$session" \
+            --calendar-path config/trading_calendar.csv \
+            --out-dir data/run/delivery
+          status=$?
+          set -e
+          # Only "nothing accepted to send" is a warning. A bad token, an
+          # outage, a validation error or a 409 must fail the step rather than
+          # pass as a quiet day.
+          if [ "$status" -eq 3 ]; then
             echo "::warning::no accepted index values to deliver for $session"
+          elif [ "$status" -ne 0 ]; then
+            exit "$status"
           fi
 
       # cdn.cse.lk returns 403 from local and hosted egress alike, which blocks

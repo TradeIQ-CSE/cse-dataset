@@ -161,25 +161,31 @@ def replay_session(
     for run_dir in sorted(session_dir.iterdir()):
         if not run_dir.is_dir():
             continue
+        # One unreadable capture must cost only its own session. Everything
+        # inside this boundary reads or writes files belonging to this one run,
+        # so OSError and ValueError from it are as local as a ReplayError;
+        # anything else is a defect or a shared misconfiguration and must stay
+        # visible rather than be recorded as a rejected day.
         try:
             outcome = replay_capture(
                 run_dir,
                 staging_root=staging_root / run_dir.name,
                 metadata_path=metadata_path,
             )
-        except ReplayError as exc:
+            if outcome.session != session:
+                rejections.append(
+                    f"{run_dir.name}: holds {outcome.session.isoformat()}, not this session"
+                )
+                continue
+            if not outcome.passed:
+                rejections.append(f"{run_dir.name}: {'; '.join(outcome.failures)}")
+                continue
+            manifest = json.loads(outcome.staged_manifest.read_text())
+            digest = manifest.get("validation", {}).get("market_digest", "")
+        except (ReplayError, OSError, ValueError) as exc:
             rejections.append(f"{run_dir.name}: {exc}")
             continue
-        if outcome.session != session:
-            rejections.append(
-                f"{run_dir.name}: holds {outcome.session.isoformat()}, not this session"
-            )
-            continue
-        if not outcome.passed:
-            rejections.append(f"{run_dir.name}: {'; '.join(outcome.failures)}")
-            continue
-        manifest = json.loads(outcome.staged_manifest.read_text())
-        passed.append((run_dir, manifest["validation"].get("market_digest", "")))
+        passed.append((run_dir, digest))
 
     if not passed:
         raise DeliveryError(
@@ -196,11 +202,37 @@ def replay_session(
     return run_dir, staging_root / run_dir.name / session.isoformat()
 
 
+def find_index_run(captures_path: Path, session: date) -> Path | None:
+    """The run directory holding this session's accepted index values, if any.
+
+    Resolved independently of the price replay. Index values are validated on
+    their own and delivered through their own route, so a session whose prices
+    cannot be replayed must still be able to hand over the closes it does have
+    — the same reason the two are separate requests in the first place.
+    """
+    session_dir = captures_path / session.isoformat()
+    if not session_dir.is_dir():
+        return None
+    for run_dir in sorted(session_dir.iterdir(), reverse=True):
+        summaries = (
+            run_dir / VALIDATION_SUBROOT / "indices" / session.isoformat()
+        ).glob("*/forward_summary.json")
+        for summary_path in summaries:
+            try:
+                summary = json.loads(summary_path.read_text())
+            except (json.JSONDecodeError, OSError):
+                continue
+            if isinstance(summary, dict) and summary.get("status") == "accepted":
+                return run_dir
+    return None
+
+
 def deliver_session(
-    run_dir: Path,
+    run_dir: Path | None,
     session: date,
     *,
-    price_root: Path,
+    price_root: Path | None,
+    price_error: str = "",
     calendar_path: Path,
     api_url: str,
     token: str,
@@ -217,10 +249,14 @@ def deliver_session(
     it only passes under today's rules. Index values always come from the
     capture, which validated them independently of the price run.
     """
-    outcome = SessionOutcome(session=session.isoformat(), run_id=run_dir.name)
+    outcome = SessionOutcome(
+        session=session.isoformat(), run_id=run_dir.name if run_dir else None
+    )
     session_out = out_dir / session.isoformat()
 
-    if with_prices:
+    if with_prices and price_root is None:
+        outcome.prices, outcome.prices_detail = "unavailable", price_error
+    elif with_prices and price_root is not None:
         try:
             body = build_price_request(
                 price_root / RESULT_MANIFEST,
@@ -258,7 +294,10 @@ def deliver_session(
                     outcome.prices = "delivered"
                     outcome.prices_detail = f"{receipt['records_accepted']} rows"
 
-    if with_indices:
+    if with_indices and run_dir is None:
+        outcome.indices = "unavailable"
+        outcome.indices_detail = "no capture holds accepted index values"
+    elif with_indices and run_dir is not None:
         try:
             body = build_index_request(
                 session,
@@ -329,6 +368,9 @@ def run(
     staging = staging_root or out_dir / "staging"
 
     for session in sessions:
+        run_dir: Path | None
+        price_root: Path | None
+        price_error = ""
         try:
             if replay:
                 run_dir, price_root = replay_session(
@@ -341,20 +383,17 @@ def run(
                 run_dir = choose_run(captures_path, session)
                 price_root = run_dir
         except DeliveryError as exc:
-            report.sessions.append(
-                SessionOutcome(
-                    session=session.isoformat(),
-                    prices="unavailable",
-                    prices_detail=str(exc),
-                    indices="unavailable",
-                )
-            )
-            continue
+            # Prices cannot be prepared, but this session's index values are
+            # validated and delivered independently, so they are still offered
+            # rather than buried with the price failure.
+            run_dir, price_root = find_index_run(captures_path, session), None
+            price_error = str(exc)
         report.sessions.append(
             deliver_session(
                 run_dir,
                 session,
                 price_root=price_root,
+                price_error=price_error,
                 calendar_path=calendar_path,
                 api_url=api_url,
                 token=token,

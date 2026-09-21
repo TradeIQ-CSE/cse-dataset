@@ -48,6 +48,12 @@ except ImportError:  # pragma: no cover - used when scripts are executed directl
 
 FAMILY = "indices"
 
+# A run that collected nothing to send is not a delivery failure: the exchange
+# publishes no index values on some days, and a quarantined capture is already
+# reported by the collection step. The workflow warns on this and fails on any
+# other non-zero status, so a bad token or an outage cannot pass as a quiet day.
+NOTHING_TO_DELIVER = 3
+
 # The codes the platform ships in market_data.indices. A code it does not know
 # is a 400 for the whole batch, so an unexpected series is refused here rather
 # than losing the three good ones with it. MPI and MTRI appear in the historical
@@ -58,6 +64,15 @@ DELIVERABLE_CODES = ("ASPI", "SL20", "SL20TRI", "ASTRI")
 CLOSE_PATTERN = re.compile(r"^(?!0+(?:\.0+)?$)(?:0|[1-9]\d{0,9})(?:\.\d{1,4})?$")
 
 MAX_VALUES = 20
+
+
+class NothingToDeliverError(DeliveryError):
+    """The day has no accepted index values to send.
+
+    Its own type so the caller can tell a quiet or quarantined day from a
+    delivery that actually went wrong. It stays a DeliveryError, so anything
+    that already handles delivery failures keeps working.
+    """
 
 
 def index_close_string(value: Any) -> str:
@@ -94,14 +109,14 @@ def find_accepted_source(
     """
     summary_root = validation_root / FAMILY / target_date.isoformat()
     if not summary_root.is_dir():
-        raise DeliveryError(f"no index run exists for {target_date.isoformat()}")
+        raise NothingToDeliverError(f"no index run exists for {target_date.isoformat()}")
     accepted = []
     for summary_path in sorted(summary_root.glob("*/forward_summary.json")):
         summary = json.loads(summary_path.read_text())
         if summary.get("status") == "accepted":
             accepted.append(summary_path.parent.name)
     if not accepted:
-        raise DeliveryError(
+        raise NothingToDeliverError(
             f"no accepted index run for {target_date.isoformat()}; it was quarantined"
         )
     if len(accepted) > 1:
@@ -154,7 +169,7 @@ def load_accepted_values(
         values.append({"code": code, "close": index_close_string(row["close"])})
 
     if not values:
-        raise DeliveryError(
+        raise NothingToDeliverError(
             f"no deliverable index values for {target_date.isoformat()}; "
             f"expected one of {', '.join(DELIVERABLE_CODES)}"
         )
@@ -235,16 +250,21 @@ def _validated_receipt(
         raise DeliveryError("index receipt does not report stored and unchanged codes")
     # Every code sent must come back in one list or the other. Anything else
     # means the day is only partly recorded, which a green run must not claim.
-    settled = {str(code) for code in stored} | {str(code) for code in unchanged}
+    stored = [str(code) for code in stored]
+    unchanged = [str(code) for code in unchanged]
+    settled = set(stored) | set(unchanged)
     sent = {value["code"] for value in request_body["values"]}
     if settled != sent:
         raise DeliveryError(
             f"index receipt accounts for {sorted(settled)}, not the {sorted(sent)} sent"
         )
-    return receipt
+    # Hand back the normalised lists, not the raw ones: callers join them into
+    # a log line, and a non-string element would raise only after the values
+    # were already stored.
+    return {**receipt, "stored": stored, "unchanged": unchanged}
 
 
-def main() -> None:
+def main() -> int:
     parser = argparse.ArgumentParser(
         description="Publish one accepted day of index closes to TradeIQ"
     )
@@ -271,11 +291,17 @@ def main() -> None:
     if not args.dry_run and (not args.api_url or not args.token):
         raise DeliveryError("api URL and token are required")
 
-    request_body = build_request(
-        args.target_date,
-        args.calendar_path,
-        source_name=args.source_name,
-    )
+    try:
+        request_body = build_request(
+            args.target_date,
+            args.calendar_path,
+            source_name=args.source_name,
+        )
+    except NothingToDeliverError as exc:
+        # The one non-zero status the workflow is allowed to treat as a
+        # warning. Everything else keeps raising, so it fails the step.
+        print(f"NOTHING TO DELIVER: {exc}")
+        return NOTHING_TO_DELIVER
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir / "index_ingestion_request.json").write_text(
         json.dumps(request_body, indent=2) + "\n"
@@ -284,7 +310,7 @@ def main() -> None:
     if args.dry_run:
         print(f"DRY RUN: {len(request_body['values'])} values for "
               f"{request_body['trade_date']} ({codes})")
-        return
+        return 0
 
     receipt = deliver(request_body, api_url=args.api_url, token=args.token)
     (args.out_dir / "index_ingestion_receipt.json").write_text(
@@ -296,7 +322,8 @@ def main() -> None:
         f"DELIVERED indices for {receipt['trade_date']}: "
         f"stored {stored}; already held {unchanged}"
     )
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
