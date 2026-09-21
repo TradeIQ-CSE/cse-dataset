@@ -6,9 +6,16 @@
 # has just been given its token, or when a delivery failed this morning and the
 # fix is ready now.
 #
-# It never fetches from CSE. Everything it sends is already in the captures
-# branch, re-validated with the current rules, so running it twice is safe: a
-# date the platform holds answers 409, which counts as delivered.
+# What it sends comes entirely from the captures branch, re-validated with the
+# current rules, so running it twice is safe: a date the platform already holds
+# answers 409, which counts as delivered.
+#
+# The metadata step is the one exception, and it does reach CSE: the active
+# list no longer carries expired rights lines, and a traded symbol with no
+# metadata row rejects its whole session. That couples this job to CSE being
+# up, which a replay of stored data should not need — the payloads carry each
+# symbol's name, so the metadata can be rebuilt from the captures alone.
+# Tracked as a follow-up; until then, a CSE outage delays a backfill.
 name: Backfill delivery
 
 on:
@@ -78,8 +85,12 @@ jobs:
           UNTIL: ${{ inputs.until }}
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
-          test -n "$TRADEIQ_INGESTION_API_URL"
-          test -n "$TRADEIQ_INGESTION_TOKEN"
+          # A dry run builds requests and sends nothing, so it must not demand
+          # delivery credentials; backfill_deliveries.py draws the same line.
+          if [ "$DRY_RUN" != "true" ]; then
+            test -n "$TRADEIQ_INGESTION_API_URL"
+            test -n "$TRADEIQ_INGESTION_TOKEN"
+          fi
           # if, not `test && args+=(...)`: the runner uses bash -e, where a
           # false test is the last command of the list and aborts the step.
           args=()
