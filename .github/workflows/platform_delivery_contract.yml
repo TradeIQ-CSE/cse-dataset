@@ -4,9 +4,13 @@ on:
   pull_request:
     paths:
       - "scripts/publish_eod.py"
+      - "scripts/publish_indices.py"
+      - "scripts/backfill_deliveries.py"
+      - "scripts/replay_capture.py"
       - "scripts/02_collect_prices.py"
       - "scripts/daily_update.py"
       - "tests/fixtures/eod_delivery/**"
+      - "tests/fixtures/index_delivery/**"
       - ".github/workflows/platform_delivery_contract.yml"
   workflow_dispatch:
 
@@ -83,11 +87,15 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm --dir services/market-trading migration:run
 
+      # release_import, not seed: tradeiq_cse 2bb49c2 replaced the old bundle
+      # seeder with the release importer and deleted data_ingestion.seed, which
+      # broke this step from that commit onwards. With no CSE_DATASET_ARTIFACT
+      # it loads the bundled sample, which is what the seeder did.
       - name: Seed market data
         working-directory: platform/pipeline/data-ingestion
         run: |
           uv sync --all-groups
-          uv run python -m data_ingestion.seed
+          uv run python -m data_ingestion.release_import
 
       - name: Start market API
         working-directory: platform
@@ -119,6 +127,36 @@ jobs:
             --expected-trade-date 2026-09-04 \
             --out-dir data/run/contract
 
+      # The index route is a separate contract with its own body shape, so it
+      # needs its own check: the price fixture above would pass unchanged while
+      # index delivery was broken.
+      - name: Send the index contract fixture
+        working-directory: dataset
+        env:
+          TRADEIQ_INGESTION_API_URL: http://localhost:3001
+          TRADEIQ_INGESTION_TOKEN: contract-test-secret
+        run: |
+          uv run python -c "
+          from datetime import date
+          from pathlib import Path
+          from scripts.publish_indices import build_request, deliver
+          import os
+
+          body = build_request(
+              date(2026, 9, 4),
+              Path('tests/fixtures/eod_delivery/calendar.csv'),
+              source_name='contract_fixture',
+              raw_root=Path('tests/fixtures/index_delivery/raw'),
+              validation_root=Path('tests/fixtures/index_delivery/validation'),
+          )
+          receipt = deliver(
+              body,
+              api_url=os.environ['TRADEIQ_INGESTION_API_URL'],
+              token=os.environ['TRADEIQ_INGESTION_TOKEN'],
+          )
+          print('index receipt:', receipt)
+          "
+
       # Paper trading reads prices in-process since it moved into
       # market-trading, so the public OHLCV read is the check.
       - name: Verify the platform serves the delivered close
@@ -133,6 +171,20 @@ jobs:
               bars = json.load(response)["data"]["bars"]
           assert [bar["date"] for bar in bars] == ["2026-09-04"], bars
           assert bars[0]["close"] == 11.25, bars
+          PY
+
+      - name: Verify the platform serves the delivered index closes
+        run: |
+          python - <<'PY'
+          import json
+          import urllib.request
+
+          with urllib.request.urlopen(
+              "http://localhost:3001/indices/ASPI/values?from=2026-09-04&to=2026-09-04"
+          ) as response:
+              values = json.load(response)["data"]["values"]
+          assert [value["date"] for value in values] == ["2026-09-04"], values
+          assert float(values[0]["close"]) == 21357.74, values
           PY
 
       - name: Upload diagnostics
