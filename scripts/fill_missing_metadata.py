@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import time
 from datetime import date
 from pathlib import Path
@@ -52,6 +53,31 @@ def accepted_symbols(accepted_root: Path, start: date | None = None, end: date |
             continue
         with path.open(newline="", encoding="utf-8") as handle:
             symbols.update(row["symbol"].strip() for row in csv.DictReader(handle))
+    return symbols
+
+
+def captured_symbols(captures_path: Path, start: date | None = None, end: date | None = None) -> set[str]:
+    """Every symbol in a saved capture's raw payload, whatever the run made of it.
+
+    A session the validator rejected has no accepted file, and the commonest
+    reason for rejecting one is a symbol with no metadata row — so reading only
+    accepted files can never find the symbol that caused the rejection. The
+    payload is the full market snapshot and always holds it.
+    """
+    symbols: set[str] = set()
+    pattern = "*/*/data/raw/ohlcv/source_payloads/*/*/payload.json"
+    for path in sorted(captures_path.glob(pattern)):
+        day = path.parent.parent.name
+        if (start and day < start.isoformat()) or (end and day > end.isoformat()):
+            continue
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        for row in payload.get("reqTradeSummery") or []:
+            symbol = row.get("symbol") or row.get("securityCode")
+            if symbol:
+                symbols.add(str(symbol).strip())
     return symbols
 
 
@@ -138,6 +164,12 @@ def main() -> int:
     parser.add_argument("--metadata-path", type=Path, default=DEFAULT_METADATA)
     parser.add_argument("--accepted-root", type=Path, default=DEFAULT_ACCEPTED_ROOT)
     parser.add_argument(
+        "--captures-path",
+        type=Path,
+        default=None,
+        help="Also take symbols from the raw payloads in a captures-branch checkout",
+    )
+    parser.add_argument(
         "--sources", type=Path, default=DEFAULT_SOURCES, help="Official price files to take fallback names from"
     )
     parser.add_argument("--start-date", type=date.fromisoformat, default=None)
@@ -165,6 +197,8 @@ def main() -> int:
     lines = args.sources.read_text(encoding="utf-8").splitlines()
     sources = [ROOT / line.strip() for line in lines if line.strip() and not line.lstrip().startswith("#")]
     symbols = accepted_symbols(args.accepted_root, args.start_date, args.end_date)
+    if args.captures_path:
+        symbols |= captured_symbols(args.captures_path, args.start_date, args.end_date)
     columns, rows, added, unresolved = fill_missing_metadata(
         args.metadata_path,
         symbols,
