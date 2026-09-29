@@ -1,0 +1,28 @@
+{
+  "contract_version": "1",
+  "status": "accepted",
+  "target_date": "2026-09-29",
+  "source_name": "cse_trade_summary_current",
+  "captured_at": "2026-09-29T18:18:13Z",
+  "source_date_method": "last_traded_time",
+  "raw_payload_hash": "8d8de59678538b630b65f8db873572533dd90af0a7dce275033c13ac546a77b6",
+  "accepted_path": "data/raw/ohlcv/accepted/2026-09-29/cse_trade_summary_current/canonical_ohlcv.csv",
+  "metadata_path": "data/processed/company_metadata.csv",
+  "validation": {
+    "generated_at_utc": "2026-09-29T18:18:14Z",
+    "target_date": "2026-09-29",
+    "row_count": 280,
+    "accepted_rows": 280,
+    "rejected_rows": 0,
+    "symbols": 280,
+    "accepted_symbols": 280,
+    "market_digest": "d0856be684ff258793a3cce1b65824e41e8d374c9ec7963d7ce55b3b9590442c",
+    "duplicate_symbol_date_rows": 0,
+    "source_ohlc_invalid_rows": 22,
+    "ohlc_repaired_rows": 22,
+    "ohlc_invalid_rows": 0,
+    "missing_activity_rate": 0.0,
+    "warnings": [],
+    "failures": []
+  }
+}
