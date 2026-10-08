@@ -31,10 +31,17 @@ jobs:
         options: >-
           --health-cmd "pg_isready -U postgres"
           --health-interval 5s --health-timeout 5s --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s --health-timeout 5s --health-retries 10
     env:
       MARKET_DATA_DATABASE_URL: postgresql://market_data:changeme@localhost:5432/market_data
       DATA_INGESTION_MARKET_DATA_DATABASE_URL: postgresql://market_data:changeme@localhost:5432/market_data
       MARKET_INGESTION_TOKEN: contract-test-secret
+      REDIS_URL: redis://localhost:6379
 
     steps:
       - name: Checkout dataset change
@@ -66,7 +73,9 @@ jobs:
         with:
           node-version: "20"
           cache: pnpm
-          cache-dependency-path: platform/pnpm-lock.yaml
+          cache-dependency-path: |
+            platform/services/market-trading/pnpm-lock.yaml
+            platform/pnpm-lock.yaml
 
       - uses: actions/setup-python@v5
         with:
@@ -84,8 +93,12 @@ jobs:
       - name: Install and migrate platform
         working-directory: platform
         run: |
-          pnpm install --frozen-lockfile
-          pnpm --dir services/market-trading migration:run
+          if [ -f services/market-trading/pnpm-lock.yaml ]; then
+            pnpm --dir services/market-trading install --frozen-lockfile
+          else
+            pnpm install --frozen-lockfile
+          fi
+          pnpm --dir services/market-trading run migration:run
 
       # release_import, not seed: tradeiq_cse 2bb49c2 replaced the old bundle
       # seeder with the release importer and deleted data_ingestion.seed, which
@@ -100,13 +113,13 @@ jobs:
       - name: Start market API
         working-directory: platform
         run: |
-          pnpm --filter @tradeiq/market-trading build
+          pnpm --dir services/market-trading run build
           # market-trading won't boot without a key to verify access tokens.
           # The contract calls no user endpoint, so the platform's local
           # development key from .env.example is enough.
           export AUTH_JWT_PUBLIC_KEYS="$(grep '^AUTH_JWT_PUBLIC_KEYS=' .env.example | cut -d= -f2-)"
           test -n "$AUTH_JWT_PUBLIC_KEYS"
-          pnpm --filter @tradeiq/market-trading start > "$RUNNER_TEMP/market-trading.log" 2>&1 &
+          pnpm --dir services/market-trading run start > "$RUNNER_TEMP/market-trading.log" 2>&1 &
           for attempt in $(seq 1 30); do
             curl --fail --silent http://localhost:3001/health && exit 0
             sleep 1
