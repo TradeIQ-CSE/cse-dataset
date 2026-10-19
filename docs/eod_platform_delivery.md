@@ -15,14 +15,19 @@ yesterday's file.
 The publisher also requires:
 
 - capture after the configured 14:30 Asia/Colombo market close;
-- capture date equal to the requested trading date;
-- trading date equal to the current Asia/Colombo date unless an operator
+- trading date equal to the latest closed session in the calendar unless an operator
   supplies `--expected-trade-date` explicitly;
 - one source-attributed, verified trading-day entry in an operator calendar;
 - matching artifact dates, row counts and security metadata;
 - no repeated market digest from the platform's latest accepted receipt. The
   digest covers canonical symbol and OHLCV content but excludes the trading
   date, so an unchanged snapshot cannot be relabelled as a later session.
+
+The daily workflow pins price and index collection to the same latest closed
+session. A run delayed past midnight can deliver the preceding session without
+relabelling it. Both families are collected before delivery, and either delivery
+can proceed if the other fails; failures still make the job fail. The calendar
+must cover the current date, so an expired calendar cannot silently select old data.
 
 The CSE `tradeSummary` response serves the latest session whatever date is
 asked for: on a holiday it is still the previous session, and scheduled runs
