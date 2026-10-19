@@ -1,6 +1,7 @@
 import json
 import tempfile
 import unittest
+from datetime import datetime
 from pathlib import Path
 from unittest.mock import patch
 
@@ -13,6 +14,7 @@ from scripts.publish_eod import (
     canonical_digest,
     deliver,
     load_calendar_entry,
+    latest_closed_trade_date,
     main,
 )
 
@@ -58,6 +60,31 @@ def valid_receipt():
 
 
 class PublishEodTests(unittest.TestCase):
+    @patch("scripts.publish_eod.deliver")
+    def test_daily_cli_accepts_after_midnight_but_refuses_stale_session(self, mock_deliver):
+        with tempfile.TemporaryDirectory(dir=ROOT / "data") as directory:
+            root = Path(directory)
+            result, _ = self.make_files(root)
+            payload = json.loads(result.read_text())
+            payload["captured_at"] = "2026-09-04T19:00:00Z"
+            result.write_text(json.dumps(payload))
+            mock_deliver.return_value = valid_receipt()
+            args = ["publish_eod.py", "--result-manifest", str(result),
+                    "--calendar-path", str(ROOT / "config/trading_calendar.csv"),
+                    "--api-url", "http://localhost:3001", "--token", "test",
+                    "--out-dir", str(root / "delivery")]
+            with patch("sys.argv", args), patch("scripts.publish_eod.datetime") as clock:
+                clock.fromisoformat.side_effect = datetime.fromisoformat
+                clock.combine.side_effect = datetime.combine
+                clock.now.return_value = datetime.fromisoformat("2026-09-05T00:35:00+05:30")
+                main()
+                self.assertEqual(mock_deliver.call_args.args[0]["trade_date"], "2026-09-04")
+                mock_deliver.reset_mock()
+                clock.now.return_value = datetime.fromisoformat("2026-09-07T18:00:00+05:30")
+                with self.assertRaisesRegex(DeliveryError, "does not match expected date"):
+                    main()
+                mock_deliver.assert_not_called()
+
     def make_files(self, root: Path, *, status="accepted", rejected=0):
         accepted = root / "accepted.csv"
         metadata = root / "metadata.csv"
@@ -294,6 +321,24 @@ class PublishEodTests(unittest.TestCase):
 
 
 class CommittedCalendarTests(unittest.TestCase):
+    def test_latest_closed_session_handles_midnight_weekend_holiday_and_close(self):
+        for stamp, expected in [
+            ("2026-10-14T01:00:00+05:30", "2026-10-13"),
+            ("2026-10-17T01:00:00+05:30", "2026-10-16"),
+            ("2026-10-19T14:29:00+05:30", "2026-10-16"),
+            ("2026-10-19T14:30:00+05:30", "2026-10-19"),
+            ("2026-08-26T18:00:00+05:30", "2026-08-25"),
+        ]:
+            with self.subTest(stamp=stamp):
+                self.assertEqual(latest_closed_trade_date(
+                    ROOT / "config/trading_calendar.csv", now=datetime.fromisoformat(stamp)
+                ), expected)
+
+    def test_expired_calendar_is_not_used_to_publish_old_data(self):
+        with self.assertRaisesRegex(DeliveryError, "calendar does not cover"):
+            latest_closed_trade_date(ROOT / "config/trading_calendar.csv",
+                                     now=datetime.fromisoformat("2027-01-04T18:00:00+05:30"))
+
     # The calendar daily_update.yml delivers with, read the way delivery reads it.
     def test_2026_calendar_closes_cse_holidays(self):
         calendar = ROOT / "config/trading_calendar.csv"

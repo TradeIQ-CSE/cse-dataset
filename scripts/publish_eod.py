@@ -120,6 +120,29 @@ def load_calendar_entry(path: Path, trade_date: str) -> dict[str, Any]:
     }
 
 
+def latest_closed_trade_date(
+    calendar_path: Path, *, close_time: str = "14:30", now: datetime | None = None,
+) -> str:
+    """Select the latest closed session independently of the source payload."""
+    current = (now or datetime.now(COLOMBO_TZ)).astimezone(COLOMBO_TZ)
+    calendar = pd.read_csv(calendar_path, dtype=str).fillna("")
+    today = current.date().isoformat()
+    if not calendar["date"].min() <= today <= calendar["date"].max():
+        raise DeliveryError(f"calendar does not cover {today}")
+    hours, minutes = (int(part) for part in close_time.split(":"))
+    eligible = calendar.loc[
+        calendar["is_trading_day"].str.strip().str.lower().isin({"true", "1", "yes"})
+        & (calendar["date"] <= today)
+    ]
+    if current.time().replace(tzinfo=None) < clock_time(hours, minutes):
+        eligible = eligible.loc[eligible["date"] < today]
+    if eligible.empty:
+        raise DeliveryError("calendar has no closed trading session")
+    session = str(eligible["date"].max())
+    load_calendar_entry(calendar_path, session)
+    return session
+
+
 def assert_after_close(
     captured_at: str,
     trade_date: str,
@@ -129,13 +152,9 @@ def assert_after_close(
 ) -> None:
     """Refuse a snapshot taken before the session it claims had closed.
 
-    The daily path requires the capture to carry the same Colombo date as the
-    session, which is the tightest possible check on a current-day snapshot.
-    A replay out of the captures store cannot use it: a run that started after
-    midnight holds the previous session, and dating it by the run would be the
-    very mistake TIQ-134 fixed. With allow_later_capture the check becomes the
-    thing actually being asserted — the capture happened at or after that
-    session's close — which a later date satisfies by definition.
+    Daily publishing and archived replay allow captures after midnight. Their
+    callers separately choose the expected session; a later capture must still
+    follow that session's close, never change the date of its source rows.
     """
     try:
         parsed = datetime.fromisoformat(captured_at.replace("Z", "+00:00"))
@@ -529,7 +548,7 @@ def main() -> None:
     parser.add_argument("--close-time", default="14:30")
     parser.add_argument(
         "--expected-trade-date",
-        help="Expected YYYY-MM-DD date; defaults to today's Asia/Colombo date",
+        help="Expected YYYY-MM-DD date; defaults to the calendar's latest closed session",
     )
     args = parser.parse_args()
     if not args.api_url or not args.token:
@@ -543,7 +562,10 @@ def main() -> None:
             args.result_manifest,
             args.calendar_path,
             close_time=args.close_time,
-            expected_trade_date=args.expected_trade_date,
+            expected_trade_date=args.expected_trade_date or latest_closed_trade_date(
+                args.calendar_path, close_time=args.close_time
+            ),
+            allow_later_capture=True,
         )
     args.out_dir.mkdir(parents=True, exist_ok=True)
     request_path = args.out_dir / "eod_ingestion_request.json"

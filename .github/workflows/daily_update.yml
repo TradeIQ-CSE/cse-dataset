@@ -45,14 +45,32 @@ jobs:
       - name: Unit tests
         run: uv run python -m unittest discover -s tests
 
+      # GitHub may create the run after midnight. Pin both data families to
+      # the latest closed session, not the wall-clock date or an old payload.
+      - name: Resolve trading session
+        id: session
+        run: |
+          session=$(uv run python -c 'from pathlib import Path; from scripts.publish_eod import latest_closed_trade_date; print(latest_closed_trade_date(Path("config/trading_calendar.csv")))')
+          echo "date=$session" >> "$GITHUB_OUTPUT"
+
       - name: Daily OHLCV source validation
+        id: ohlcv
         run: >-
           uv run python scripts/daily_update.py
+          --target-date '${{ steps.session.outputs.date }}'
           --allow-validation-failure
           --result-manifest data/run/daily_result.json
 
+      - name: Daily index collection (ASPI, S&P SL20)
+        id: indices
+        if: ${{ !cancelled() && steps.session.outcome == 'success' }}
+        run: >-
+          uv run python scripts/daily_indices_update.py
+          --target-date '${{ steps.session.outputs.date }}'
+          --allow-validation-failure
+
       - name: Deliver accepted OHLCV to TradeIQ
-        if: ${{ vars.TRADEIQ_INGESTION_ENABLED == 'true' }}
+        if: ${{ !cancelled() && steps.ohlcv.outcome == 'success' && vars.TRADEIQ_INGESTION_ENABLED == 'true' }}
         env:
           TRADEIQ_INGESTION_API_URL: ${{ secrets.TRADEIQ_INGESTION_API_URL }}
           TRADEIQ_INGESTION_TOKEN: ${{ secrets.TRADEIQ_INGESTION_TOKEN }}
@@ -62,13 +80,8 @@ jobs:
           uv run python scripts/publish_eod.py \
             --result-manifest data/run/daily_result.json \
             --calendar-path config/trading_calendar.csv \
+            --expected-trade-date '${{ steps.session.outputs.date }}' \
             --out-dir data/run/delivery
-
-      - name: 2026-forward source validation summary
-        run: uv run python scripts/2026_forward_update.py --allow-validation-failure
-
-      - name: Daily index collection (ASPI, S&P SL20)
-        run: uv run python scripts/daily_indices_update.py --allow-validation-failure
 
       # Separate from the price delivery above because the price route refuses a
       # date that already has prices: bundled together, index values captured
@@ -76,15 +89,14 @@ jobs:
       # which publish_indices reports rather than inventing a value, so this
       # step is allowed to find nothing on a day the capture failed.
       - name: Deliver accepted index values to TradeIQ
-        if: ${{ vars.TRADEIQ_INGESTION_ENABLED == 'true' }}
+        if: ${{ !cancelled() && steps.indices.outcome == 'success' && vars.TRADEIQ_INGESTION_ENABLED == 'true' }}
         env:
           TRADEIQ_INGESTION_API_URL: ${{ secrets.TRADEIQ_INGESTION_API_URL }}
           TRADEIQ_INGESTION_TOKEN: ${{ secrets.TRADEIQ_INGESTION_TOKEN }}
         run: |
           test -n "$TRADEIQ_INGESTION_API_URL"
           test -n "$TRADEIQ_INGESTION_TOKEN"
-          session=$(jq -r '.target_date // empty' data/run/daily_result.json 2>/dev/null || true)
-          session=${session:-$(TZ=Asia/Colombo date +%F)}
+          session='${{ steps.session.outputs.date }}'
           set +e
           uv run python scripts/publish_indices.py \
             --target-date "$session" \
@@ -100,6 +112,10 @@ jobs:
           elif [ "$status" -ne 0 ]; then
             exit "$status"
           fi
+
+      - name: 2026-forward source validation summary
+        if: ${{ !cancelled() && steps.session.outcome == 'success' }}
+        run: uv run python scripts/2026_forward_update.py --allow-validation-failure
 
       # cdn.cse.lk returns 403 from local and hosted egress alike, which blocks
       # the SMD PDF path and the official workbook downloads. This reports
