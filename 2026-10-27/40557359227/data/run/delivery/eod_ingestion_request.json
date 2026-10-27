@@ -1,0 +1,4541 @@
+{
+  "contract_version": "1",
+  "batch_id": "1c62c1e9324726ac2e2b95b169e67c5a5771734cf075c9b4f7c9468c98967008",
+  "trade_date": "2026-10-27",
+  "source": {
+    "name": "cse_trade_summary_current",
+    "captured_at": "2026-10-27T18:15:45Z",
+    "source_date_method": "last_traded_time",
+    "raw_payload_hash": "27fea7661d1ff5bfb149842ffdcb57de3c95c56ceabb9fd9e54896cbb4f8f902",
+    "producer_commit": "7903c390c1b94e050e62440e32b6a5b2d0c399e7",
+    "action_run_url": "https://github.com/TradeIQ-CSE/cse-dataset/actions/runs/40557359227"
+  },
+  "calendar": {
+    "is_trading_day": true,
+    "source": "CSE circular 07-10-2025",
+    "verified_at": "2025-10-22T00:00:00Z"
+  },
+  "validation": {
+    "processed": 282,
+    "accepted": 282,
+    "rejected": 0,
+    "repaired": 25
+  },
+  "securities": [
+    {
+      "symbol": "AAF.N0000",
+      "company_name": "ASIA ASSET FINANCE PLC",
+      "cse_code": "AAF.N0000",
+      "shares_outstanding": "222706141"
+    },
+    {
+      "symbol": "AAIC.N0000",
+      "company_name": "SOFTLOGIC LIFE INSURANCE PLC",
+      "cse_code": "AAIC.N0000",
+      "shares_outstanding": "316406250"
+    },
+    {
+      "symbol": "ABAN.N0000",
+      "company_name": "ABANS ELECTRICALS PLC",
+      "cse_code": "ABAN.N0000",
+      "shares_outstanding": "5110560"
+    },
+    {
+      "symbol": "ABL.N0000",
+      "company_name": "AMANA BANK PLC",
+      "cse_code": "ABL.N0000",
+      "shares_outstanding": "551222806"
+    },
+    {
+      "symbol": "ACL.N0000",
+      "company_name": "ACL CABLES PLC",
+      "cse_code": "ACL.N0000",
+      "shares_outstanding": "718724160"
+    },
+    {
+      "symbol": "ACME.N0000",
+      "company_name": "ACME PRINTING & PACKAGING PLC",
+      "cse_code": "ACME.N0000",
+      "shares_outstanding": "665000000"
+    },
+    {
+      "symbol": "AEL.N0000",
+      "company_name": "ACCESS ENGINEERING PLC",
+      "cse_code": "AEL.N0000",
+      "shares_outstanding": "1000000000"
+    },
+    {
+      "symbol": "AFS.N0000",
+      "company_name": "ALPHA FIRE SERVICES PLC",
+      "cse_code": "AFS.N0000",
+      "shares_outstanding": "37950000"
+    },
+    {
+      "symbol": "AFSL.N0000",
+      "company_name": "ABANS FINANCE PLC",
+      "cse_code": "AFSL.N0000",
+      "shares_outstanding": "73693171"
+    },
+    {
+      "symbol": "AGAL.N0000",
+      "company_name": "AGALAWATTE  PLANTATIONS  PLC",
+      "cse_code": "AGAL.N0000",
+      "shares_outstanding": "156250000"
+    },
+    {
+      "symbol": "AGPL.N0000",
+      "company_name": "AGARAPATANA PLANTATIONS PLC",
+      "cse_code": "AGPL.N0000",
+      "shares_outstanding": "500000000"
+    },
+    {
+      "symbol": "AGST.N0000",
+      "company_name": "AGSTAR PLC",
+      "cse_code": "AGST.N0000",
+      "shares_outstanding": "461289465"
+    },
+    {
+      "symbol": "AHPL.N0000",
+      "company_name": "ASIAN HOTELS AND PROPERTIES PLC",
+      "cse_code": "AHPL.N0000",
+      "shares_outstanding": "442775300"
+    },
+    {
+      "symbol": "AHUN.N0000",
+      "company_name": "AITKEN SPENCE HOTEL HOLDINGS PLC",
+      "cse_code": "AHUN.N0000",
+      "shares_outstanding": "336290010"
+    },
+    {
+      "symbol": "ALLI.N0000",
+      "company_name": "ALLIANCE FINANCE COMPANY PLC",
+      "cse_code": "ALLI.N0000",
+      "shares_outstanding": "33696000"
+    },
+    {
+      "symbol": "ALUM.N0000",
+      "company_name": "ALUMEX PLC",
+      "cse_code": "ALUM.N0000",
+      "shares_outstanding": "598605680"
+    },
+    {
+      "symbol": "AMSL.N0000",
+      "company_name": "ASIRI SURGICAL HOSPITAL PLC",
+      "cse_code": "AMSL.N0000",
+      "shares_outstanding": "528457545"
+    },
+    {
+      "symbol": "APLA.N0000",
+      "company_name": "ACL PLASTICS PLC",
+      "cse_code": "APLA.N0000",
+      "shares_outstanding": "42125000"
+    },
+    {
+      "symbol": "ASCO.N0000",
+      "company_name": "LANKA REALTY INVESTMENTS PLC",
+      "cse_code": "ASCO.N0000",
+      "shares_outstanding": "211370428"
+    },
+    {
+      "symbol": "ASHO.N0000",
+      "company_name": "LANKA ASHOK LEYLAND PLC",
+      "cse_code": "ASHO.N0000",
+      "shares_outstanding": "3620843"
+    },
+    {
+      "symbol": "ASIR.N0000",
+      "company_name": "ASIRI HOSPITAL HOLDINGS PLC",
+      "cse_code": "ASIR.N0000",
+      "shares_outstanding": "1137533596"
+    },
+    {
+      "symbol": "ASIY.N0000",
+      "company_name": "ASIA SIYAKA COMMODITIES LIMITED",
+      "cse_code": "ASIY.N0000",
+      "shares_outstanding": "260000000"
+    },
+    {
+      "symbol": "ASPH.N0000",
+      "company_name": "INDUSTRIAL ASPHALTS (CEYLON) PLC",
+      "cse_code": "ASPH.N0000",
+      "shares_outstanding": "3749411250"
+    },
+    {
+      "symbol": "ATL.N0000",
+      "company_name": "AMANA TAKAFUL PLC",
+      "cse_code": "ATL.N0000",
+      "shares_outstanding": "299510854"
+    },
+    {
+      "symbol": "ATLL.N0000",
+      "company_name": "AMANA TAKAFUL LIFE PLC",
+      "cse_code": "ATLL.N0000",
+      "shares_outstanding": "50000000"
+    },
+    {
+      "symbol": "AUTO.N0000",
+      "company_name": "THE AUTODROME PLC",
+      "cse_code": "AUTO.N0000",
+      "shares_outstanding": "12000000"
+    },
+    {
+      "symbol": "BALA.N0000",
+      "company_name": "BALANGODA  PLANTATIONS  PLC",
+      "cse_code": "BALA.N0000",
+      "shares_outstanding": "47272726"
+    },
+    {
+      "symbol": "BERU.N0000",
+      "company_name": "BERUWALA RESORTS PLC",
+      "cse_code": "BERU.N0000",
+      "shares_outstanding": "700544295"
+    },
+    {
+      "symbol": "BFL.N0000",
+      "company_name": "BAIRAHA FARMS PLC",
+      "cse_code": "BFL.N0000",
+      "shares_outstanding": "88000000"
+    },
+    {
+      "symbol": "BFN.N0000",
+      "company_name": "JANASHAKTHI FINANCE PLC",
+      "cse_code": "BFN.N0000",
+      "shares_outstanding": "211101155"
+    },
+    {
+      "symbol": "BIL.N0000",
+      "company_name": "BROWNS INVESTMENTS PLC",
+      "cse_code": "BIL.N0000",
+      "shares_outstanding": "14369717460"
+    },
+    {
+      "symbol": "BOGA.N0000",
+      "company_name": "BOGALA GRAPHITE LANKA PLC",
+      "cse_code": "BOGA.N0000",
+      "shares_outstanding": "94632904"
+    },
+    {
+      "symbol": "BOPL.N0000",
+      "company_name": "BOGAWANTALAWA TEA ESTATES PLC",
+      "cse_code": "BOPL.N0000",
+      "shares_outstanding": "83750000"
+    },
+    {
+      "symbol": "BPPL.N0000",
+      "company_name": "B P P L HOLDINGS PLC",
+      "cse_code": "BPPL.N0000",
+      "shares_outstanding": "306843357"
+    },
+    {
+      "symbol": "BREW.N0000",
+      "company_name": "CEYLON BEVERAGE HOLDINGS PLC",
+      "cse_code": "BREW.N0000",
+      "shares_outstanding": "20988090"
+    },
+    {
+      "symbol": "BRR.N0000",
+      "company_name": "BANSEI ROYAL RESORTS HIKKADUWA PLC",
+      "cse_code": "BRR.N0000",
+      "shares_outstanding": "53728000"
+    },
+    {
+      "symbol": "BRWN.N0000",
+      "company_name": "BROWN & COMPANY PLC",
+      "cse_code": "BRWN.N0000",
+      "shares_outstanding": "212625000"
+    },
+    {
+      "symbol": "BUKI.N0000",
+      "company_name": "BUKIT DARAH PLC",
+      "cse_code": "BUKI.N0000",
+      "shares_outstanding": "102000000"
+    },
+    {
+      "symbol": "CABO.N0000",
+      "company_name": "CARGO BOAT DEVELOPMENT COMPANY PLC",
+      "cse_code": "CABO.N0000",
+      "shares_outstanding": "18031995"
+    },
+    {
+      "symbol": "CALC.U0000",
+      "company_name": "CAL FIVE YEAR CLOSED END FUND (\u201cUnits\u201d)",
+      "cse_code": "CALC.U0000",
+      "shares_outstanding": "914925446"
+    },
+    {
+      "symbol": "CALF.N0000",
+      "company_name": "DIALOG FINANCE PLC",
+      "cse_code": "CALF.N0000",
+      "shares_outstanding": "117399866"
+    },
+    {
+      "symbol": "CALH.N0000",
+      "company_name": "CAPITAL ALLIANCE HOLDINGS PLC",
+      "cse_code": "CALH.N0000",
+      "shares_outstanding": "2072049345"
+    },
+    {
+      "symbol": "CALI.U0000",
+      "company_name": "CAL FIVE YEAR OPTIMUM FUND (\u201cUnits\u201d)",
+      "cse_code": "CALI.U0000",
+      "shares_outstanding": "193904428"
+    },
+    {
+      "symbol": "CALT.N0000",
+      "company_name": "CAPITAL ALLIANCE PLC",
+      "cse_code": "CALT.N0000",
+      "shares_outstanding": "329417884"
+    },
+    {
+      "symbol": "CALU.U0000",
+      "company_name": "CAL THREE YEAR CLOSED END FUND (\u201cUnits\u201d)",
+      "cse_code": "CALU.U0000",
+      "shares_outstanding": "841263375"
+    },
+    {
+      "symbol": "CARE.N0000",
+      "company_name": "PRINTCARE PLC",
+      "cse_code": "CARE.N0000",
+      "shares_outstanding": "85966670"
+    },
+    {
+      "symbol": "CARG.N0000",
+      "company_name": "CARGILLS (CEYLON) PLC",
+      "cse_code": "CARG.N0000",
+      "shares_outstanding": "257677731"
+    },
+    {
+      "symbol": "CARS.N0000",
+      "company_name": "CARSON CUMBERBATCH PLC",
+      "cse_code": "CARS.N0000",
+      "shares_outstanding": "196386914"
+    },
+    {
+      "symbol": "CBNK.N0000",
+      "company_name": "CARGILLS BANK PLC",
+      "cse_code": "CBNK.N0000",
+      "shares_outstanding": "1239842858"
+    },
+    {
+      "symbol": "CCS.N0000",
+      "company_name": "CEYLON COLD STORES PLC",
+      "cse_code": "CCS.N0000",
+      "shares_outstanding": "950400000"
+    },
+    {
+      "symbol": "CDB.N0000",
+      "company_name": "CITIZENS DEVELOPMENT BUSINESS FINANCE PLC",
+      "cse_code": "CDB.N0000",
+      "shares_outstanding": "623303390"
+    },
+    {
+      "symbol": "CDB.X0000",
+      "company_name": "CITIZENS DEVELOPMENT BUSINESS FINANCE PLC",
+      "cse_code": "CDB.X0000",
+      "shares_outstanding": "103436680"
+    },
+    {
+      "symbol": "CERA.N0000",
+      "company_name": "LANKA CERAMIC PLC",
+      "cse_code": "CERA.N0000",
+      "shares_outstanding": "6000000"
+    },
+    {
+      "symbol": "CFI.N0000",
+      "company_name": "COLOMBO FORT INVESTMENTS PLC",
+      "cse_code": "CFI.N0000",
+      "shares_outstanding": "8939651"
+    },
+    {
+      "symbol": "CFIN.N0000",
+      "company_name": "CENTRAL FINANCE COMPANY PLC",
+      "cse_code": "CFIN.N0000",
+      "shares_outstanding": "227354462"
+    },
+    {
+      "symbol": "CFLB.N0000",
+      "company_name": "THE COLOMBO FORT LAND AND BUILDING PLC",
+      "cse_code": "CFLB.N0000",
+      "shares_outstanding": "240000000"
+    },
+    {
+      "symbol": "CFVF.N0000",
+      "company_name": "FIRST CAPITAL HOLDINGS PLC",
+      "cse_code": "CFVF.N0000",
+      "shares_outstanding": "405000000"
+    },
+    {
+      "symbol": "CHL.N0000",
+      "company_name": "CEYLON HOSPITALS PLC",
+      "cse_code": "CHL.N0000",
+      "shares_outstanding": "127050892"
+    },
+    {
+      "symbol": "CHL.X0000",
+      "company_name": "CEYLON HOSPITALS PLC",
+      "cse_code": "CHL.X0000",
+      "shares_outstanding": "40535060"
+    },
+    {
+      "symbol": "CHMX.N0000",
+      "company_name": "CHEMANEX PLC",
+      "cse_code": "CHMX.N0000",
+      "shares_outstanding": "16152353"
+    },
+    {
+      "symbol": "CHOT.N0000",
+      "company_name": "CEYLON HOTELS CORPORATION PLC",
+      "cse_code": "CHOT.N0000",
+      "shares_outstanding": "180030942"
+    },
+    {
+      "symbol": "CIC.N0000",
+      "company_name": "C I C HOLDINGS PLC",
+      "cse_code": "CIC.N0000",
+      "shares_outstanding": "1458000000"
+    },
+    {
+      "symbol": "CIC.X0000",
+      "company_name": "C I C HOLDINGS PLC",
+      "cse_code": "CIC.X0000",
+      "shares_outstanding": "437400000"
+    },
+    {
+      "symbol": "CIND.N0000",
+      "company_name": "CENTRAL INDUSTRIES PLC",
+      "cse_code": "CIND.N0000",
+      "shares_outstanding": "24195193"
+    },
+    {
+      "symbol": "CINS.N0000",
+      "company_name": "CEYLINCO HOLDINGS PLC",
+      "cse_code": "CINS.N0000",
+      "shares_outstanding": "20000000"
+    },
+    {
+      "symbol": "CINS.X0000",
+      "company_name": "CEYLINCO HOLDINGS PLC",
+      "cse_code": "CINS.X0000",
+      "shares_outstanding": "6414480"
+    },
+    {
+      "symbol": "CINV.N0000",
+      "company_name": "CEYLON INVESTMENT PLC",
+      "cse_code": "CINV.N0000",
+      "shares_outstanding": "97200743"
+    },
+    {
+      "symbol": "CIT.N0000",
+      "company_name": "COLOMBO INVESTMENT TRUST PLC",
+      "cse_code": "CIT.N0000",
+      "shares_outstanding": "7210808"
+    },
+    {
+      "symbol": "CITH.N0000",
+      "company_name": "HIKKADUWA BEACH RESORT PLC",
+      "cse_code": "CITH.N0000",
+      "shares_outstanding": "542663531"
+    },
+    {
+      "symbol": "CITW.N0000",
+      "company_name": "WASKADUWA BEACH RESORT PLC",
+      "cse_code": "CITW.N0000",
+      "shares_outstanding": "936683988"
+    },
+    {
+      "symbol": "CLND.N0000",
+      "company_name": "COLOMBO LAND AND DEVELOPMENT COMPANY PLC",
+      "cse_code": "CLND.N0000",
+      "shares_outstanding": "199881008"
+    },
+    {
+      "symbol": "COCO.N0000",
+      "company_name": "RENUKA FOODS PLC",
+      "cse_code": "COCO.N0000",
+      "shares_outstanding": "361233311"
+    },
+    {
+      "symbol": "COCO.X0000",
+      "company_name": "RENUKA FOODS PLC",
+      "cse_code": "COCO.X0000",
+      "shares_outstanding": "14672315"
+    },
+    {
+      "symbol": "COCR.N0000",
+      "company_name": "COMMERCIAL CREDIT AND FINANCE PLC",
+      "cse_code": "COCR.N0000",
+      "shares_outstanding": "318074365"
+    },
+    {
+      "symbol": "COLO.N0000",
+      "company_name": "C M HOLDINGS PLC",
+      "cse_code": "COLO.N0000",
+      "shares_outstanding": "152000000"
+    },
+    {
+      "symbol": "COMB.N0000",
+      "company_name": "COMMERCIAL BANK OF CEYLON PLC",
+      "cse_code": "COMB.N0000",
+      "shares_outstanding": "1557406237"
+    },
+    {
+      "symbol": "COMB.X0000",
+      "company_name": "COMMERCIAL BANK OF CEYLON PLC",
+      "cse_code": "COMB.X0000",
+      "shares_outstanding": "97325945"
+    },
+    {
+      "symbol": "COMD.N0000",
+      "company_name": "COMMERCIAL DEVELOPMENT COMPANY PLC",
+      "cse_code": "COMD.N0000",
+      "shares_outstanding": "12000000"
+    },
+    {
+      "symbol": "CONN.N0000",
+      "company_name": "HAYLEYS LEISURE PLC",
+      "cse_code": "CONN.N0000",
+      "shares_outstanding": "107989958"
+    },
+    {
+      "symbol": "COOP.N0000",
+      "company_name": "Co-operative Insurance Company PLC",
+      "cse_code": "COOP.N0000",
+      "shares_outstanding": "1652177600"
+    },
+    {
+      "symbol": "CPRT.N0000",
+      "company_name": "KERNER HAUS GLOBAL SOLUTIONS PLC",
+      "cse_code": "CPRT.N0000",
+      "shares_outstanding": "42011900"
+    },
+    {
+      "symbol": "CRL.N0000",
+      "company_name": "SOFTLOGIC FINANCE PLC",
+      "cse_code": "CRL.N0000",
+      "shares_outstanding": "962573191"
+    },
+    {
+      "symbol": "CSD.N0000",
+      "company_name": "SEYLAN DEVELOPMENTS PLC",
+      "cse_code": "CSD.N0000",
+      "shares_outstanding": "139688298"
+    },
+    {
+      "symbol": "CSLK.N0000",
+      "company_name": "CABLE SOLUTIONS PLC",
+      "cse_code": "CSLK.N0000",
+      "shares_outstanding": "470666600"
+    },
+    {
+      "symbol": "CTBL.N0000",
+      "company_name": "CEYLON TEA BROKERS PLC",
+      "cse_code": "CTBL.N0000",
+      "shares_outstanding": "182400000"
+    },
+    {
+      "symbol": "CTC.N0000",
+      "company_name": "CEYLON TOBACCO COMPANY PLC",
+      "cse_code": "CTC.N0000",
+      "shares_outstanding": "187323751"
+    },
+    {
+      "symbol": "CTHR.N0000",
+      "company_name": "C T HOLDINGS PLC",
+      "cse_code": "CTHR.N0000",
+      "shares_outstanding": "201406978"
+    },
+    {
+      "symbol": "CTLD.N0000",
+      "company_name": "C T LAND DEVELOPMENT PLC",
+      "cse_code": "CTLD.N0000",
+      "shares_outstanding": "81250000"
+    },
+    {
+      "symbol": "CWL.N0000",
+      "company_name": "CHRISSWORLD PLC",
+      "cse_code": "CWL.N0000",
+      "shares_outstanding": "30000000"
+    },
+    {
+      "symbol": "CWM.N0000",
+      "company_name": "C. W. MACKIE PLC",
+      "cse_code": "CWM.N0000",
+      "shares_outstanding": "179942780"
+    },
+    {
+      "symbol": "DFCC.N0000",
+      "company_name": "DFCC BANK PLC",
+      "cse_code": "DFCC.N0000",
+      "shares_outstanding": "450715084"
+    },
+    {
+      "symbol": "DIAL.N0000",
+      "company_name": "DIALOG AXIATA PLC",
+      "cse_code": "DIAL.N0000",
+      "shares_outstanding": "9200334994"
+    },
+    {
+      "symbol": "DIMO.N0000",
+      "company_name": "DIESEL & MOTOR ENGINEERING PLC",
+      "cse_code": "DIMO.N0000",
+      "shares_outstanding": "9231494"
+    },
+    {
+      "symbol": "DIPD.N0000",
+      "company_name": "DIPPED PRODUCTS PLC",
+      "cse_code": "DIPD.N0000",
+      "shares_outstanding": "598615120"
+    },
+    {
+      "symbol": "DIST.N0000",
+      "company_name": "DISTILLERIES COMPANY OF SRI LANKA PLC",
+      "cse_code": "DIST.N0000",
+      "shares_outstanding": "4600000000"
+    },
+    {
+      "symbol": "DOCK.N0000",
+      "company_name": "COLOMBO DOCKYARD PLC",
+      "cse_code": "DOCK.N0000",
+      "shares_outstanding": "395224082"
+    },
+    {
+      "symbol": "DPL.N0000",
+      "company_name": "DANKOTUWA PORCELAIN PLC",
+      "cse_code": "DPL.N0000",
+      "shares_outstanding": "162552920"
+    },
+    {
+      "symbol": "EAST.N0000",
+      "company_name": "EAST WEST PROPERTIES PLC",
+      "cse_code": "EAST.N0000",
+      "shares_outstanding": "138240000"
+    },
+    {
+      "symbol": "EBCR.N0000",
+      "company_name": "E B CREASY & COMPANY PLC",
+      "cse_code": "EBCR.N0000",
+      "shares_outstanding": "278900380"
+    },
+    {
+      "symbol": "EDEN.N0000",
+      "company_name": "EDEN HOTEL LANKA PLC",
+      "cse_code": "EDEN.N0000",
+      "shares_outstanding": "1584000000"
+    },
+    {
+      "symbol": "ELPL.N0000",
+      "company_name": "ELPITIYA PLANTATIONS PLC",
+      "cse_code": "ELPL.N0000",
+      "shares_outstanding": "72866428"
+    },
+    {
+      "symbol": "EMER.N0000",
+      "company_name": "EASTERN MERCHANTS PLC",
+      "cse_code": "EMER.N0000",
+      "shares_outstanding": "117446000"
+    },
+    {
+      "symbol": "EML.N0000",
+      "company_name": "E M L CONSULTANTS PLC",
+      "cse_code": "EML.N0000",
+      "shares_outstanding": "90900000"
+    },
+    {
+      "symbol": "ETWO.N0000",
+      "company_name": "EQUITY TWO PLC",
+      "cse_code": "ETWO.N0000",
+      "shares_outstanding": "31000000"
+    },
+    {
+      "symbol": "EXT.N0000",
+      "company_name": "EXTERMINATORS PLC",
+      "cse_code": "EXT.N0000",
+      "shares_outstanding": "52852459"
+    },
+    {
+      "symbol": "FCT.N0000",
+      "company_name": "First Capital Treasuries PLC",
+      "cse_code": "FCT.N0000",
+      "shares_outstanding": "615600000"
+    },
+    {
+      "symbol": "GEST.N0000",
+      "company_name": "GESTETNER OF CEYLON PLC",
+      "cse_code": "GEST.N0000",
+      "shares_outstanding": "2657812"
+    },
+    {
+      "symbol": "GHLL.N0000",
+      "company_name": "GALADARI HOTELS (LANKA) PLC",
+      "cse_code": "GHLL.N0000",
+      "shares_outstanding": "500829564"
+    },
+    {
+      "symbol": "GLAS.N0000",
+      "company_name": "PGP GLASS CEYLON PLC",
+      "cse_code": "GLAS.N0000",
+      "shares_outstanding": "950086080"
+    },
+    {
+      "symbol": "GRAN.N0000",
+      "company_name": "CEYLON GRAIN ELEVATORS PLC",
+      "cse_code": "GRAN.N0000",
+      "shares_outstanding": "60000000"
+    },
+    {
+      "symbol": "GREG.N0000",
+      "company_name": "AMBEON HOLDINGS PLC",
+      "cse_code": "GREG.N0000",
+      "shares_outstanding": "1427478664"
+    },
+    {
+      "symbol": "GUAR.N0000",
+      "company_name": "CEYLON GUARDIAN INVESTMENT TRUST PLC",
+      "cse_code": "GUAR.N0000",
+      "shares_outstanding": "80057991"
+    },
+    {
+      "symbol": "HAPU.N0000",
+      "company_name": "HAPUGASTENNE PLANTATIONS PLC",
+      "cse_code": "HAPU.N0000",
+      "shares_outstanding": "46315789"
+    },
+    {
+      "symbol": "HARI.N0000",
+      "company_name": "HARISCHANDRA MILLS PLC",
+      "cse_code": "HARI.N0000",
+      "shares_outstanding": "1919600"
+    },
+    {
+      "symbol": "HASU.N0000",
+      "company_name": "HNB LIFE PLC",
+      "cse_code": "HASU.N0000",
+      "shares_outstanding": "150000000"
+    },
+    {
+      "symbol": "HAYC.N0000",
+      "company_name": "HAYCARB PLC",
+      "cse_code": "HAYC.N0000",
+      "shares_outstanding": "297123750"
+    },
+    {
+      "symbol": "HAYL.N0000",
+      "company_name": "HAYLEYS PLC",
+      "cse_code": "HAYL.N0000",
+      "shares_outstanding": "795000000"
+    },
+    {
+      "symbol": "HBS.N0000",
+      "company_name": "hSenid Business Solutions PLC",
+      "cse_code": "HBS.N0000",
+      "shares_outstanding": "285457722"
+    },
+    {
+      "symbol": "HDFC.N0000",
+      "company_name": "HOUSING DEVELOPMENT FINANCE CORPORATION BANK OF SL",
+      "cse_code": "HDFC.N0000",
+      "shares_outstanding": "64710520"
+    },
+    {
+      "symbol": "HEXP.N0000",
+      "company_name": "HAYLEYS FIBRE PLC",
+      "cse_code": "HEXP.N0000",
+      "shares_outstanding": "24000000"
+    },
+    {
+      "symbol": "HHL.N0000",
+      "company_name": "HEMAS HOLDINGS PLC",
+      "cse_code": "HHL.N0000",
+      "shares_outstanding": "2995985015"
+    },
+    {
+      "symbol": "HNB.N0000",
+      "company_name": "HATTON NATIONAL BANK PLC",
+      "cse_code": "HNB.N0000",
+      "shares_outstanding": "460218180"
+    },
+    {
+      "symbol": "HNB.X0000",
+      "company_name": "HATTON NATIONAL BANK PLC",
+      "cse_code": "HNB.X0000",
+      "shares_outstanding": "117103990"
+    },
+    {
+      "symbol": "HNBF.N0000",
+      "company_name": "HNB FINANCE PLC",
+      "cse_code": "HNBF.N0000",
+      "shares_outstanding": "2099168606"
+    },
+    {
+      "symbol": "HNBF.X0000",
+      "company_name": "HNB FINANCE PLC",
+      "cse_code": "HNBF.X0000",
+      "shares_outstanding": "440397222"
+    },
+    {
+      "symbol": "HOPL.N0000",
+      "company_name": "HORANA PLANTATIONS PLC",
+      "cse_code": "HOPL.N0000",
+      "shares_outstanding": "25000000"
+    },
+    {
+      "symbol": "HPFL.N0000",
+      "company_name": "LOTUS HYDRO POWER PLC",
+      "cse_code": "HPFL.N0000",
+      "shares_outstanding": "109088112"
+    },
+    {
+      "symbol": "HPL.N0000",
+      "company_name": "HATTON PLANTATIONS PLC",
+      "cse_code": "HPL.N0000",
+      "shares_outstanding": "236666671"
+    },
+    {
+      "symbol": "HPWR.N0000",
+      "company_name": "RESUS ENERGY PLC",
+      "cse_code": "HPWR.N0000",
+      "shares_outstanding": "430924135"
+    },
+    {
+      "symbol": "HSIG.N0000",
+      "company_name": "HOTEL SIGIRIYA PLC",
+      "cse_code": "HSIG.N0000",
+      "shares_outstanding": "17577000"
+    },
+    {
+      "symbol": "HUNA.N0000",
+      "company_name": "HUNAS HOLDINGS PLC",
+      "cse_code": "HUNA.N0000",
+      "shares_outstanding": "849030000"
+    },
+    {
+      "symbol": "HUNT.N0000",
+      "company_name": "HUNTER & COMPANY PLC",
+      "cse_code": "HUNT.N0000",
+      "shares_outstanding": "5145000"
+    },
+    {
+      "symbol": "HVA.N0000",
+      "company_name": "HVA FOODS PLC",
+      "cse_code": "HVA.N0000",
+      "shares_outstanding": "244526188"
+    },
+    {
+      "symbol": "INME.N0000",
+      "company_name": "INSUREME INSURANCE BROKERS PLC",
+      "cse_code": "INME.N0000",
+      "shares_outstanding": "2055290"
+    },
+    {
+      "symbol": "JAT.N0000",
+      "company_name": "JAT HOLDINGS PLC",
+      "cse_code": "JAT.N0000",
+      "shares_outstanding": "522436476"
+    },
+    {
+      "symbol": "JETS.N0000",
+      "company_name": "JETWING SYMPHONY PLC",
+      "cse_code": "JETS.N0000",
+      "shares_outstanding": "602188559"
+    },
+    {
+      "symbol": "JFP.N0000",
+      "company_name": "JF PACKAGING PLC",
+      "cse_code": "JFP.N0000",
+      "shares_outstanding": "172130944"
+    },
+    {
+      "symbol": "JINS.N0000",
+      "company_name": "JANASHAKTHI INSURANCE PLC",
+      "cse_code": "JINS.N0000",
+      "shares_outstanding": "679578459"
+    },
+    {
+      "symbol": "JKH.N0000",
+      "company_name": "JOHN KEELLS HOLDINGS PLC",
+      "cse_code": "JKH.N0000",
+      "shares_outstanding": "17741405405"
+    },
+    {
+      "symbol": "JKL.N0000",
+      "company_name": "JOHN KEELLS PLC",
+      "cse_code": "JKL.N0000",
+      "shares_outstanding": "60800000"
+    },
+    {
+      "symbol": "JXG.N0000",
+      "company_name": "JANASHAKTHI PLC",
+      "cse_code": "JXG.N0000",
+      "shares_outstanding": "2300000000"
+    },
+    {
+      "symbol": "KAHA.N0000",
+      "company_name": "KAHAWATTE  PLANTATIONS  PLC",
+      "cse_code": "KAHA.N0000",
+      "shares_outstanding": "99406691"
+    },
+    {
+      "symbol": "KCAB.N0000",
+      "company_name": "KELANI CABLES PLC",
+      "cse_code": "KCAB.N0000",
+      "shares_outstanding": "218000000"
+    },
+    {
+      "symbol": "KFP.N0000",
+      "company_name": "KEELLS FOOD PRODUCTS PLC",
+      "cse_code": "KFP.N0000",
+      "shares_outstanding": "25500000"
+    },
+    {
+      "symbol": "KGAL.N0000",
+      "company_name": "KEGALLE  PLANTATIONS  PLC",
+      "cse_code": "KGAL.N0000",
+      "shares_outstanding": "25000000"
+    },
+    {
+      "symbol": "KHC.N0000",
+      "company_name": "THE KANDY HOTELS COMPANY (1938) PLC",
+      "cse_code": "KHC.N0000",
+      "shares_outstanding": "754309253"
+    },
+    {
+      "symbol": "KHL.N0000",
+      "company_name": "JOHN KEELLS HOTELS PLC",
+      "cse_code": "KHL.N0000",
+      "shares_outstanding": "1456146780"
+    },
+    {
+      "symbol": "KOTA.N0000",
+      "company_name": "KOTAGALA PLANTATIONS PLC",
+      "cse_code": "KOTA.N0000",
+      "shares_outstanding": "423140625"
+    },
+    {
+      "symbol": "KPHL.N0000",
+      "company_name": "KAPRUKA HOLDINGS PLC",
+      "cse_code": "KPHL.N0000",
+      "shares_outstanding": "164130360"
+    },
+    {
+      "symbol": "KVAL.N0000",
+      "company_name": "KELANI VALLEY PLANTATIONS PLC",
+      "cse_code": "KVAL.N0000",
+      "shares_outstanding": "68000000"
+    },
+    {
+      "symbol": "KZOO.N0000",
+      "company_name": "CEYLON LAND & EQUITY PLC",
+      "cse_code": "KZOO.N0000",
+      "shares_outstanding": "925788331"
+    },
+    {
+      "symbol": "LALU.N0000",
+      "company_name": "LANKA ALUMINIUM INDUSTRIES PLC",
+      "cse_code": "LALU.N0000",
+      "shares_outstanding": "68514115"
+    },
+    {
+      "symbol": "LCBF.N0000",
+      "company_name": "LANKA CREDIT AND BUSINESS FINANCE PLC",
+      "cse_code": "LCBF.N0000",
+      "shares_outstanding": "790168780"
+    },
+    {
+      "symbol": "LCEY.N0000",
+      "company_name": "LANKEM CEYLON PLC",
+      "cse_code": "LCEY.N0000",
+      "shares_outstanding": "137255352"
+    },
+    {
+      "symbol": "LDEV.N0000",
+      "company_name": "LANKEM DEVELOPMENTS PLC",
+      "cse_code": "LDEV.N0000",
+      "shares_outstanding": "160000000"
+    },
+    {
+      "symbol": "LFIN.N0000",
+      "company_name": "LB FINANCE PLC",
+      "cse_code": "LFIN.N0000",
+      "shares_outstanding": "554057136"
+    },
+    {
+      "symbol": "LGIL.N0000",
+      "company_name": "LOLC GENERAL INSURANCE PLC",
+      "cse_code": "LGIL.N0000",
+      "shares_outstanding": "1200000000"
+    },
+    {
+      "symbol": "LGL.N0000",
+      "company_name": "LAUGFS GAS PLC",
+      "cse_code": "LGL.N0000",
+      "shares_outstanding": "335000086"
+    },
+    {
+      "symbol": "LGL.X0000",
+      "company_name": "LAUGFS GAS PLC",
+      "cse_code": "LGL.X0000",
+      "shares_outstanding": "52000000"
+    },
+    {
+      "symbol": "LHCL.N0000",
+      "company_name": "THE LANKA HOSPITALS CORPORATION PLC",
+      "cse_code": "LHCL.N0000",
+      "shares_outstanding": "223732169"
+    },
+    {
+      "symbol": "LHL.N0000",
+      "company_name": "THE  LIGHTHOUSE  HOTEL  PLC",
+      "cse_code": "LHL.N0000",
+      "shares_outstanding": "46000000"
+    },
+    {
+      "symbol": "LIOC.N0000",
+      "company_name": "LANKA IOC PLC",
+      "cse_code": "LIOC.N0000",
+      "shares_outstanding": "532465705"
+    },
+    {
+      "symbol": "LION.N0000",
+      "company_name": "LION BREWERY (CEYLON) PLC",
+      "cse_code": "LION.N0000",
+      "shares_outstanding": "80000000"
+    },
+    {
+      "symbol": "LITE.N0000",
+      "company_name": "LAXAPANA PLC",
+      "cse_code": "LITE.N0000",
+      "shares_outstanding": "66224939"
+    },
+    {
+      "symbol": "LLUB.N0000",
+      "company_name": "CHEVRON LUBRICANTS  LANKA  PLC",
+      "cse_code": "LLUB.N0000",
+      "shares_outstanding": "240000000"
+    },
+    {
+      "symbol": "LMF.N0000",
+      "company_name": "LANKA MILK FOODS (CWE) PLC",
+      "cse_code": "LMF.N0000",
+      "shares_outstanding": "399980000"
+    },
+    {
+      "symbol": "LOFC.N0000",
+      "company_name": "LOLC FINANCE PLC",
+      "cse_code": "LOFC.N0000",
+      "shares_outstanding": "27261024605"
+    },
+    {
+      "symbol": "LOLC.N0000",
+      "company_name": "L O L C HOLDINGS PLC",
+      "cse_code": "LOLC.N0000",
+      "shares_outstanding": "475200000"
+    },
+    {
+      "symbol": "LPL.N0000",
+      "company_name": "LAUGFS POWER PLC",
+      "cse_code": "LPL.N0000",
+      "shares_outstanding": "335000086"
+    },
+    {
+      "symbol": "LPL.X0000",
+      "company_name": "LAUGFS POWER PLC",
+      "cse_code": "LPL.X0000",
+      "shares_outstanding": "52000000"
+    },
+    {
+      "symbol": "LPRT.N0000",
+      "company_name": "LAKE HOUSE PRINTERS & PUBLISHERS PLC",
+      "cse_code": "LPRT.N0000",
+      "shares_outstanding": "2937245"
+    },
+    {
+      "symbol": "LUMX.N0000",
+      "company_name": "LUMINEX PLC",
+      "cse_code": "LUMX.N0000",
+      "shares_outstanding": "271250000"
+    },
+    {
+      "symbol": "LVEF.N0000",
+      "company_name": "L V L ENERGY FUND PLC",
+      "cse_code": "LVEF.N0000",
+      "shares_outstanding": "766353136"
+    },
+    {
+      "symbol": "LWL.N0000",
+      "company_name": "LANKA WALLTILE PLC",
+      "cse_code": "LWL.N0000",
+      "shares_outstanding": "273000000"
+    },
+    {
+      "symbol": "MADU.N0000",
+      "company_name": "MADULSIMA  PLANTATIONS  PLC",
+      "cse_code": "MADU.N0000",
+      "shares_outstanding": "169501097"
+    },
+    {
+      "symbol": "MAL.N0000",
+      "company_name": "MALWATTE VALLEY PLANTATION PLC",
+      "cse_code": "MAL.N0000",
+      "shares_outstanding": "202792331"
+    },
+    {
+      "symbol": "MARA.N0000",
+      "company_name": "MARAWILA  RESORTS  PLC",
+      "cse_code": "MARA.N0000",
+      "shares_outstanding": "351923389"
+    },
+    {
+      "symbol": "MASK.N0000",
+      "company_name": "MASKELIYA PLANTATIONS PLC",
+      "cse_code": "MASK.N0000",
+      "shares_outstanding": "53953489"
+    },
+    {
+      "symbol": "MBSL.N0000",
+      "company_name": "MERCHANT BANK OF SRI LANKA & FINANCE PLC",
+      "cse_code": "MBSL.N0000",
+      "shares_outstanding": "524539637"
+    },
+    {
+      "symbol": "MCPL.N0000",
+      "company_name": "MAHAWELI COCONUT PLANTATIONS PLC",
+      "cse_code": "MCPL.N0000",
+      "shares_outstanding": "34996115"
+    },
+    {
+      "symbol": "MDL.N0000",
+      "company_name": "MYLAND DEVELOPMENTS PLC",
+      "cse_code": "MDL.N0000",
+      "shares_outstanding": "36250000"
+    },
+    {
+      "symbol": "MEL.N0000",
+      "company_name": "GREENTECH ENERGY PLC",
+      "cse_code": "MEL.N0000",
+      "shares_outstanding": "100000000"
+    },
+    {
+      "symbol": "MELS.N0000",
+      "company_name": "MELSTACORP PLC",
+      "cse_code": "MELS.N0000",
+      "shares_outstanding": "1165397072"
+    },
+    {
+      "symbol": "MERC.N0000",
+      "company_name": "MERCANTILE INVESTMENTS AND FINANCE PLC",
+      "cse_code": "MERC.N0000",
+      "shares_outstanding": "634600000"
+    },
+    {
+      "symbol": "MFPE.N0000",
+      "company_name": "MAHARAJA FOODS PLC",
+      "cse_code": "MFPE.N0000",
+      "shares_outstanding": "138230468"
+    },
+    {
+      "symbol": "MGT.N0000",
+      "company_name": "HAYLEYS FABRIC PLC",
+      "cse_code": "MGT.N0000",
+      "shares_outstanding": "415481776"
+    },
+    {
+      "symbol": "MHDL.N0000",
+      "company_name": "MILLENNIUM HOUSING DEVELOPERS PLC",
+      "cse_code": "MHDL.N0000",
+      "shares_outstanding": "134681320"
+    },
+    {
+      "symbol": "MRH.N0000",
+      "company_name": "MAHAWELI REACH HOTELS PLC",
+      "cse_code": "MRH.N0000",
+      "shares_outstanding": "47066447"
+    },
+    {
+      "symbol": "MSL.N0000",
+      "company_name": "MERCANTILE SHIPPING COMPANY PLC",
+      "cse_code": "MSL.N0000",
+      "shares_outstanding": "2844990"
+    },
+    {
+      "symbol": "MULL.N0000",
+      "company_name": "MULLER & PHIPPS (CEYLON) PLC",
+      "cse_code": "MULL.N0000",
+      "shares_outstanding": "283000000"
+    },
+    {
+      "symbol": "NAMU.N0000",
+      "company_name": "NAMUNUKULA PLANTATIONS PLC",
+      "cse_code": "NAMU.N0000",
+      "shares_outstanding": "237500000"
+    },
+    {
+      "symbol": "NDB.N0000",
+      "company_name": "NATIONAL DEVELOPMENT BANK PLC",
+      "cse_code": "NDB.N0000",
+      "shares_outstanding": "432197834"
+    },
+    {
+      "symbol": "NHL.N0000",
+      "company_name": "NAWALOKA HOSPITALS PLC",
+      "cse_code": "NHL.N0000",
+      "shares_outstanding": "1409505596"
+    },
+    {
+      "symbol": "NTB.N0000",
+      "company_name": "NATIONS TRUST BANK PLC",
+      "cse_code": "NTB.N0000",
+      "shares_outstanding": "288491548"
+    },
+    {
+      "symbol": "NTB.X0000",
+      "company_name": "NATIONS TRUST BANK PLC",
+      "cse_code": "NTB.X0000",
+      "shares_outstanding": "44935218"
+    },
+    {
+      "symbol": "ODEL.N0000",
+      "company_name": "ODEL PLC",
+      "cse_code": "ODEL.N0000",
+      "shares_outstanding": "538369934"
+    },
+    {
+      "symbol": "OFEQ.N0000",
+      "company_name": "OFFICE EQUIPMENT PLC",
+      "cse_code": "OFEQ.N0000",
+      "shares_outstanding": "833560"
+    },
+    {
+      "symbol": "ONAL.N0000",
+      "company_name": "ON'ALLY HOLDINGS PLC",
+      "cse_code": "ONAL.N0000",
+      "shares_outstanding": "93003087"
+    },
+    {
+      "symbol": "OSEA.N0000",
+      "company_name": "OVERSEAS REALTY (CEYLON) PLC",
+      "cse_code": "OSEA.N0000",
+      "shares_outstanding": "1243029582"
+    },
+    {
+      "symbol": "PABC.N0000",
+      "company_name": "PAN ASIA BANKING CORPORATION PLC",
+      "cse_code": "PABC.N0000",
+      "shares_outstanding": "442561629"
+    },
+    {
+      "symbol": "PACK.N0000",
+      "company_name": "Ex-pack Corrugated Cartons PLC",
+      "cse_code": "PACK.N0000",
+      "shares_outstanding": "333333333"
+    },
+    {
+      "symbol": "PAP.N0000",
+      "company_name": "PANASIAN POWER PLC",
+      "cse_code": "PAP.N0000",
+      "shares_outstanding": "625000000"
+    },
+    {
+      "symbol": "PARA.N0000",
+      "company_name": "PARAGON CEYLON PLC",
+      "cse_code": "PARA.N0000",
+      "shares_outstanding": "1000280"
+    },
+    {
+      "symbol": "PARQ.N0000",
+      "company_name": "SWISSTEK (CEYLON) PLC",
+      "cse_code": "PARQ.N0000",
+      "shares_outstanding": "136860000"
+    },
+    {
+      "symbol": "PEG.N0000",
+      "company_name": "PEGASUS HOTELS OF CEYLON PLC",
+      "cse_code": "PEG.N0000",
+      "shares_outstanding": "84420940"
+    },
+    {
+      "symbol": "PHAR.N0000",
+      "company_name": "COLOMBO CITY HOLDINGS PLC",
+      "cse_code": "PHAR.N0000",
+      "shares_outstanding": "25457140"
+    },
+    {
+      "symbol": "PINS.N0000",
+      "company_name": "PEOPLE'S INSURANCE PLC",
+      "cse_code": "PINS.N0000",
+      "shares_outstanding": "203632478"
+    },
+    {
+      "symbol": "PKME.N0000",
+      "company_name": "DIGITAL MOBILITY SOLUTIONS LANKA PLC",
+      "cse_code": "PKME.N0000",
+      "shares_outstanding": "333822939"
+    },
+    {
+      "symbol": "PLC.N0000",
+      "company_name": "PEOPLE'S LEASING & FINANCE PLC",
+      "cse_code": "PLC.N0000",
+      "shares_outstanding": "2269634110"
+    },
+    {
+      "symbol": "PLR.N0000",
+      "company_name": "PRIME LANDS RESIDENCIES PLC",
+      "cse_code": "PLR.N0000",
+      "shares_outstanding": "937500000"
+    },
+    {
+      "symbol": "PMB.N0000",
+      "company_name": "PMF FINANCE PLC",
+      "cse_code": "PMB.N0000",
+      "shares_outstanding": "405301750"
+    },
+    {
+      "symbol": "RAL.N0000",
+      "company_name": "RENUKA AGRI FOODS PLC",
+      "cse_code": "RAL.N0000",
+      "shares_outstanding": "804946466"
+    },
+    {
+      "symbol": "RCH.N0000",
+      "company_name": "RENUKA HOTELS PLC",
+      "cse_code": "RCH.N0000",
+      "shares_outstanding": "40297530"
+    },
+    {
+      "symbol": "RCL.N0000",
+      "company_name": "ROYAL CERAMICS LANKA PLC",
+      "cse_code": "RCL.N0000",
+      "shares_outstanding": "1107893840"
+    },
+    {
+      "symbol": "REEF.N0000",
+      "company_name": "CITRUS LEISURE PLC",
+      "cse_code": "REEF.N0000",
+      "shares_outstanding": "645584677"
+    },
+    {
+      "symbol": "RENU.N0000",
+      "company_name": "RENUKA CITY HOTELS PLC.",
+      "cse_code": "RENU.N0000",
+      "shares_outstanding": "7000000"
+    },
+    {
+      "symbol": "REXP.N0000",
+      "company_name": "RICHARD PIERIS EXPORTS PLC",
+      "cse_code": "REXP.N0000",
+      "shares_outstanding": "11163745"
+    },
+    {
+      "symbol": "RFL.N0000",
+      "company_name": "RAMBODA FALLS PLC",
+      "cse_code": "RFL.N0000",
+      "shares_outstanding": "20000000"
+    },
+    {
+      "symbol": "RGEM.N0000",
+      "company_name": "RADIANT GEMS INTERNATIONAL PLC",
+      "cse_code": "RGEM.N0000",
+      "shares_outstanding": "2400000"
+    },
+    {
+      "symbol": "RHL.N0000",
+      "company_name": "RENUKA HOLDINGS PLC",
+      "cse_code": "RHL.N0000",
+      "shares_outstanding": "166276664"
+    },
+    {
+      "symbol": "RHL.X0000",
+      "company_name": "RENUKA HOLDINGS PLC",
+      "cse_code": "RHL.X0000",
+      "shares_outstanding": "24362055"
+    },
+    {
+      "symbol": "RHTL.N0000",
+      "company_name": "THE FORTRESS RESORTS PLC",
+      "cse_code": "RHTL.N0000",
+      "shares_outstanding": "110886684"
+    },
+    {
+      "symbol": "RICH.N0000",
+      "company_name": "RICHARD PIERIS AND COMPANY PLC",
+      "cse_code": "RICH.N0000",
+      "shares_outstanding": "2035038275"
+    },
+    {
+      "symbol": "RIL.N0000",
+      "company_name": "R I L PROPERTY PLC",
+      "cse_code": "RIL.N0000",
+      "shares_outstanding": "800000000"
+    },
+    {
+      "symbol": "RPBH.N0000",
+      "company_name": "ROYAL PALMS BEACH HOTELS PLC",
+      "cse_code": "RPBH.N0000",
+      "shares_outstanding": "50000000"
+    },
+    {
+      "symbol": "RWSL.N0000",
+      "company_name": "RAIGAM WAYAMBA SALTERNS PLC",
+      "cse_code": "RWSL.N0000",
+      "shares_outstanding": "282207320"
+    },
+    {
+      "symbol": "SAMP.N0000",
+      "company_name": "SAMPATH BANK PLC",
+      "cse_code": "SAMP.N0000",
+      "shares_outstanding": "1172700760"
+    },
+    {
+      "symbol": "SCAP.N0000",
+      "company_name": "SOFTLOGIC CAPITAL PLC",
+      "cse_code": "SCAP.N0000",
+      "shares_outstanding": "977187200"
+    },
+    {
+      "symbol": "SDB.N0000",
+      "company_name": "SANASA DEVELOPMENT BANK PLC",
+      "cse_code": "SDB.N0000",
+      "shares_outstanding": "164166494"
+    },
+    {
+      "symbol": "SDF.N0000",
+      "company_name": "SARVODAYA DEVELOPMENT FINANCE PLC",
+      "cse_code": "SDF.N0000",
+      "shares_outstanding": "149596052"
+    },
+    {
+      "symbol": "SEMB.N0000",
+      "company_name": "SMB FINANCE PLC",
+      "cse_code": "SEMB.N0000",
+      "shares_outstanding": "6470375048"
+    },
+    {
+      "symbol": "SEMB.X0000",
+      "company_name": "SMB FINANCE PLC",
+      "cse_code": "SEMB.X0000",
+      "shares_outstanding": "3081603712"
+    },
+    {
+      "symbol": "SERV.N0000",
+      "company_name": "THE KINGSBURY PLC",
+      "cse_code": "SERV.N0000",
+      "shares_outstanding": "484000000"
+    },
+    {
+      "symbol": "SEYB.N0000",
+      "company_name": "SEYLAN BANK PLC",
+      "cse_code": "SEYB.N0000",
+      "shares_outstanding": "305236937"
+    },
+    {
+      "symbol": "SEYB.X0000",
+      "company_name": "SEYLAN BANK PLC",
+      "cse_code": "SEYB.X0000",
+      "shares_outstanding": "330410398"
+    },
+    {
+      "symbol": "SFCL.N0000",
+      "company_name": "SENKADAGALA FINANCE COMPANY PLC",
+      "cse_code": "SFCL.N0000",
+      "shares_outstanding": "90593826"
+    },
+    {
+      "symbol": "SFIN.N0000",
+      "company_name": "SINGER FINANCE LANKA PLC",
+      "cse_code": "SFIN.N0000",
+      "shares_outstanding": "277851853"
+    },
+    {
+      "symbol": "SHAW.N0000",
+      "company_name": "LEE HEDGES PLC",
+      "cse_code": "SHAW.N0000",
+      "shares_outstanding": "25602730"
+    },
+    {
+      "symbol": "SHL.N0000",
+      "company_name": "SOFTLOGIC HOLDINGS PLC",
+      "cse_code": "SHL.N0000",
+      "shares_outstanding": "1395257979"
+    },
+    {
+      "symbol": "SHOT.N0000",
+      "company_name": "SERENDIB HOTELS PLC",
+      "cse_code": "SHOT.N0000",
+      "shares_outstanding": "302058952"
+    },
+    {
+      "symbol": "SHOT.X0000",
+      "company_name": "SERENDIB HOTELS PLC",
+      "cse_code": "SHOT.X0000",
+      "shares_outstanding": "144044224"
+    },
+    {
+      "symbol": "SIGV.N0000",
+      "company_name": "SIGIRIYA VILLAGE HOTELS PLC",
+      "cse_code": "SIGV.N0000",
+      "shares_outstanding": "90000000"
+    },
+    {
+      "symbol": "SIL.N0000",
+      "company_name": "SAMSON INTERNATIONAL PLC",
+      "cse_code": "SIL.N0000",
+      "shares_outstanding": "4232771"
+    },
+    {
+      "symbol": "SING.N0000",
+      "company_name": "STANDARD CAPITAL PLC",
+      "cse_code": "SING.N0000",
+      "shares_outstanding": "5540828"
+    },
+    {
+      "symbol": "SINH.N0000",
+      "company_name": "SINGHE HOSPITALS PLC",
+      "cse_code": "SINH.N0000",
+      "shares_outstanding": "431300895"
+    },
+    {
+      "symbol": "SINS.N0000",
+      "company_name": "SINGER (SRI LANKA) PLC",
+      "cse_code": "SINS.N0000",
+      "shares_outstanding": "1167617912"
+    },
+    {
+      "symbol": "SIRA.N0000",
+      "company_name": "SIERRA CABLES PLC",
+      "cse_code": "SIRA.N0000",
+      "shares_outstanding": "537512430"
+    },
+    {
+      "symbol": "SLND.N0000",
+      "company_name": "SERENDIB LAND PLC",
+      "cse_code": "SLND.N0000",
+      "shares_outstanding": "398906"
+    },
+    {
+      "symbol": "SLTL.N0000",
+      "company_name": "SRI LANKA TELECOM PLC",
+      "cse_code": "SLTL.N0000",
+      "shares_outstanding": "1804860000"
+    },
+    {
+      "symbol": "SMOT.N0000",
+      "company_name": "SATHOSA MOTORS PLC",
+      "cse_code": "SMOT.N0000",
+      "shares_outstanding": "6033622"
+    },
+    {
+      "symbol": "SOY.N0000",
+      "company_name": "CONVENIENCE FOODS LANKA PLC",
+      "cse_code": "SOY.N0000",
+      "shares_outstanding": "2750000"
+    },
+    {
+      "symbol": "SPEN.N0000",
+      "company_name": "AITKEN SPENCE PLC",
+      "cse_code": "SPEN.N0000",
+      "shares_outstanding": "405996045"
+    },
+    {
+      "symbol": "STAF.N0000",
+      "company_name": "DOLPHIN HOTELS PLC",
+      "cse_code": "STAF.N0000",
+      "shares_outstanding": "63242954"
+    },
+    {
+      "symbol": "SUN.N0000",
+      "company_name": "SUNSHINE HOLDINGS PLC",
+      "cse_code": "SUN.N0000",
+      "shares_outstanding": "1967894516"
+    },
+    {
+      "symbol": "TAFL.N0000",
+      "company_name": "THREE ACRE FARMS PLC",
+      "cse_code": "TAFL.N0000",
+      "shares_outstanding": "23545000"
+    },
+    {
+      "symbol": "TAJ.N0000",
+      "company_name": "TAL LANKA HOTELS PLC",
+      "cse_code": "TAJ.N0000",
+      "shares_outstanding": "171866018"
+    },
+    {
+      "symbol": "TANG.N0000",
+      "company_name": "TANGERINE BEACH HOTELS PLC",
+      "cse_code": "TANG.N0000",
+      "shares_outstanding": "20000000"
+    },
+    {
+      "symbol": "TAP.N0000",
+      "company_name": "AMBEON CAPITAL PLC",
+      "cse_code": "TAP.N0000",
+      "shares_outstanding": "1022352863"
+    },
+    {
+      "symbol": "TESS.N0000",
+      "company_name": "TESS AGRO PLC",
+      "cse_code": "TESS.N0000",
+      "shares_outstanding": "802063049"
+    },
+    {
+      "symbol": "TESS.X0000",
+      "company_name": "TESS AGRO PLC",
+      "cse_code": "TESS.X0000",
+      "shares_outstanding": "66666667"
+    },
+    {
+      "symbol": "TILE.N0000",
+      "company_name": "LANKA TILES PLC",
+      "cse_code": "TILE.N0000",
+      "shares_outstanding": "265252050"
+    },
+    {
+      "symbol": "TJL.N0000",
+      "company_name": "TEEJAY LANKA PLC",
+      "cse_code": "TJL.N0000",
+      "shares_outstanding": "721457738"
+    },
+    {
+      "symbol": "TKYO.N0000",
+      "company_name": "TOKYO CEMENT COMPANY (LANKA) PLC",
+      "cse_code": "TKYO.N0000",
+      "shares_outstanding": "294030000"
+    },
+    {
+      "symbol": "TKYO.X0000",
+      "company_name": "TOKYO CEMENT COMPANY (LANKA) PLC",
+      "cse_code": "TKYO.X0000",
+      "shares_outstanding": "147015000"
+    },
+    {
+      "symbol": "TPL.N0000",
+      "company_name": "TALAWAKELLE TEA ESTATES PLC",
+      "cse_code": "TPL.N0000",
+      "shares_outstanding": "47500000"
+    },
+    {
+      "symbol": "TSML.N0000",
+      "company_name": "TEA SMALLHOLDER FACTORIES PLC",
+      "cse_code": "TSML.N0000",
+      "shares_outstanding": "30000000"
+    },
+    {
+      "symbol": "TYRE.N0000",
+      "company_name": "KELANI TYRES PLC",
+      "cse_code": "TYRE.N0000",
+      "shares_outstanding": "80400000"
+    },
+    {
+      "symbol": "UAL.N0000",
+      "company_name": "UNION ASSURANCE PLC",
+      "cse_code": "UAL.N0000",
+      "shares_outstanding": "589285720"
+    },
+    {
+      "symbol": "UBC.N0000",
+      "company_name": "UNION BANK OF COLOMBO PLC",
+      "cse_code": "UBC.N0000",
+      "shares_outstanding": "1083558338"
+    },
+    {
+      "symbol": "UBF.N0000",
+      "company_name": "UB FINANCE PLC",
+      "cse_code": "UBF.N0000",
+      "shares_outstanding": "3178485367"
+    },
+    {
+      "symbol": "UCAR.N0000",
+      "company_name": "UNION CHEMICALS LANKA PLC",
+      "cse_code": "UCAR.N0000",
+      "shares_outstanding": "1500000"
+    },
+    {
+      "symbol": "UML.N0000",
+      "company_name": "UNITED MOTORS LANKA PLC",
+      "cse_code": "UML.N0000",
+      "shares_outstanding": "1009006260"
+    },
+    {
+      "symbol": "VFIN.N0000",
+      "company_name": "VALLIBEL FINANCE PLC",
+      "cse_code": "VFIN.N0000",
+      "shares_outstanding": "264885075"
+    },
+    {
+      "symbol": "VLL.N0000",
+      "company_name": "VIDULLANKA PLC",
+      "cse_code": "VLL.N0000",
+      "shares_outstanding": "955792326"
+    },
+    {
+      "symbol": "VLL.X0000",
+      "company_name": "VIDULLANKA PLC",
+      "cse_code": "VLL.X0000",
+      "shares_outstanding": "82113575"
+    },
+    {
+      "symbol": "VONE.N0000",
+      "company_name": "VALLIBEL ONE PLC",
+      "cse_code": "VONE.N0000",
+      "shares_outstanding": "1138915644"
+    },
+    {
+      "symbol": "VPEL.N0000",
+      "company_name": "VALLIBEL POWER ERATHNA PLC",
+      "cse_code": "VPEL.N0000",
+      "shares_outstanding": "747109731"
+    },
+    {
+      "symbol": "WAPO.N0000",
+      "company_name": "GALLE FACE CAPITAL PARTNERS PLC",
+      "cse_code": "WAPO.N0000",
+      "shares_outstanding": "122388394"
+    },
+    {
+      "symbol": "WATA.N0000",
+      "company_name": "WATAWALA  PLANTATIONS  PLC",
+      "cse_code": "WATA.N0000",
+      "shares_outstanding": "1016543165"
+    },
+    {
+      "symbol": "WIND.N0000",
+      "company_name": "WINDFORCE PLC",
+      "cse_code": "WIND.N0000",
+      "shares_outstanding": "1355591889"
+    },
+    {
+      "symbol": "WLTH.N0000",
+      "company_name": "WEALTHTRUST SECURITIES PLC",
+      "cse_code": "WLTH.N0000",
+      "shares_outstanding": "1225052939"
+    },
+    {
+      "symbol": "YORK.N0000",
+      "company_name": "YORK ARCADE HOLDINGS PLC",
+      "cse_code": "YORK.N0000",
+      "shares_outstanding": "150000000"
+    }
+  ],
+  "prices": [
+    {
+      "symbol": "ABAN.N0000",
+      "open": "1004.0000",
+      "high": "1015.0000",
+      "low": "999.2500",
+      "close": "1000.0000",
+      "volume": "359",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "AFSL.N0000",
+      "open": "71.0000",
+      "high": "76.0000",
+      "low": "71.0000",
+      "close": "71.1000",
+      "volume": "188",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "AEL.N0000",
+      "open": "74.8000",
+      "high": "74.8000",
+      "low": "74.0000",
+      "close": "74.3000",
+      "volume": "58342",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ACL.N0000",
+      "open": "87.5000",
+      "high": "87.5000",
+      "low": "86.4000",
+      "close": "86.5000",
+      "volume": "14685",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "APLA.N0000",
+      "open": "159.7500",
+      "high": "159.7500",
+      "low": "156.5000",
+      "close": "157.2500",
+      "volume": "7453",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ACME.N0000",
+      "open": "3.3000",
+      "high": "3.6000",
+      "low": "3.3000",
+      "close": "3.4000",
+      "volume": "358203",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "AGAL.N0000",
+      "open": "47.7000",
+      "high": "47.7000",
+      "low": "47.3000",
+      "close": "47.5000",
+      "volume": "658",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "AGST.N0000",
+      "open": "10.7000",
+      "high": "10.9000",
+      "low": "10.4000",
+      "close": "10.7000",
+      "volume": "72341",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "AHUN.N0000",
+      "open": "78.0000",
+      "high": "78.0000",
+      "low": "77.0000",
+      "close": "77.4000",
+      "volume": "23851",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SPEN.N0000",
+      "open": "131.0000",
+      "high": "131.5000",
+      "low": "129.2500",
+      "close": "131.2500",
+      "volume": "8900",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ALLI.N0000",
+      "open": "290.0000",
+      "high": "297.0000",
+      "low": "290.0000",
+      "close": "293.5000",
+      "volume": "155",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "AFS.N0000",
+      "open": "19.5000",
+      "high": "19.5000",
+      "low": "19.5000",
+      "close": "19.5000",
+      "volume": "7",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ALUM.N0000",
+      "open": "14.6000",
+      "high": "14.7000",
+      "low": "14.4000",
+      "close": "14.5000",
+      "volume": "1065759",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ABL.N0000",
+      "open": "24.0000",
+      "high": "24.0000",
+      "low": "23.0000",
+      "close": "23.3000",
+      "volume": "148758",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ATL.N0000",
+      "open": "20.5000",
+      "high": "21.0000",
+      "low": "20.5000",
+      "close": "20.9000",
+      "volume": "1392",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ATLL.N0000",
+      "open": "18.4000",
+      "high": "20.7000",
+      "low": "18.4000",
+      "close": "19.8000",
+      "volume": "17678",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "TAP.N0000",
+      "open": "28.1000",
+      "high": "28.5000",
+      "low": "28.0000",
+      "close": "28.2000",
+      "volume": "829",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "GREG.N0000",
+      "open": "33.9000",
+      "high": "33.9000",
+      "low": "33.8000",
+      "close": "33.8000",
+      "volume": "159",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "AAF.N0000",
+      "open": "41.9000",
+      "high": "41.9000",
+      "low": "40.8000",
+      "close": "41.0000",
+      "volume": "108799",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ASIY.N0000",
+      "open": "11.8000",
+      "high": "12.2000",
+      "low": "11.6000",
+      "close": "12.0000",
+      "volume": "88557",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "AHPL.N0000",
+      "open": "44.2000",
+      "high": "44.7000",
+      "low": "44.0000",
+      "close": "44.0000",
+      "volume": "3456",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "AMSL.N0000",
+      "open": "10.0000",
+      "high": "10.2000",
+      "low": "10.0000",
+      "close": "10.1000",
+      "volume": "72147",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ASIR.N0000",
+      "open": "24.5000",
+      "high": "25.0000",
+      "low": "24.2000",
+      "close": "24.3000",
+      "volume": "38097",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "AGPL.N0000",
+      "open": "12.9000",
+      "high": "13.0000",
+      "low": "12.9000",
+      "close": "13.0000",
+      "volume": "6513",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "BPPL.N0000",
+      "open": "16.5000",
+      "high": "16.7000",
+      "low": "16.5000",
+      "close": "16.7000",
+      "volume": "7460",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "BFL.N0000",
+      "open": "83.0000",
+      "high": "83.2000",
+      "low": "81.0000",
+      "close": "81.1000",
+      "volume": "61677",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "BALA.N0000",
+      "open": "53.0000",
+      "high": "53.5000",
+      "low": "52.8000",
+      "close": "53.5000",
+      "volume": "1397",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "BRR.N0000",
+      "open": "19.1000",
+      "high": "19.3000",
+      "low": "19.1000",
+      "close": "19.3000",
+      "volume": "1465",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "BERU.N0000",
+      "open": "2.5000",
+      "high": "2.6000",
+      "low": "2.5000",
+      "close": "2.6000",
+      "volume": "60889",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "BOGA.N0000",
+      "open": "106.0000",
+      "high": "106.0000",
+      "low": "102.2500",
+      "close": "102.5000",
+      "volume": "3753",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "BOPL.N0000",
+      "open": "65.1000",
+      "high": "69.0000",
+      "low": "65.0000",
+      "close": "69.0000",
+      "volume": "369",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "BRWN.N0000",
+      "open": "112.0000",
+      "high": "112.5000",
+      "low": "106.2500",
+      "close": "110.0000",
+      "volume": "8073",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "BIL.N0000",
+      "open": "4.4000",
+      "high": "4.5000",
+      "low": "4.3000",
+      "close": "4.4000",
+      "volume": "806143",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "BUKI.N0000",
+      "open": "837.5000",
+      "high": "837.5000",
+      "low": "817.5000",
+      "close": "817.5000",
+      "volume": "10",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "COLO.N0000",
+      "open": "30.3000",
+      "high": "30.3000",
+      "low": "30.0000",
+      "close": "30.3000",
+      "volume": "3785",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CTHR.N0000",
+      "open": "545.0000",
+      "high": "545.0000",
+      "low": "520.2500",
+      "close": "537.0000",
+      "volume": "10",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CTLD.N0000",
+      "open": "35.1000",
+      "high": "35.1000",
+      "low": "35.0000",
+      "close": "35.0000",
+      "volume": "1325",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CWM.N0000",
+      "open": "32.9000",
+      "high": "34.7000",
+      "low": "32.9000",
+      "close": "34.4000",
+      "volume": "29163",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CSLK.N0000",
+      "open": "11.8000",
+      "high": "12.2000",
+      "low": "11.8000",
+      "close": "12.0000",
+      "volume": "41027",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CALC.U0000",
+      "open": "12.1000",
+      "high": "12.5000",
+      "low": "12.1000",
+      "close": "12.5000",
+      "volume": "1",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "CALI.U0000",
+      "open": "13.4000",
+      "high": "13.4000",
+      "low": "13.0000",
+      "close": "13.0000",
+      "volume": "9",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "CALU.U0000",
+      "open": "9.6000",
+      "high": "9.6000",
+      "low": "9.5000",
+      "close": "9.5000",
+      "volume": "9",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "CALH.N0000",
+      "open": "11.2000",
+      "high": "11.6000",
+      "low": "11.2000",
+      "close": "11.4000",
+      "volume": "55792",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CALT.N0000",
+      "open": "41.0000",
+      "high": "42.4000",
+      "low": "40.6000",
+      "close": "42.0000",
+      "volume": "16446",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CARG.N0000",
+      "open": "674.5000",
+      "high": "674.5000",
+      "low": "649.7500",
+      "close": "650.0000",
+      "volume": "298",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CBNK.N0000",
+      "open": "6.9000",
+      "high": "6.9000",
+      "low": "6.6000",
+      "close": "6.7000",
+      "volume": "234067",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CABO.N0000",
+      "open": "164.0000",
+      "high": "164.0000",
+      "low": "162.0000",
+      "close": "164.0000",
+      "volume": "954",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CARS.N0000",
+      "open": "679.0000",
+      "high": "679.0000",
+      "low": "670.0000",
+      "close": "670.0000",
+      "volume": "471",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CFIN.N0000",
+      "open": "191.7500",
+      "high": "191.7500",
+      "low": "190.2500",
+      "close": "191.2500",
+      "volume": "33356",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CIND.N0000",
+      "open": "199.5000",
+      "high": "199.5000",
+      "low": "193.7500",
+      "close": "195.0000",
+      "volume": "4455",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CINS.N0000",
+      "open": "2845.0000",
+      "high": "2899.5000",
+      "low": "2840.0000",
+      "close": "2899.5000",
+      "volume": "3",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "CINS.X0000",
+      "open": "1458.0000",
+      "high": "1458.0000",
+      "low": "1435.0000",
+      "close": "1436.2500",
+      "volume": "304",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "BREW.N0000",
+      "open": "2500.0000",
+      "high": "2599.0000",
+      "low": "2500.0000",
+      "close": "2500.0000",
+      "volume": "3",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CCS.N0000",
+      "open": "120.0000",
+      "high": "121.7500",
+      "low": "119.5000",
+      "close": "121.5000",
+      "volume": "28900",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "GRAN.N0000",
+      "open": "455.0000",
+      "high": "459.7500",
+      "low": "450.0000",
+      "close": "454.0000",
+      "volume": "1049",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "GUAR.N0000",
+      "open": "219.7500",
+      "high": "219.7500",
+      "low": "217.0000",
+      "close": "217.0000",
+      "volume": "1741",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CHL.N0000",
+      "open": "56.2000",
+      "high": "56.3000",
+      "low": "56.2000",
+      "close": "56.2000",
+      "volume": "631",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CHL.X0000",
+      "open": "46.9000",
+      "high": "46.9000",
+      "low": "46.9000",
+      "close": "46.9000",
+      "volume": "2222",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CHOT.N0000",
+      "open": "27.8000",
+      "high": "27.8000",
+      "low": "27.8000",
+      "close": "27.8000",
+      "volume": "1344",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CINV.N0000",
+      "open": "95.8000",
+      "high": "99.6000",
+      "low": "95.8000",
+      "close": "98.6000",
+      "volume": "16545",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "KZOO.N0000",
+      "open": "6.5000",
+      "high": "6.6000",
+      "low": "6.5000",
+      "close": "6.5000",
+      "volume": "450611",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CTBL.N0000",
+      "open": "8.9000",
+      "high": "8.9000",
+      "low": "8.5000",
+      "close": "8.9000",
+      "volume": "23861",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CTC.N0000",
+      "open": "1780.0000",
+      "high": "1780.2500",
+      "low": "1770.0000",
+      "close": "1772.7500",
+      "volume": "1083",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CHMX.N0000",
+      "open": "150.0000",
+      "high": "152.5000",
+      "low": "150.0000",
+      "close": "152.5000",
+      "volume": "15",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "LLUB.N0000",
+      "open": "202.5000",
+      "high": "205.0000",
+      "low": "202.0000",
+      "close": "202.2500",
+      "volume": "63784",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CWL.N0000",
+      "open": "14.0000",
+      "high": "14.6000",
+      "low": "14.0000",
+      "close": "14.5000",
+      "volume": "30140",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CIC.N0000",
+      "open": "25.0000",
+      "high": "25.0000",
+      "low": "24.5000",
+      "close": "24.9000",
+      "volume": "3051377",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CIC.X0000",
+      "open": "21.2000",
+      "high": "21.4000",
+      "low": "21.2000",
+      "close": "21.3000",
+      "volume": "342256",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CDB.X0000",
+      "open": "28.3000",
+      "high": "28.3000",
+      "low": "27.4000",
+      "close": "27.8000",
+      "volume": "233388",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CDB.N0000",
+      "open": "32.8000",
+      "high": "32.8000",
+      "low": "32.5000",
+      "close": "32.5000",
+      "volume": "2357",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "REEF.N0000",
+      "open": "3.0000",
+      "high": "3.1000",
+      "low": "3.0000",
+      "close": "3.0000",
+      "volume": "113608",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "COOP.N0000",
+      "open": "2.9000",
+      "high": "2.9000",
+      "low": "2.8000",
+      "close": "2.9000",
+      "volume": "279627",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "PHAR.N0000",
+      "open": "182.0000",
+      "high": "187.0000",
+      "low": "175.5000",
+      "close": "175.5000",
+      "volume": "9336",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "DOCK.N0000",
+      "open": "99.9000",
+      "high": "99.9000",
+      "low": "95.0000",
+      "close": "95.3000",
+      "volume": "242448",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CFI.N0000",
+      "open": "300.0000",
+      "high": "300.0000",
+      "low": "291.0000",
+      "close": "291.7500",
+      "volume": "35",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CIT.N0000",
+      "open": "364.7500",
+      "high": "364.7500",
+      "low": "322.0000",
+      "close": "348.7500",
+      "volume": "44",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CLND.N0000",
+      "open": "45.0000",
+      "high": "45.8000",
+      "low": "45.0000",
+      "close": "45.6000",
+      "volume": "1534",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "COMB.N0000",
+      "open": "196.2500",
+      "high": "196.2500",
+      "low": "195.5000",
+      "close": "195.5000",
+      "volume": "56992",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "COMB.X0000",
+      "open": "180.0000",
+      "high": "181.5000",
+      "low": "179.0000",
+      "close": "180.2500",
+      "volume": "19170",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "COCR.N0000",
+      "open": "90.3000",
+      "high": "91.0000",
+      "low": "90.0000",
+      "close": "90.0000",
+      "volume": "258153",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "COMD.N0000",
+      "open": "273.2500",
+      "high": "273.2500",
+      "low": "273.0000",
+      "close": "273.0000",
+      "volume": "1206",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SOY.N0000",
+      "open": "1939.7500",
+      "high": "1940.0000",
+      "low": "1910.2500",
+      "close": "1910.2500",
+      "volume": "81",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "DPL.N0000",
+      "open": "10.9000",
+      "high": "11.1000",
+      "low": "10.8000",
+      "close": "10.8000",
+      "volume": "8022",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "DFCC.N0000",
+      "open": "115.0000",
+      "high": "115.2500",
+      "low": "114.5000",
+      "close": "114.5000",
+      "volume": "131614",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "DIAL.N0000",
+      "open": "42.2000",
+      "high": "42.9000",
+      "low": "42.0000",
+      "close": "42.2000",
+      "volume": "302484",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CALF.N0000",
+      "open": "130.0000",
+      "high": "130.0000",
+      "low": "110.0000",
+      "close": "114.2500",
+      "volume": "843",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "DIMO.N0000",
+      "open": "1331.0000",
+      "high": "1350.0000",
+      "low": "1330.0000",
+      "close": "1332.2500",
+      "volume": "8",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "PKME.N0000",
+      "open": "152.5000",
+      "high": "152.7500",
+      "low": "149.7500",
+      "close": "150.0000",
+      "volume": "30664",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "DIPD.N0000",
+      "open": "56.7000",
+      "high": "56.8000",
+      "low": "56.0000",
+      "close": "56.8000",
+      "volume": "182399",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "DIST.N0000",
+      "open": "51.8000",
+      "high": "51.8000",
+      "low": "51.6000",
+      "close": "51.8000",
+      "volume": "16204",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "STAF.N0000",
+      "open": "37.9000",
+      "high": "38.6000",
+      "low": "37.9000",
+      "close": "38.0000",
+      "volume": "2729",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "EBCR.N0000",
+      "open": "33.5000",
+      "high": "34.0000",
+      "low": "33.0000",
+      "close": "33.6000",
+      "volume": "7854",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "EML.N0000",
+      "open": "6.1000",
+      "high": "6.8000",
+      "low": "6.1000",
+      "close": "6.8000",
+      "volume": "6214",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "EAST.N0000",
+      "open": "64.0000",
+      "high": "65.0000",
+      "low": "64.0000",
+      "close": "65.0000",
+      "volume": "4314",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "EMER.N0000",
+      "open": "8.5000",
+      "high": "9.4000",
+      "low": "8.5000",
+      "close": "9.4000",
+      "volume": "44600",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "EDEN.N0000",
+      "open": "8.5000",
+      "high": "8.6000",
+      "low": "8.5000",
+      "close": "8.6000",
+      "volume": "11005",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ELPL.N0000",
+      "open": "168.0000",
+      "high": "168.5000",
+      "low": "167.5000",
+      "close": "168.0000",
+      "volume": "336",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ETWO.N0000",
+      "open": "53.0000",
+      "high": "53.9000",
+      "low": "53.0000",
+      "close": "53.0000",
+      "volume": "852",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "PACK.N0000",
+      "open": "10.4000",
+      "high": "10.4000",
+      "low": "9.8000",
+      "close": "9.9000",
+      "volume": "11665",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "EXT.N0000",
+      "open": "11.6000",
+      "high": "11.6000",
+      "low": "11.0000",
+      "close": "11.2000",
+      "volume": "185123",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CFVF.N0000",
+      "open": "37.0000",
+      "high": "40.0000",
+      "low": "37.0000",
+      "close": "38.8000",
+      "volume": "12623",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "FCT.N0000",
+      "open": "23.9000",
+      "high": "26.9000",
+      "low": "23.4000",
+      "close": "24.0000",
+      "volume": "32505",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "GHLL.N0000",
+      "open": "14.5000",
+      "high": "14.5000",
+      "low": "14.0000",
+      "close": "14.4000",
+      "volume": "2300",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "WAPO.N0000",
+      "open": "15.3000",
+      "high": "16.0000",
+      "low": "14.9000",
+      "close": "14.9000",
+      "volume": "296639",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "GEST.N0000",
+      "open": "290.0000",
+      "high": "293.0000",
+      "low": "290.0000",
+      "close": "293.0000",
+      "volume": "6",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "MEL.N0000",
+      "open": "4.3000",
+      "high": "4.4000",
+      "low": "4.2000",
+      "close": "4.3000",
+      "volume": "15919",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HAPU.N0000",
+      "open": "52.4000",
+      "high": "52.7000",
+      "low": "50.0000",
+      "close": "52.5000",
+      "volume": "1484",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HARI.N0000",
+      "open": "4950.0000",
+      "high": "4950.0000",
+      "low": "4650.2500",
+      "close": "4650.2500",
+      "volume": "1",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "HNB.X0000",
+      "open": "307.0000",
+      "high": "307.0000",
+      "low": "304.0000",
+      "close": "305.2500",
+      "volume": "37589",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HNB.N0000",
+      "open": "367.7500",
+      "high": "370.0000",
+      "low": "366.7500",
+      "close": "367.5000",
+      "volume": "10990",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HPL.N0000",
+      "open": "24.0000",
+      "high": "24.0000",
+      "low": "23.4000",
+      "close": "23.4000",
+      "volume": "6249",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HAYC.N0000",
+      "open": "200.0000",
+      "high": "200.5000",
+      "low": "196.2500",
+      "close": "199.7500",
+      "volume": "170872",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MGT.N0000",
+      "open": "27.0000",
+      "high": "27.0000",
+      "low": "26.5000",
+      "close": "27.0000",
+      "volume": "108431",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HEXP.N0000",
+      "open": "133.0000",
+      "high": "134.0000",
+      "low": "130.2500",
+      "close": "131.2500",
+      "volume": "1268",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CONN.N0000",
+      "open": "22.0000",
+      "high": "22.0000",
+      "low": "22.0000",
+      "close": "22.0000",
+      "volume": "981",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HAYL.N0000",
+      "open": "216.0000",
+      "high": "216.0000",
+      "low": "215.0000",
+      "close": "216.0000",
+      "volume": "26372",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HHL.N0000",
+      "open": "30.0000",
+      "high": "30.2000",
+      "low": "29.7000",
+      "close": "30.0000",
+      "volume": "160453",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CITH.N0000",
+      "open": "3.8000",
+      "high": "4.2000",
+      "low": "3.8000",
+      "close": "4.2000",
+      "volume": "195897",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HNBF.N0000",
+      "open": "6.5000",
+      "high": "6.5000",
+      "low": "6.2000",
+      "close": "6.3000",
+      "volume": "1331285",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HNBF.X0000",
+      "open": "6.0000",
+      "high": "6.1000",
+      "low": "6.0000",
+      "close": "6.0000",
+      "volume": "855",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HASU.N0000",
+      "open": "133.0000",
+      "high": "133.0000",
+      "low": "132.5000",
+      "close": "132.7500",
+      "volume": "5907",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HOPL.N0000",
+      "open": "51.5000",
+      "high": "53.5000",
+      "low": "51.5000",
+      "close": "53.5000",
+      "volume": "60",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "HSIG.N0000",
+      "open": "62.0000",
+      "high": "65.0000",
+      "low": "61.7000",
+      "close": "64.9000",
+      "volume": "5498",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HDFC.N0000",
+      "open": "59.6000",
+      "high": "59.6000",
+      "low": "56.1000",
+      "close": "57.9000",
+      "volume": "6190",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HBS.N0000",
+      "open": "18.5000",
+      "high": "19.5000",
+      "low": "18.5000",
+      "close": "19.5000",
+      "volume": "7893",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HUNA.N0000",
+      "open": "14.0000",
+      "high": "14.0000",
+      "low": "13.6000",
+      "close": "13.7000",
+      "volume": "2532",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HUNT.N0000",
+      "open": "1462.0000",
+      "high": "1500.0000",
+      "low": "1462.0000",
+      "close": "1500.0000",
+      "volume": "1",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "HVA.N0000",
+      "open": "3.8000",
+      "high": "3.9000",
+      "low": "3.7000",
+      "close": "3.8000",
+      "volume": "89497",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ASPH.N0000",
+      "open": "0.5000",
+      "high": "0.5000",
+      "low": "0.4000",
+      "close": "0.5000",
+      "volume": "130717",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "INME.N0000",
+      "open": "1572.0000",
+      "high": "1749.7500",
+      "low": "1572.0000",
+      "close": "1749.7500",
+      "volume": "1",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "BFN.N0000",
+      "open": "25.0000",
+      "high": "25.7000",
+      "low": "25.0000",
+      "close": "25.1000",
+      "volume": "755",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "JINS.N0000",
+      "open": "32.2000",
+      "high": "35.0000",
+      "low": "32.0000",
+      "close": "32.7000",
+      "volume": "80060",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "JXG.N0000",
+      "open": "8.9000",
+      "high": "9.0000",
+      "low": "8.8000",
+      "close": "8.9000",
+      "volume": "253337",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "JAT.N0000",
+      "open": "29.9000",
+      "high": "30.3000",
+      "low": "28.8000",
+      "close": "29.5000",
+      "volume": "314061",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "JETS.N0000",
+      "open": "13.3000",
+      "high": "13.4000",
+      "low": "13.0000",
+      "close": "13.3000",
+      "volume": "579536",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "JFP.N0000",
+      "open": "14.7000",
+      "high": "14.8000",
+      "low": "14.2000",
+      "close": "14.7000",
+      "volume": "5668",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "JKH.N0000",
+      "open": "17.7000",
+      "high": "17.9000",
+      "low": "17.7000",
+      "close": "17.9000",
+      "volume": "1046762",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "KHL.N0000",
+      "open": "15.4000",
+      "high": "15.5000",
+      "low": "15.1000",
+      "close": "15.4000",
+      "volume": "20022",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "JKL.N0000",
+      "open": "71.0000",
+      "high": "71.0000",
+      "low": "70.0000",
+      "close": "70.0000",
+      "volume": "7078",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "KAHA.N0000",
+      "open": "14.0000",
+      "high": "14.2000",
+      "low": "14.0000",
+      "close": "14.0000",
+      "volume": "2304",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "KPHL.N0000",
+      "open": "14.4000",
+      "high": "17.4000",
+      "low": "14.4000",
+      "close": "16.8000",
+      "volume": "359059",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "KFP.N0000",
+      "open": "166.0000",
+      "high": "169.0000",
+      "low": "165.0000",
+      "close": "165.2500",
+      "volume": "515",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "KGAL.N0000",
+      "open": "132.7500",
+      "high": "134.0000",
+      "low": "132.0000",
+      "close": "134.0000",
+      "volume": "25",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "KCAB.N0000",
+      "open": "93.0000",
+      "high": "94.8000",
+      "low": "93.0000",
+      "close": "93.0000",
+      "volume": "5992",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "TYRE.N0000",
+      "open": "80.0000",
+      "high": "80.4000",
+      "low": "78.5000",
+      "close": "78.6000",
+      "volume": "11071",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "KVAL.N0000",
+      "open": "75.5000",
+      "high": "76.0000",
+      "low": "75.0000",
+      "close": "76.0000",
+      "volume": "2556",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CPRT.N0000",
+      "open": "31.1000",
+      "high": "31.1000",
+      "low": "29.0000",
+      "close": "29.2000",
+      "volume": "2743",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "KOTA.N0000",
+      "open": "7.3000",
+      "high": "7.3000",
+      "low": "7.0000",
+      "close": "7.1000",
+      "volume": "60064",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LFIN.N0000",
+      "open": "141.0000",
+      "high": "141.0000",
+      "low": "139.5000",
+      "close": "139.7500",
+      "volume": "75399",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LPRT.N0000",
+      "open": "549.5000",
+      "high": "549.5000",
+      "low": "470.0000",
+      "close": "540.0000",
+      "volume": "14",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LALU.N0000",
+      "open": "31.4000",
+      "high": "31.4000",
+      "low": "30.2000",
+      "close": "31.3000",
+      "volume": "21590",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ASHO.N0000",
+      "open": "2515.0000",
+      "high": "2515.7500",
+      "low": "2466.0000",
+      "close": "2515.7500",
+      "volume": "76",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "CERA.N0000",
+      "open": "174.5000",
+      "high": "174.5000",
+      "low": "167.7500",
+      "close": "167.7500",
+      "volume": "1",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "LCBF.N0000",
+      "open": "4.9000",
+      "high": "5.0000",
+      "low": "4.7000",
+      "close": "4.8000",
+      "volume": "308014",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LIOC.N0000",
+      "open": "123.5000",
+      "high": "124.7500",
+      "low": "123.5000",
+      "close": "123.5000",
+      "volume": "2062",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LMF.N0000",
+      "open": "81.2000",
+      "high": "81.3000",
+      "low": "80.7000",
+      "close": "81.0000",
+      "volume": "190697",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ASCO.N0000",
+      "open": "42.5000",
+      "high": "42.5000",
+      "low": "40.4000",
+      "close": "41.5000",
+      "volume": "18215",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "TILE.N0000",
+      "open": "39.0000",
+      "high": "39.7000",
+      "low": "39.0000",
+      "close": "39.7000",
+      "volume": "1197",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LWL.N0000",
+      "open": "40.0000",
+      "high": "40.0000",
+      "low": "39.2000",
+      "close": "40.0000",
+      "volume": "66658",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LCEY.N0000",
+      "open": "28.0000",
+      "high": "28.9000",
+      "low": "27.7000",
+      "close": "28.0000",
+      "volume": "28127",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LDEV.N0000",
+      "open": "16.0000",
+      "high": "16.0000",
+      "low": "15.7000",
+      "close": "15.7000",
+      "volume": "805",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LGL.N0000",
+      "open": "36.0000",
+      "high": "39.5000",
+      "low": "36.0000",
+      "close": "37.3000",
+      "volume": "241584",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LGL.X0000",
+      "open": "29.8000",
+      "high": "33.2000",
+      "low": "29.0000",
+      "close": "29.3000",
+      "volume": "65520",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LPL.X0000",
+      "open": "8.7000",
+      "high": "8.7000",
+      "low": "8.7000",
+      "close": "8.7000",
+      "volume": "400",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LPL.N0000",
+      "open": "10.4000",
+      "high": "10.5000",
+      "low": "10.4000",
+      "close": "10.5000",
+      "volume": "2100",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LITE.N0000",
+      "open": "41.4000",
+      "high": "41.5000",
+      "low": "41.0000",
+      "close": "41.0000",
+      "volume": "1002",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SHAW.N0000",
+      "open": "269.7500",
+      "high": "269.7500",
+      "low": "260.2500",
+      "close": "260.2500",
+      "volume": "1",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "LION.N0000",
+      "open": "1840.0000",
+      "high": "1850.0000",
+      "low": "1840.0000",
+      "close": "1849.7500",
+      "volume": "429",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LOFC.N0000",
+      "open": "4.6000",
+      "high": "4.6000",
+      "low": "4.3000",
+      "close": "4.4000",
+      "volume": "642257",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LGIL.N0000",
+      "open": "6.1000",
+      "high": "6.1000",
+      "low": "5.9000",
+      "close": "5.9000",
+      "volume": "150051",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LOLC.N0000",
+      "open": "400.0000",
+      "high": "400.0000",
+      "low": "389.7500",
+      "close": "390.0000",
+      "volume": "11595",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HPFL.N0000",
+      "open": "9.9000",
+      "high": "10.5000",
+      "low": "9.9000",
+      "close": "10.0000",
+      "volume": "4187",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LUMX.N0000",
+      "open": "7.3000",
+      "high": "7.5000",
+      "low": "7.0000",
+      "close": "7.4000",
+      "volume": "4292",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LVEF.N0000",
+      "open": "5.1000",
+      "high": "5.3000",
+      "low": "5.0000",
+      "close": "5.3000",
+      "volume": "247249",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MADU.N0000",
+      "open": "8.7000",
+      "high": "9.0000",
+      "low": "8.3000",
+      "close": "8.8000",
+      "volume": "21612",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MFPE.N0000",
+      "open": "14.4000",
+      "high": "14.4000",
+      "low": "13.5000",
+      "close": "13.7000",
+      "volume": "40947",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MCPL.N0000",
+      "open": "43.0000",
+      "high": "44.0000",
+      "low": "42.2000",
+      "close": "42.6000",
+      "volume": "6174",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MRH.N0000",
+      "open": "16.6000",
+      "high": "16.6000",
+      "low": "16.1000",
+      "close": "16.1000",
+      "volume": "10",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "MAL.N0000",
+      "open": "53.0000",
+      "high": "54.0000",
+      "low": "52.0000",
+      "close": "53.9000",
+      "volume": "1404",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MARA.N0000",
+      "open": "4.9000",
+      "high": "4.9000",
+      "low": "4.6000",
+      "close": "4.9000",
+      "volume": "35853",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MASK.N0000",
+      "open": "61.1000",
+      "high": "61.1000",
+      "low": "59.0000",
+      "close": "59.1000",
+      "volume": "1070",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MELS.N0000",
+      "open": "175.0000",
+      "high": "176.5000",
+      "low": "174.0000",
+      "close": "176.5000",
+      "volume": "10564",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MERC.N0000",
+      "open": "19.5000",
+      "high": "19.8000",
+      "low": "19.1000",
+      "close": "19.5000",
+      "volume": "27976",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MSL.N0000",
+      "open": "183.0000",
+      "high": "183.0000",
+      "low": "171.0000",
+      "close": "173.0000",
+      "volume": "39",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MBSL.N0000",
+      "open": "8.9000",
+      "high": "9.0000",
+      "low": "8.7000",
+      "close": "8.9000",
+      "volume": "50205",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MHDL.N0000",
+      "open": "6.2000",
+      "high": "6.3000",
+      "low": "6.0000",
+      "close": "6.3000",
+      "volume": "11856",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MULL.N0000",
+      "open": "2.5000",
+      "high": "2.6000",
+      "low": "2.5000",
+      "close": "2.5000",
+      "volume": "338056",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "MDL.N0000",
+      "open": "15.0000",
+      "high": "15.3000",
+      "low": "14.9000",
+      "close": "15.2000",
+      "volume": "5883",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "NAMU.N0000",
+      "open": "61.6000",
+      "high": "62.0000",
+      "low": "60.0000",
+      "close": "60.0000",
+      "volume": "5008",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "NDB.N0000",
+      "open": "102.2500",
+      "high": "103.0000",
+      "low": "100.7500",
+      "close": "101.5000",
+      "volume": "52535",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "NTB.X0000",
+      "open": "357.2500",
+      "high": "357.2500",
+      "low": "338.5000",
+      "close": "338.5000",
+      "volume": "15",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "NTB.N0000",
+      "open": "295.5000",
+      "high": "295.5000",
+      "low": "293.0000",
+      "close": "294.0000",
+      "volume": "4514",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "NHL.N0000",
+      "open": "9.5000",
+      "high": "9.9000",
+      "low": "9.5000",
+      "close": "9.8000",
+      "volume": "13188",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ODEL.N0000",
+      "open": "10.2000",
+      "high": "10.7000",
+      "low": "10.2000",
+      "close": "10.2000",
+      "volume": "1350",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "OFEQ.N0000",
+      "open": "329.5000",
+      "high": "329.5000",
+      "low": "329.2500",
+      "close": "329.2500",
+      "volume": "113",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "ONAL.N0000",
+      "open": "40.9000",
+      "high": "41.0000",
+      "low": "40.8000",
+      "close": "40.8000",
+      "volume": "3",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "OSEA.N0000",
+      "open": "47.6000",
+      "high": "48.9000",
+      "low": "47.6000",
+      "close": "48.0000",
+      "volume": "164679",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "PABC.N0000",
+      "open": "45.1000",
+      "high": "45.9000",
+      "low": "45.0000",
+      "close": "45.9000",
+      "volume": "40580",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "PAP.N0000",
+      "open": "10.3000",
+      "high": "10.5000",
+      "low": "10.0000",
+      "close": "10.4000",
+      "volume": "5401081",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "PARA.N0000",
+      "open": "430.5000",
+      "high": "474.0000",
+      "low": "416.2500",
+      "close": "416.2500",
+      "volume": "17",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "PEG.N0000",
+      "open": "16.7000",
+      "high": "18.4000",
+      "low": "16.7000",
+      "close": "17.1000",
+      "volume": "629",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "PINS.N0000",
+      "open": "25.8000",
+      "high": "25.8000",
+      "low": "24.9000",
+      "close": "25.8000",
+      "volume": "1319",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "PLC.N0000",
+      "open": "16.6000",
+      "high": "17.0000",
+      "low": "16.6000",
+      "close": "16.6000",
+      "volume": "65064",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "GLAS.N0000",
+      "open": "55.3000",
+      "high": "55.9000",
+      "low": "55.2000",
+      "close": "55.3000",
+      "volume": "37223",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "PMB.N0000",
+      "open": "8.1000",
+      "high": "8.2000",
+      "low": "8.1000",
+      "close": "8.2000",
+      "volume": "2515",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "PLR.N0000",
+      "open": "32.0000",
+      "high": "32.2000",
+      "low": "31.7000",
+      "close": "32.0000",
+      "volume": "1008278",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CARE.N0000",
+      "open": "32.1000",
+      "high": "32.1000",
+      "low": "32.0000",
+      "close": "32.0000",
+      "volume": "1384",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "RIL.N0000",
+      "open": "19.8000",
+      "high": "20.0000",
+      "low": "19.6000",
+      "close": "19.9000",
+      "volume": "155446",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "RGEM.N0000",
+      "open": "118.0000",
+      "high": "118.0000",
+      "low": "118.0000",
+      "close": "118.0000",
+      "volume": "108",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "RWSL.N0000",
+      "open": "16.2000",
+      "high": "16.2000",
+      "low": "16.0000",
+      "close": "16.1000",
+      "volume": "126505",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "RFL.N0000",
+      "open": "21.9000",
+      "high": "21.9000",
+      "low": "21.2000",
+      "close": "21.5000",
+      "volume": "330",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "RAL.N0000",
+      "open": "9.0000",
+      "high": "9.1000",
+      "low": "8.7000",
+      "close": "8.9000",
+      "volume": "848243",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "RENU.N0000",
+      "open": "710.0000",
+      "high": "710.0000",
+      "low": "700.0000",
+      "close": "700.2500",
+      "volume": "2101",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "COCO.N0000",
+      "open": "19.2000",
+      "high": "19.3000",
+      "low": "19.2000",
+      "close": "19.2000",
+      "volume": "3300",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "COCO.X0000",
+      "open": "19.4000",
+      "high": "19.4000",
+      "low": "18.0000",
+      "close": "18.6000",
+      "volume": "4302",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "RHL.X0000",
+      "open": "24.5000",
+      "high": "24.5000",
+      "low": "22.5000",
+      "close": "22.8000",
+      "volume": "577",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "RHL.N0000",
+      "open": "34.2000",
+      "high": "34.2000",
+      "low": "31.8000",
+      "close": "31.8000",
+      "volume": "8638",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "RCH.N0000",
+      "open": "175.0000",
+      "high": "176.0000",
+      "low": "175.0000",
+      "close": "176.0000",
+      "volume": "272",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "HPWR.N0000",
+      "open": "7.9000",
+      "high": "8.3000",
+      "low": "7.9000",
+      "close": "8.3000",
+      "volume": "32812",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "RICH.N0000",
+      "open": "25.3000",
+      "high": "26.0000",
+      "low": "25.0000",
+      "close": "25.8000",
+      "volume": "37026",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "REXP.N0000",
+      "open": "286.0000",
+      "high": "292.0000",
+      "low": "280.0000",
+      "close": "280.2500",
+      "volume": "1995",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "RCL.N0000",
+      "open": "40.2000",
+      "high": "40.5000",
+      "low": "39.8000",
+      "close": "40.1000",
+      "volume": "59531",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "RPBH.N0000",
+      "open": "33.6000",
+      "high": "33.6000",
+      "low": "33.5000",
+      "close": "33.5000",
+      "volume": "328",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SAMP.N0000",
+      "open": "138.5000",
+      "high": "139.2500",
+      "low": "138.0000",
+      "close": "138.7500",
+      "volume": "225580",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SIL.N0000",
+      "open": "501.0000",
+      "high": "501.0000",
+      "low": "500.2500",
+      "close": "500.2500",
+      "volume": "90",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "SDB.N0000",
+      "open": "41.1000",
+      "high": "41.1000",
+      "low": "40.5000",
+      "close": "40.6000",
+      "volume": "4725",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SDF.N0000",
+      "open": "35.0000",
+      "high": "35.0000",
+      "low": "35.0000",
+      "close": "35.0000",
+      "volume": "7532",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SMOT.N0000",
+      "open": "1449.0000",
+      "high": "1449.0000",
+      "low": "1449.0000",
+      "close": "1449.0000",
+      "volume": "1",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SFCL.N0000",
+      "open": "300.0000",
+      "high": "301.0000",
+      "low": "298.0000",
+      "close": "300.0000",
+      "volume": "740",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SHOT.X0000",
+      "open": "11.1000",
+      "high": "11.5000",
+      "low": "11.0000",
+      "close": "11.0000",
+      "volume": "27121",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SHOT.N0000",
+      "open": "14.9000",
+      "high": "14.9000",
+      "low": "14.0000",
+      "close": "14.4000",
+      "volume": "8438",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SLND.N0000",
+      "open": "2160.0000",
+      "high": "2530.5000",
+      "low": "2100.0000",
+      "close": "2530.5000",
+      "volume": "10",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "SEYB.N0000",
+      "open": "87.2000",
+      "high": "87.5000",
+      "low": "87.2000",
+      "close": "87.4000",
+      "volume": "2248",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SEYB.X0000",
+      "open": "64.0000",
+      "high": "64.1000",
+      "low": "63.4000",
+      "close": "63.5000",
+      "volume": "15741",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CSD.N0000",
+      "open": "22.9000",
+      "high": "22.9000",
+      "low": "22.0000",
+      "close": "22.2000",
+      "volume": "12079",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SIRA.N0000",
+      "open": "31.2000",
+      "high": "31.7000",
+      "low": "30.2000",
+      "close": "31.1000",
+      "volume": "260950",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SIGV.N0000",
+      "open": "11.0000",
+      "high": "11.5000",
+      "low": "11.0000",
+      "close": "11.5000",
+      "volume": "870",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SINS.N0000",
+      "open": "70.0000",
+      "high": "70.0000",
+      "low": "69.5000",
+      "close": "69.9000",
+      "volume": "18209",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SFIN.N0000",
+      "open": "40.2000",
+      "high": "40.2000",
+      "low": "39.2000",
+      "close": "39.9000",
+      "volume": "7202",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SINH.N0000",
+      "open": "21.7000",
+      "high": "21.7000",
+      "low": "20.7000",
+      "close": "21.2000",
+      "volume": "9832",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SEMB.N0000",
+      "open": "1.0000",
+      "high": "1.0000",
+      "low": "0.9000",
+      "close": "1.0000",
+      "volume": "28610",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SEMB.X0000",
+      "open": "0.2000",
+      "high": "0.3000",
+      "low": "0.2000",
+      "close": "0.3000",
+      "volume": "443643",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SCAP.N0000",
+      "open": "8.0000",
+      "high": "8.4000",
+      "low": "7.8000",
+      "close": "7.9000",
+      "volume": "232623",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CRL.N0000",
+      "open": "3.0000",
+      "high": "3.1000",
+      "low": "3.0000",
+      "close": "3.0000",
+      "volume": "343995",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SHL.N0000",
+      "open": "5.7000",
+      "high": "5.9000",
+      "low": "5.4000",
+      "close": "5.8000",
+      "volume": "225751",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "AAIC.N0000",
+      "open": "72.7000",
+      "high": "72.8000",
+      "low": "72.0000",
+      "close": "72.8000",
+      "volume": "692337",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SLTL.N0000",
+      "open": "77.1000",
+      "high": "78.9000",
+      "low": "77.0000",
+      "close": "78.9000",
+      "volume": "410",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SING.N0000",
+      "open": "42.0000",
+      "high": "45.5000",
+      "low": "42.0000",
+      "close": "44.6000",
+      "volume": "3920",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SUN.N0000",
+      "open": "27.4000",
+      "high": "27.6000",
+      "low": "27.0000",
+      "close": "27.3000",
+      "volume": "54497",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "PARQ.N0000",
+      "open": "80.0000",
+      "high": "81.0000",
+      "low": "79.5000",
+      "close": "80.0000",
+      "volume": "61486",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "TAJ.N0000",
+      "open": "24.7000",
+      "high": "25.4000",
+      "low": "24.7000",
+      "close": "25.4000",
+      "volume": "1283",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "TPL.N0000",
+      "open": "128.0000",
+      "high": "128.0000",
+      "low": "126.5000",
+      "close": "127.0000",
+      "volume": "11249",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "TANG.N0000",
+      "open": "90.0000",
+      "high": "90.0000",
+      "low": "90.0000",
+      "close": "90.0000",
+      "volume": "150",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "TSML.N0000",
+      "open": "31.0000",
+      "high": "31.0000",
+      "low": "30.7000",
+      "close": "30.7000",
+      "volume": "3",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "TJL.N0000",
+      "open": "28.0000",
+      "high": "28.8000",
+      "low": "27.5000",
+      "close": "28.5000",
+      "volume": "12611",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "TESS.N0000",
+      "open": "1.6000",
+      "high": "1.6000",
+      "low": "1.5000",
+      "close": "1.5000",
+      "volume": "103878",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "TESS.X0000",
+      "open": "1.4000",
+      "high": "1.4000",
+      "low": "1.3000",
+      "close": "1.3000",
+      "volume": "16721",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "AUTO.N0000",
+      "open": "261.5000",
+      "high": "261.5000",
+      "low": "256.7500",
+      "close": "256.7500",
+      "volume": "26",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "CFLB.N0000",
+      "open": "51.4000",
+      "high": "52.0000",
+      "low": "49.8000",
+      "close": "50.2000",
+      "volume": "2140",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "RHTL.N0000",
+      "open": "21.9000",
+      "high": "23.0000",
+      "low": "21.9000",
+      "close": "23.0000",
+      "volume": "36738",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "KHC.N0000",
+      "open": "11.1000",
+      "high": "11.6000",
+      "low": "10.1000",
+      "close": "11.2000",
+      "volume": "10916",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "SERV.N0000",
+      "open": "12.4000",
+      "high": "13.0000",
+      "low": "12.4000",
+      "close": "12.9000",
+      "volume": "47169",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LHCL.N0000",
+      "open": "104.0000",
+      "high": "104.0000",
+      "low": "101.0000",
+      "close": "102.0000",
+      "volume": "3364",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "LHL.N0000",
+      "open": "63.8000",
+      "high": "63.8000",
+      "low": "63.8000",
+      "close": "63.8000",
+      "volume": "5850",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "TAFL.N0000",
+      "open": "602.0000",
+      "high": "604.5000",
+      "low": "600.0000",
+      "close": "600.0000",
+      "volume": "37632",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "TKYO.X0000",
+      "open": "57.9000",
+      "high": "58.0000",
+      "low": "57.0000",
+      "close": "58.0000",
+      "volume": "55715",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "TKYO.N0000",
+      "open": "75.9000",
+      "high": "75.9000",
+      "low": "74.0000",
+      "close": "75.0000",
+      "volume": "16400",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "UBF.N0000",
+      "open": "1.9000",
+      "high": "2.0000",
+      "low": "1.9000",
+      "close": "1.9000",
+      "volume": "56972",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "UAL.N0000",
+      "open": "66.0000",
+      "high": "66.0000",
+      "low": "65.0000",
+      "close": "65.6000",
+      "volume": "78002",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "UBC.N0000",
+      "open": "10.4000",
+      "high": "10.4000",
+      "low": "10.3000",
+      "close": "10.3000",
+      "volume": "44461",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "UCAR.N0000",
+      "open": "2398.0000",
+      "high": "2398.0000",
+      "low": "2394.2500",
+      "close": "2394.2500",
+      "volume": "50",
+      "validation_warnings": [],
+      "ohlc_repaired": true
+    },
+    {
+      "symbol": "UML.N0000",
+      "open": "20.7000",
+      "high": "21.7000",
+      "low": "20.7000",
+      "close": "21.4000",
+      "volume": "326033",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "VFIN.N0000",
+      "open": "77.0000",
+      "high": "77.1000",
+      "low": "76.5000",
+      "close": "76.8000",
+      "volume": "11995",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "VONE.N0000",
+      "open": "83.9000",
+      "high": "84.0000",
+      "low": "83.0000",
+      "close": "83.0000",
+      "volume": "41840",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "VPEL.N0000",
+      "open": "14.3000",
+      "high": "14.3000",
+      "low": "13.8000",
+      "close": "14.0000",
+      "volume": "50985",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "VLL.X0000",
+      "open": "18.0000",
+      "high": "18.0000",
+      "low": "17.9000",
+      "close": "18.0000",
+      "volume": "155225",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "VLL.N0000",
+      "open": "21.5000",
+      "high": "21.8000",
+      "low": "21.0000",
+      "close": "21.7000",
+      "volume": "99116",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "CITW.N0000",
+      "open": "1.3000",
+      "high": "1.4000",
+      "low": "1.3000",
+      "close": "1.4000",
+      "volume": "255933",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "WATA.N0000",
+      "open": "46.5000",
+      "high": "46.8000",
+      "low": "46.3000",
+      "close": "46.4000",
+      "volume": "90182",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "WLTH.N0000",
+      "open": "9.9000",
+      "high": "10.1000",
+      "low": "9.8000",
+      "close": "9.9000",
+      "volume": "51794",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "WIND.N0000",
+      "open": "36.0000",
+      "high": "36.0000",
+      "low": "35.5000",
+      "close": "35.6000",
+      "volume": "21865",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    },
+    {
+      "symbol": "YORK.N0000",
+      "open": "6.4000",
+      "high": "6.6000",
+      "low": "6.3000",
+      "close": "6.5000",
+      "volume": "153957",
+      "validation_warnings": [],
+      "ohlc_repaired": false
+    }
+  ],
+  "market_digest": "ec8133cddb41934f3b1c5f076c25a7a700eec8f5653ae0c3c62e29ce69e17e37"
+}
