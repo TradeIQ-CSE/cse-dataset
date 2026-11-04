@@ -1,0 +1,25 @@
+{
+  "trade_date": "2026-11-04",
+  "calendar": {
+    "is_trading_day": true,
+    "source": "CSE circular 07-10-2025"
+  },
+  "values": [
+    {
+      "code": "ASPI",
+      "close": "20541.12"
+    },
+    {
+      "code": "ASTRI",
+      "close": "32373.02"
+    },
+    {
+      "code": "SL20",
+      "close": "5835.09"
+    },
+    {
+      "code": "SL20TRI",
+      "close": "12394.73"
+    }
+  ]
+}
