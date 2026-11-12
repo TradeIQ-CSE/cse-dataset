@@ -1,0 +1,9 @@
+{
+  "target_date": "2026-11-12",
+  "source_name": "cse_trade_summary_current",
+  "accepted_rows": 294,
+  "accepted_symbols": 294,
+  "market_digest": "7dfc261595c69383c4220faac371c292737247e904e14b6cd1c51f0210084219",
+  "processed_path": "data/processed/daily_ohlcv/2026-11-12_cse_trade_summary_current.parquet",
+  "accepted_path": "data/raw/ohlcv/accepted/2026-11-12/cse_trade_summary_current/canonical_ohlcv.csv"
+}
