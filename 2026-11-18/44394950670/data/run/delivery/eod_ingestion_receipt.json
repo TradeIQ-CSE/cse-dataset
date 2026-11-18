@@ -1,0 +1,12 @@
+{
+  "batch_id": "65e031f9c3e3f177ff86f86faa453a4926d473cca9df8bf72133de26f4208f67",
+  "trade_date": "2026-11-18",
+  "status": "succeeded",
+  "market_digest": "8267386af16997763c90be2e76ac506e7dab4dd569fb46ce0bab12438ec42743",
+  "records_processed": 287,
+  "records_accepted": 287,
+  "records_quarantined": 0,
+  "started_at": "2026-11-18T20:54:06.588Z",
+  "completed_at": "2026-11-18T20:54:06.588Z",
+  "replayed": false
+}
